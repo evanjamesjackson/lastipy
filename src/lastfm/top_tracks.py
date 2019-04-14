@@ -8,7 +8,7 @@ class TopTracksFetcher:
     def __init__(self):
         self.config_parser = ApiKeysParser()
 
-    def fetch_top_tracks(self, user, period=period.OVERALL):
+    def fetch(self, user, period=period.OVERALL):
         """Fetches the top tracks for the given user over the given period"""
 
         page = 1

@@ -9,7 +9,7 @@ class SimilarTracksFetcher:
     def __init__(self):
         self.config_parser = ApiKeysParser()
         
-    def fetch_similar_tracks(self, track, limit):
+    def fetch(self, track, limit):
         """Fetches tracks similar to the given track"""
         
         json_payload = self.__buildJsonPayload(track, limit)

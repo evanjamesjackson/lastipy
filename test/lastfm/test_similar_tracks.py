@@ -32,4 +32,4 @@ class SimilarTracksFetcherTest(unittest.TestCase):
         mock_get.return_value.json.return_value = json_response
 
         fetcher = SimilarTracksFetcher()
-        self.assertCountEqual(expected_tracks, fetcher.fetch_similar_tracks(track_to_send, 2))
+        self.assertCountEqual(expected_tracks, fetcher.fetch(track_to_send, 2))
