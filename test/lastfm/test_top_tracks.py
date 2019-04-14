@@ -37,7 +37,7 @@ class TopTracksFetcherTest(unittest.TestCase):
         mock_get.side_effect = mock_responses
 
         fetcher = TopTracksFetcher()
-        self.assertEqual(fetcher.fetch_top_tracks(user='sonofjack3', period=period.SEVEN_DAYS)[0], expected_track)
+        self.assertEqual(fetcher.fetch(user='sonofjack3', period=period.SEVEN_DAYS)[0], expected_track)
     
     @patch('requests.get')
     def test_fetch_top_track_failure(self, mock_get):
@@ -47,7 +47,7 @@ class TopTracksFetcherTest(unittest.TestCase):
 
         fetcher = TopTracksFetcher()
         with self.assertRaises(HTTPError):
-            fetcher.fetch_top_tracks('sonofjack3', period.SEVEN_DAYS)
+            fetcher.fetch('sonofjack3', period.SEVEN_DAYS)
 
     @patch('requests.get')
     def test_fetch_top_tracks_gets_multiple_tracks(self, mock_get):
@@ -89,5 +89,5 @@ class TopTracksFetcherTest(unittest.TestCase):
         mock_get.side_effect = mock_responses
 
         fetcher = TopTracksFetcher()
-        fetched_tracks = fetcher.fetch_top_tracks(user="sonofjack3", period=period.SEVEN_DAYS)
+        fetched_tracks = fetcher.fetch(user="sonofjack3", period=period.SEVEN_DAYS)
         self.assertCountEqual(fetched_tracks, expected_tracks)
