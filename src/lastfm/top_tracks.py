@@ -34,11 +34,11 @@ class TopTracksFetcher:
     def __buildJsonPayload(self, user, period, page):
         api_key = self.config_parser.get_lastfm_key()
         payload = {
-            'user' : user,
-            'api_key' : api_key,
-            'format' : 'json',
-            'period' : period,
-            'page' : page
+            'user': user,
+            'api_key': api_key,
+            'format': 'json',
+            'period': period,
+            'page': page
         }
         return payload
 

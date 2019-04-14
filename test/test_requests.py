@@ -17,7 +17,7 @@ class RequestTest(unittest.TestCase):
     def test_get_with_params_returns_json_with_expected_attributes(self):
         expected_post_id = 1
         payload = {
-            'postId' : expected_post_id
+            'postId': expected_post_id
         }
         r = requests.get('http://jsonplaceholder.typicode.com/comments', params=payload)
         json = r.json()

@@ -29,10 +29,10 @@ class SimilarTracksFetcher:
     def __build_json_payload(self, track, limit):
         api_key = self.config_parser.get_lastfm_key()
         payload = {
-            'track' : track.track_name,
-            'artist' : track.artist,
-            'format' : 'json',
-            'api_key' : api_key,
-            'limit' : limit
+            'track': track.track_name,
+            'artist': track.artist,
+            'format': 'json',
+            'api_key': api_key,
+            'limit': limit
         }
         return payload
