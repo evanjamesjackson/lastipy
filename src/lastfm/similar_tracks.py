@@ -12,21 +12,21 @@ class SimilarTracksFetcher:
     def fetch(self, track, limit):
         """Fetches tracks similar to the given track"""
         
-        json_payload = self.__buildJsonPayload(track, limit)
+        json_payload = self.__build_json_payload(track, limit)
         json_response = self.__send_request(json_payload)
-        if ('similartracks' in json_response):
+        if 'similartracks' in json_response:
             return track_convert.convert_tracks(json_response['similartracks']['track'])    
-        elif ('errors' in json_response):
+        elif 'errors' in json_response:
             raise Exception("Error occurred while fetching similar tracks " + json_response['errors'])
 
     def __send_request(self, json_payload):
         response = requests.get(URL, params=json_payload)
-        if (response.ok):
+        if response.ok:
             return response.json()
         else:
             response.raise_for_status()
 
-    def __buildJsonPayload(self, track, limit):
+    def __build_json_payload(self, track, limit):
         api_key = self.config_parser.get_lastfm_key()
         payload = {
             'track' : track.track_name,

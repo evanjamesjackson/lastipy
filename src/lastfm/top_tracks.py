@@ -19,10 +19,9 @@ class TopTracksFetcher:
             converted_tracks = track_convert.convert_tracks(json_response['toptracks']['track'])
             top_tracks = top_tracks + converted_tracks
             page = page + 1
-            if (not converted_tracks):
-                # If converted_tracks is empty, no need to continue
+            if not converted_tracks:
                 keep_fetching = False
-        
+
         return top_tracks
 
     def __send_request(self, json_payload):
