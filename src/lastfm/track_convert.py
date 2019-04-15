@@ -9,5 +9,7 @@ def convert_tracks(tracks_to_convert):
     
 def __convert_track(track_to_convert):
     track_name = track_to_convert['name']
-    artist = track_to_convert['artist']['name']
+    artist = track_to_convert['artist']
+    if 'name' in artist:
+        artist = artist['name']
     return Track(track_name, artist)

@@ -17,6 +17,19 @@ class TrackConverterTest(unittest.TestCase):
         self.assertEqual(converted[0].track_name, track_name)
         self.assertEqual(converted[0].artist, artist)
 
+    def test_convert_accounts_for_weird_artist_data(self):
+        track_name = "Stayin' Alive"
+        artist = "Bee Gees"
+        to_convert = {
+            'name': track_name,
+            'artist': artist
+        }
+
+        converted = track_convert.convert_tracks([to_convert])
+
+        self.assertEqual(converted[0].track_name, track_name)
+        self.assertEqual(converted[0].artist, artist)
+
     def test_convert_raises_error_with_invalid_json(self):
         invalid_json = {
             'suq' : 'madiq'
