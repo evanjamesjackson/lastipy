@@ -1,4 +1,4 @@
-import requests
+import logging, requests
 from .parse_api_keys import ApiKeysParser
 from . import period, track_convert
 
@@ -14,14 +14,17 @@ class TopTracksFetcher:
         page = 1
         top_tracks = []
         keep_fetching = True
+        logging.info("Fetching top tracks for user " + user + " over period " + period)
         while keep_fetching:
             json_response = self.__send_request(self.__buildJsonPayload(user, period, page))
             converted_tracks = track_convert.convert_tracks(json_response['toptracks']['track'])
+            logging.debug("Fetched " + str(converted_tracks))
             top_tracks = top_tracks + converted_tracks
             page = page + 1
             if not converted_tracks:
                 keep_fetching = False
 
+        logging.info(f"Fetched top tracks: " + str(top_tracks))
         return top_tracks
 
     def __send_request(self, json_payload):

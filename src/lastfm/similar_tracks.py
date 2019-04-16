@@ -1,4 +1,4 @@
-import requests
+import logging, requests
 from .parse_api_keys import ApiKeysParser
 from .track import Track
 from . import period, track_convert
@@ -11,11 +11,13 @@ class SimilarTracksFetcher:
         
     def fetch(self, track, limit):
         """Fetches tracks similar to the given track"""
-        
-        json_payload = self.__build_json_payload(track, limit)
-        json_response = self.__send_request(json_payload)
+
+        logging.info("Fetching up to " + str(limit) + " tracks similar to " + str(track))
+        json_response = self.__send_request(self.__build_json_payload(track, limit))
         if 'similartracks' in json_response:
-            return track_convert.convert_tracks(json_response['similartracks']['track'])    
+            similar_tracks = track_convert.convert_tracks(json_response['similartracks']['track'])
+            logging.info("Fetched similar tracks: " + str(similar_tracks))
+            return similar_tracks
         elif 'errors' in json_response:
             raise Exception("Error occurred while fetching similar tracks " + json_response['errors'])
 
