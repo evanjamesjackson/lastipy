@@ -17,7 +17,7 @@ class SimilarTracksFetcher:
         json_response = self._send_request(self._build_json_payload(track, limit))
         if 'similartracks' in json_response:
             similar_tracks = track_convert.convert_tracks(json_response['similartracks']['track'])
-            logging.info("Fetched similar tracks: " + str(similar_tracks))
+            logging.info(f"Fetched " + str(len(similar_tracks)) + " similar tracks: " + str(similar_tracks))
             return similar_tracks
         elif 'errors' in json_response:
             raise Exception("Error occurred while fetching similar tracks " + json_response['errors'])

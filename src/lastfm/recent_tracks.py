@@ -28,7 +28,7 @@ class RecentTracksFetcher:
             if not converted_tracks:
                 keep_fetching = False
 
-        logging.info("Fetched recent tracks: " + str(recent_tracks))
+        logging.info(f"Fetched " + str(len(recent_tracks)) + " recent tracks: " + str(recent_tracks))
         return recent_tracks
 
     def _send_request(self, json_payload):

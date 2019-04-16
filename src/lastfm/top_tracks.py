@@ -25,7 +25,7 @@ class TopTracksFetcher:
             if not converted_tracks:
                 keep_fetching = False
 
-        logging.info(f"Fetched top tracks: " + str(top_tracks))
+        logging.info(f"Fetched " + str(len(top_tracks)) + " top tracks: " + str(top_tracks))
         return top_tracks
 
     def _send_request(self, json_payload):
