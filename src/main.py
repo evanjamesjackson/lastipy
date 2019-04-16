@@ -13,7 +13,7 @@ def main():
     recommendations_fetcher = TopRecommendationsFetcher(similar_fetcher=SimilarTracksFetcher(),
                                                         top_fetcher=TopTracksFetcher(),
                                                         recent_fetcher=RecentTracksFetcher())
-    recommendations_fetcher.fetch(user=user, recommendation_period=period.SEVEN_DAYS, max_similar_tracks_per_top_track=1)
+    recommendations_fetcher.fetch(user=user, recommendation_period=period.SEVEN_DAYS, max_similar_tracks_per_top_track=50)
 
 if __name__ == "__main__":
     main()
