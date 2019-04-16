@@ -3,6 +3,7 @@ from src.lastfm import period
 from src.lastfm.top_recommendations import TopRecommendationsFetcher
 from src.lastfm.recent_tracks import RecentTracksFetcher
 
+
 def main():
     log_file = os.path.join(definitions.ROOT_DIR, "spotify_recommender.log")
     logging.basicConfig(level=logging.INFO, handlers=[logging.FileHandler(filename=log_file, mode='w', encoding='utf-8'), logging.StreamHandler()])
@@ -12,6 +13,7 @@ def main():
     # recommendations = [track for track in recommendations if track not in recent_tracks]
     # print(str(recommendations))
     # print(len(recommendations))
+
 
 if __name__ == "__main__":
     main()

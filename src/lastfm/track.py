@@ -9,4 +9,4 @@ class Track:
         return isinstance(other, Track) and self.track_name == other.track_name and self.artist == other.artist
 
     def __repr__(self):
-        return str(self.__dict__)    
+        return str(self.__dict__)

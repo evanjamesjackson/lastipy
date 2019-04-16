@@ -4,6 +4,7 @@ from . import period, track_convert
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=user.gettoptracks'
 
+
 class TopTracksFetcher:
     def __init__(self):
         self.config_parser = ApiKeysParser()

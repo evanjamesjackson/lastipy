@@ -3,6 +3,7 @@ from src.lastfm.similar_tracks import SimilarTracksFetcher
 from src.lastfm.track import Track
 from unittest.mock import patch
 
+
 class SimilarTracksFetcherTest(unittest.TestCase):
     @patch('requests.get')
     def test_track_has_multiple_similar_tracks(self, mock_get):

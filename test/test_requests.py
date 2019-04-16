@@ -1,6 +1,7 @@
 import requests
 import unittest
 
+
 @unittest.skip
 class RequestTest(unittest.TestCase):
     def test_get_returns_200(self):
@@ -37,7 +38,3 @@ class RequestTest(unittest.TestCase):
         response = requests.post('http://jsonplaceholder.typicode.com/posts', json=payload)
         
         self.assertEqual(response.status_code, 201)
-
-
-
-        

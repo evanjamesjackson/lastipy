@@ -7,6 +7,7 @@ URL = 'http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks'
 
 RESULTS_PER_PAGE_LIMIT = 200
 
+
 class RecentTracksFetcher:
     def __init__(self):
         self.config_parser = ApiKeysParser()

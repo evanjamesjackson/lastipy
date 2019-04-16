@@ -5,6 +5,7 @@ from . import period, track_convert
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=track.getsimilar'
 
+
 class SimilarTracksFetcher:
     def __init__(self):
         self.config_parser = ApiKeysParser()

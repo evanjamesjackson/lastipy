@@ -1,6 +1,7 @@
 import unittest
 from src.lastfm import track_convert
 
+
 class TrackConverterTest(unittest.TestCase):
     def test_convert_succeeds_with_valid_json(self):
         track_name = "Stayin' Alive"

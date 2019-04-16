@@ -2,6 +2,7 @@ from configparser import ConfigParser
 import os
 import definitions
 
+
 class ApiKeysParser:
     FILE = 'api_keys.ini'
     LAST_FM_SECTION = 'LastFM'
