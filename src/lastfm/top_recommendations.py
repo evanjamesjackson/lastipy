@@ -5,9 +5,9 @@ from . import period
 
 
 class TopRecommendationsFetcher:
-    def __init__(self, similar_fetcher, top_fetcher):
-        self.similar_fetcher = similar_fetcher
-        self.top_fetcher = top_fetcher
+    def __init__(self):
+        self.similar_fetcher = SimilarTracksFetcher()
+        self.top_fetcher = TopTracksFetcher()
 
     def fetch(self, user, recommendation_period=period.OVERALL, max_similar_tracks_per_top_track=100):
         top_tracks = self.top_fetcher.fetch(user=user, period=recommendation_period)
