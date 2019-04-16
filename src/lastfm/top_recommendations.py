@@ -14,11 +14,8 @@ class TopRecommendationsFetcher:
 
         recommendations = []
         for top_track in top_tracks:
-            try:
-                similar_tracks = self.similar_fetcher.fetch(top_track, max_similar_tracks_per_top_track)
-                if similar_tracks:
-                    recommendations = recommendations + similar_tracks
-            except Exception as error:
-                print(error)
+            similar_tracks = self.similar_fetcher.fetch(top_track, max_similar_tracks_per_top_track)
+            if similar_tracks:
+                recommendations = recommendations + similar_tracks
 
         logging.info("Fetched " + str(len(recommendations)) + " recommendations")
