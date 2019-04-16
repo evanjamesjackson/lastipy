@@ -33,7 +33,7 @@ class TopTracksFetcherTest(unittest.TestCase):
         mock_get.side_effect = mock_responses
 
         fetcher = TopTracksFetcher()
-        self.assertEqual(fetcher.fetch(user='sonofjack3', period=period.SEVEN_DAYS)[0], expected_track)
+        self.assertEqual(fetcher.fetch(user='sonofjack3', a_period=period.SEVEN_DAYS)[0], expected_track)
 
     @patch('requests.get')
     def test_multiple_tracks_over_multiple_pages(self, mock_get):
@@ -73,7 +73,7 @@ class TopTracksFetcherTest(unittest.TestCase):
         mock_get.side_effect = mock_responses
 
         fetcher = TopTracksFetcher()
-        fetched_tracks = fetcher.fetch(user="sonofjack3", period=period.SEVEN_DAYS)
+        fetched_tracks = fetcher.fetch(user="sonofjack3", a_period=period.SEVEN_DAYS)
         self.assertCountEqual(fetched_tracks, expected_tracks)
     
     @patch('requests.get')

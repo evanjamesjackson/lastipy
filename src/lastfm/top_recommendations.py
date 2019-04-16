@@ -10,7 +10,7 @@ class TopRecommendationsFetcher:
         self.top_fetcher = TopTracksFetcher()
 
     def fetch(self, user, recommendation_period=period.OVERALL, max_similar_tracks_per_top_track=100):
-        top_tracks = self.top_fetcher.fetch(user=user, period=recommendation_period)
+        top_tracks = self.top_fetcher.fetch(user=user, a_period=recommendation_period)
 
         recommendations = []
         for top_track in top_tracks:

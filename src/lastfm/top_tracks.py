@@ -9,15 +9,15 @@ class TopTracksFetcher:
     def __init__(self):
         self.config_parser = ApiKeysParser()
 
-    def fetch(self, user, period=period.OVERALL):
+    def fetch(self, user, a_period=period.OVERALL):
         """Fetches the top tracks for the given user over the given period"""
 
         page = 1
         top_tracks = []
         keep_fetching = True
-        logging.info("Fetching top tracks for user " + user + " over period " + period)
+        logging.info("Fetching top tracks for user " + user + " over period " + a_period)
         while keep_fetching:
-            json_response = self._send_request(self._buildJsonPayload(user, period, page))
+            json_response = self._send_request(self._build_json_payload(user, a_period, page))
             converted_tracks = track_convert.convert_tracks(json_response['toptracks']['track'])
             logging.debug("Fetched " + str(converted_tracks))
             top_tracks = top_tracks + converted_tracks
@@ -30,12 +30,12 @@ class TopTracksFetcher:
 
     def _send_request(self, json_payload):
         response = requests.get(URL, params=json_payload)
-        if (response.ok):
+        if response.ok:
             return response.json()
         else:
             response.raise_for_status()
 
-    def _buildJsonPayload(self, user, period, page):
+    def _build_json_payload(self, user, period, page):
         api_key = self.config_parser.get_lastfm_key()
         payload = {
             'user': user,
