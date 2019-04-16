@@ -16,7 +16,7 @@ class TopTracksFetcher:
         keep_fetching = True
         logging.info("Fetching top tracks for user " + user + " over period " + period)
         while keep_fetching:
-            json_response = self.__send_request(self.__buildJsonPayload(user, period, page))
+            json_response = self._send_request(self._buildJsonPayload(user, period, page))
             converted_tracks = track_convert.convert_tracks(json_response['toptracks']['track'])
             logging.debug("Fetched " + str(converted_tracks))
             top_tracks = top_tracks + converted_tracks
@@ -27,14 +27,14 @@ class TopTracksFetcher:
         logging.info(f"Fetched top tracks: " + str(top_tracks))
         return top_tracks
 
-    def __send_request(self, json_payload):
+    def _send_request(self, json_payload):
         response = requests.get(URL, params=json_payload)
         if (response.ok):
             return response.json()
         else:
             response.raise_for_status()
 
-    def __buildJsonPayload(self, user, period, page):
+    def _buildJsonPayload(self, user, period, page):
         api_key = self.config_parser.get_lastfm_key()
         payload = {
             'user': user,

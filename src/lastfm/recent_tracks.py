@@ -19,7 +19,7 @@ class RecentTracksFetcher:
         keep_fetching = True
         logging.info("Fetching recent tracks for " + user + "...")
         while keep_fetching:
-            json_response = self.__send_request(self.__build_json_payload(user, page))
+            json_response = self._send_request(self._build_json_payload(user, page))
             converted_tracks = track_convert.convert_tracks(json_response['recenttracks']['track'])
             logging.debug("Fetched " + str(converted_tracks))
             recent_tracks = recent_tracks + converted_tracks
@@ -30,14 +30,14 @@ class RecentTracksFetcher:
         logging.info("Fetched recent tracks: " + str(recent_tracks))
         return recent_tracks
 
-    def __send_request(self, json_payload):
+    def _send_request(self, json_payload):
         response = requests.get(URL, params=json_payload)
         if response.ok:
             return response.json()
         else:
             response.raise_for_status()
 
-    def __build_json_payload(self, user, page):
+    def _build_json_payload(self, user, page):
         api_key = self.config_parser.get_lastfm_key()
         payload = {
             'user': user,
