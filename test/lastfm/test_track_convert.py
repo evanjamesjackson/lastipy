@@ -6,9 +6,9 @@ class TrackConverterTest(unittest.TestCase):
         track_name = "Stayin' Alive"
         artist = "Bee Gees"
         to_convert = {
-            'name' : track_name,
-            'artist' : {
-                'name' : artist
+            'name': track_name,
+            'artist': {
+                'name': artist
             }
         }
 
@@ -22,7 +22,10 @@ class TrackConverterTest(unittest.TestCase):
         artist = "Bee Gees"
         to_convert = {
             'name': track_name,
-            'artist': artist
+            'artist': {
+                'mbid': '45c25199-fa62-4d4c-b0a2-11eeed6923c3',
+                '#text': artist
+            }
         }
 
         converted = track_convert.convert_tracks([to_convert])
@@ -32,10 +35,9 @@ class TrackConverterTest(unittest.TestCase):
 
     def test_convert_raises_error_with_invalid_json(self):
         invalid_json = {
-            'suq' : 'madiq'
+            'suq': 'madiq'
         }
 
         # If you make a regular call to your testable function, the error will happen before assertRaises can catch it
         # Passing your test argument(s) directly to assertRaises makes sure things happen in the right sequence
         self.assertRaises(KeyError, track_convert.convert_tracks, [invalid_json])
-    
