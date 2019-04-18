@@ -7,7 +7,7 @@ from src.lastfm.recent_tracks import RecentTracksFetcher
 
 
 def main():
-    log_file = os.path.join(definitions.ROOT_DIR, "spotify_recommender.log")
+    log_file = os.path.join(definitions.ROOT_DIR, ".log")
     logging.basicConfig(level=logging.INFO, handlers=[logging.FileHandler(filename=log_file, mode='w', encoding='utf-8'), logging.StreamHandler()])
     user = 'sonofjack3'
     recommendations_fetcher = TopRecommendationsFetcher(similar_fetcher=SimilarTracksFetcher(),
