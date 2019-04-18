@@ -1,4 +1,4 @@
-from src.lastfm.parse_api_keys import ApiKeysParser
+from src.parse_api_keys import ApiKeysParser
 import unittest
 
 

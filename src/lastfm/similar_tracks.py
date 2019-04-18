@@ -1,7 +1,6 @@
 import logging, requests
-from .parse_api_keys import ApiKeysParser
-from .track import Track
-from . import period, track_convert
+from src.parse_api_keys import ApiKeysParser
+from . import track_convert
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=track.getsimilar'
 
