@@ -1,4 +1,4 @@
-"""List of time periods over which to retrieve top tracks for"""
+"""List of time periods over which to retrieve top tracks"""
 OVERALL = "overall"
 SEVEN_DAYS = "7day"
 ONE_MONTH = "1month"
