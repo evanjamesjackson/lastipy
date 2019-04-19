@@ -2,4 +2,4 @@ api_keys.ini
 venv
 .idea
 .log
-.token
+.cache*
