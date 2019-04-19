@@ -11,22 +11,25 @@ from random import shuffle
 
 
 def main():
+    # TODO put these somewhere. Or maybe command-line arguments?
+    lastfm_user = 'sonofjack3'
+    lastfm_recommendation_period = period.ONE_MONTH
+    max_similar_tracks_per_top_track = 50
+    spotify_user = 'sonofjack3'
+    playlist_size = 40
+    playlist_name = "LastFM"
+
     log_file = os.path.join(definitions.ROOT_DIR, ".log")
     logging.basicConfig(level=logging.DEBUG, handlers=[logging.FileHandler(filename=log_file, mode='w', encoding='utf-8'), logging.StreamHandler()])
 
-    lastfm_user = 'sonofjack3'
     recommendations_fetcher = TopRecommendationsFetcher(similar_fetcher=SimilarTracksFetcher(),
                                                         top_fetcher=TopTracksFetcher(),
                                                         recent_fetcher=RecentTracksFetcher())
     recommendations = recommendations_fetcher.fetch(user=lastfm_user,
-                                                    recommendation_period=period.SEVEN_DAYS,
-                                                    max_similar_tracks_per_top_track=50)
+                                                    recommendation_period=lastfm_recommendation_period,
+                                                    max_similar_tracks_per_top_track=max_similar_tracks_per_top_track)
 
     shuffle(recommendations)
-
-    spotify_user = 'sonofjack3'
-    playlist_size = 40
-    playlist_name = "LastFM"
 
     track_ids = []
     for track in recommendations[:playlist_size]:
