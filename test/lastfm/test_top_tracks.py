@@ -1,7 +1,7 @@
 import unittest
 from src.lastfm import period
 from src.lastfm.top_tracks import TopTracksFetcher
-from src.lastfm.track import Track
+from src.track import Track
 from unittest.mock import patch, Mock
 from requests import HTTPError
 

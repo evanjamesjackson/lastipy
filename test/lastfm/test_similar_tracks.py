@@ -1,6 +1,6 @@
 import unittest
 from src.lastfm.similar_tracks import SimilarTracksFetcher
-from src.lastfm.track import Track
+from src.track import Track
 from unittest.mock import patch
 
 

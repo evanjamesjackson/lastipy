@@ -4,8 +4,7 @@ from src.lastfm.similar_tracks import SimilarTracksFetcher
 from src.lastfm.top_tracks import TopTracksFetcher
 from src.lastfm.recent_tracks import RecentTracksFetcher
 from src.lastfm.top_recommendations import TopRecommendationsFetcher
-from src.lastfm.track import Track
-from unittest.mock import patch
+from src.track import Track
 
 
 class TopRecommendationsFetcherTest(unittest.TestCase):
