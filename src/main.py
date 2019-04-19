@@ -6,6 +6,7 @@ from src.lastfm.top_recommendations import TopRecommendationsFetcher
 from src.lastfm.recent_tracks import RecentTracksFetcher
 from src.spotify.playlist import *
 from src.spotify.search import *
+from src.spotify.library import *
 from random import shuffle
 
 
@@ -23,10 +24,8 @@ def main():
 
     shuffle(recommendations)
 
-    # TODO filter out tracks already in Spotify playlists and library
-
     spotify_user = 'sonofjack3'
-    playlist_size = 30
+    playlist_size = 40
     playlist_name = "LastFM"
 
     track_ids = []
@@ -35,7 +34,13 @@ def main():
         if search_results['tracks']['items']:
             track_ids.append(search_results['tracks']['items'][0]['id'])
 
+    saved_tracks = get_saved_tracks(spotify_user)
+    playlist_tracks = get_tracks_in_playlists(spotify_user)
+
+    track_ids = [track_id for track_id in track_ids if track_id not in saved_tracks and track_id not in playlist_tracks]
+
     add_to_playlist(spotify_user, playlist_name, track_ids)
+
 
 if __name__ == "__main__":
     main()
