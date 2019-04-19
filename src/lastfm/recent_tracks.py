@@ -18,14 +18,23 @@ class RecentTracksFetcher:
         recent_tracks = []
         keep_fetching = True
         logging.info("Fetching recent tracks for " + user + "...")
+        max_retries = 3
+        retries = 0
         while keep_fetching:
-            json_response = self._send_request(self._build_json_payload(user, page))
-            converted_tracks = track_convert.convert_tracks(json_response['recenttracks']['track'])
-            logging.debug("Fetched " + str(converted_tracks))
-            recent_tracks = recent_tracks + converted_tracks
-            page = page + 1
-            if not converted_tracks:
-                keep_fetching = False
+            try:
+                json_response = self._send_request(self._build_json_payload(user, page))
+                converted_tracks = track_convert.convert_tracks(json_response['recenttracks']['track'])
+                logging.debug("Fetched " + str(converted_tracks))
+                recent_tracks = recent_tracks + converted_tracks
+                page = page + 1
+                if not converted_tracks:
+                    keep_fetching = False
+            except Exception as e:
+                # This particular endpoint has a habit of throwing back error 500, so just retry if it does
+                if retries < max_retries:
+                    retries = retries + 1
+                else:
+                    raise e
 
         logging.info(f"Fetched " + str(len(recent_tracks)) + " recent tracks: " + str(recent_tracks))
         return recent_tracks
