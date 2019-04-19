@@ -6,7 +6,7 @@ import definitions
 class ApiKeysParser:
     FILE = 'api_keys.ini'
     LAST_FM_SECTION = 'LastFM'
-    API_KEY = 'API'
+    LAST_FM_API_KEY = 'API'
     SPOTIFY_SECTION = 'Spotify'
     SPOTIFY_CLIENT_ID_KEY = 'CLIENT_ID'
     SPOTIFY_CLIENT_SECRET_KEY = 'CLIENT_SECRET'
@@ -15,7 +15,7 @@ class ApiKeysParser:
         self.config_parser = ConfigParser()
 
     def get_lastfm_key(self):
-        return self._get_property(self.LAST_FM_SECTION, self.API_KEY)
+        return self._get_property(self.LAST_FM_SECTION, self.LAST_FM_API_KEY)
 
     def get_spotify_client_id(self):
         return self._get_property(self.SPOTIFY_SECTION, self.SPOTIFY_CLIENT_ID_KEY)
