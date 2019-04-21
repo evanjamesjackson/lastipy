@@ -3,3 +3,4 @@ venv
 .idea
 .log
 .cache*
+__pycache__
