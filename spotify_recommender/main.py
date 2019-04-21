@@ -1,4 +1,4 @@
-#!/usr/env/python
+#!/usr/bin/env python
 
 import logging, os
 from spotify_recommender import definitions
