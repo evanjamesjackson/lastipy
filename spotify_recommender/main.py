@@ -1,4 +1,5 @@
-import definitions, logging, os
+import logging, os
+from spotify_recommender import definitions
 from spotify_recommender.lastfm import period
 from spotify_recommender.lastfm.top_tracks import TopTracksFetcher
 from spotify_recommender.lastfm.similar_tracks import SimilarTracksFetcher
