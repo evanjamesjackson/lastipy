@@ -1,3 +1,5 @@
+#!/usr/env/python
+
 import logging, os
 from spotify_recommender import definitions
 from spotify_recommender.lastfm import period
