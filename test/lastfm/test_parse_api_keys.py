@@ -1,4 +1,4 @@
-from src.parse_api_keys import ApiKeysParser
+from spotify_recommender.parse_api_keys import ApiKeysParser
 import unittest
 
 

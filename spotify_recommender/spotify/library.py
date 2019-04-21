@@ -1,4 +1,4 @@
-from src.spotify.token import *
+from spotify_recommender.spotify.token import *
 import spotipy
 import logging
 

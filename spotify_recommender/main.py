@@ -1,10 +1,10 @@
 import definitions, logging, os
-from src.lastfm import period
-from src.lastfm.top_tracks import TopTracksFetcher
-from src.lastfm.similar_tracks import SimilarTracksFetcher
-from src.lastfm.top_recommendations import TopRecommendationsFetcher
-from src.lastfm.recent_tracks import RecentTracksFetcher
-from src.spotify import library, playlist, search
+from spotify_recommender.lastfm import period
+from spotify_recommender.lastfm.top_tracks import TopTracksFetcher
+from spotify_recommender.lastfm.similar_tracks import SimilarTracksFetcher
+from spotify_recommender.lastfm.top_recommendations import TopRecommendationsFetcher
+from spotify_recommender.lastfm.recent_tracks import RecentTracksFetcher
+from spotify_recommender.spotify import library, playlist, search
 from random import shuffle
 
 

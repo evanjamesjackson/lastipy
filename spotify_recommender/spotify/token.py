@@ -1,5 +1,5 @@
 import spotipy.util as util
-from src.parse_api_keys import ApiKeysParser
+from spotify_recommender.parse_api_keys import ApiKeysParser
 import spotipy.oauth2 as oauth2
 import webbrowser
 import definitions
