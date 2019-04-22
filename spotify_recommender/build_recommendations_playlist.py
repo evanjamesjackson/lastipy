@@ -78,8 +78,8 @@ if __name__ == "__main__":
         args.lastfm_user = config_parser[section]['LastFMUser']
         args.spotify_user = config_parser[section]['SpotifyUser']
         args.recommendation_period = config_parser[section]['RecommendationPeriod']
-        args.max_recommendations_per_top_track = config_parser[section]['MaxRecommendationsPerTopTrack']
-        args.playlist_size = config_parser[section]['PlaylistSize']
+        args.max_recommendations_per_top_track = int(config_parser[section]['MaxRecommendationsPerTopTrack'])
+        args.playlist_size = int(config_parser[section]['PlaylistSize'])
 
     build_recommendations_playlist(args.lastfm_user,
                                    args.spotify_user,
