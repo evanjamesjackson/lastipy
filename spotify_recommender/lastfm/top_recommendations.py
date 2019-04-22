@@ -23,7 +23,7 @@ class TopRecommendationsFetcher:
                 if similar_tracks:
                     recommendations = recommendations + similar_tracks
             except Exception as e:
-                logging.error("Error occurred fetching similar tracks: " + e)
+                logging.error(f"Error occurred fetching similar tracks: " + str(e))
 
         logging.debug(f"Before filtering, fetched " + str(len(recommendations)) + " recommendations: " + str(recommendations))
 

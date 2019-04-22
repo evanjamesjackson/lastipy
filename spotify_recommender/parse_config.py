@@ -1,10 +1,8 @@
 from configparser import ConfigParser
-import os
-from spotify_recommender import definitions
 
 
 class ApiKeysParser:
-    FILE = 'api_keys.ini'
+    FILE = '.config'
     LAST_FM_SECTION = 'LastFM'
     LAST_FM_API_KEY = 'API'
     SPOTIFY_SECTION = 'Spotify'
@@ -24,5 +22,5 @@ class ApiKeysParser:
         return self._get_property(self.SPOTIFY_SECTION, self.SPOTIFY_CLIENT_SECRET_KEY)
 
     def _get_property(self, section, key):
-        self.config_parser.read(os.path.join(definitions.ROOT_DIR, self.FILE))
+        self.config_parser.read(self.FILE)
         return self.config_parser[section][key]

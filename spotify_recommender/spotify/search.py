@@ -1,14 +1,13 @@
 import logging
 import spotipy
-from .token import *
+from . import token
 import json
 
 
 def search_for_tracks(username, query):
     """Returns a list of track IDs for the given query"""
 
-    token = get_token(username)
-    spotify = spotipy.Spotify(auth=token)
+    spotify = spotipy.Spotify(auth=token.get_token(username))
     results = spotify.search(q=query)
     logging.debug("Search results for query " + query + ": " + json.dumps(results))
     return _extract_ids(results)

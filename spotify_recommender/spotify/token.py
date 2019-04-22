@@ -1,8 +1,6 @@
-from spotify_recommender.parse_api_keys import ApiKeysParser
+from ..parse_config import ApiKeysParser
 import spotipy.oauth2 as oauth2
 import webbrowser
-from spotify_recommender import definitions
-import os
 
 REDIRECT_URI = 'https://www.example.com/callback/'
 
@@ -18,7 +16,7 @@ def get_token(username):
                                    client_secret,
                                    REDIRECT_URI,
                                    scope=scope,
-                                   cache_path=os.path.join(definitions.ROOT_DIR, '.cache-' + username))
+                                   cache_path='.cache-' + username)
 
     token_info = sp_oauth.get_cached_token()
 

@@ -1,4 +1,4 @@
-from spotify_recommender.spotify.token import *
+from . import token
 import spotipy
 import logging
 
@@ -8,7 +8,7 @@ def get_tracks_in_playlists(username):
 
     logging.info("Fetching all tracks in " + username + "'s playlists")
 
-    spotify = spotipy.Spotify(auth=get_token(username))
+    spotify = spotipy.Spotify(auth=token.get_token(username))
 
     playlists = spotify.current_user_playlists()['items']
 
@@ -40,7 +40,7 @@ def get_saved_tracks(username):
 
     logging.info("Fetching " + username + "'s saved tracks")
 
-    spotify = spotipy.Spotify(auth=get_token(username))
+    spotify = spotipy.Spotify(auth=token.get_token(username))
 
     track_ids = []
     keep_fetching = True

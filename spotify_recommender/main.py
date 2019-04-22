@@ -1,8 +1,7 @@
 #!/usr/bin/env python3.7
 
-import logging, os
+import logging
 import logging.handlers
-from spotify_recommender import definitions
 from spotify_recommender.lastfm import period
 from spotify_recommender.lastfm.top_tracks import TopTracksFetcher
 from spotify_recommender.lastfm.similar_tracks import SimilarTracksFetcher
@@ -21,11 +20,10 @@ def main():
     playlist_size = 40
     playlist_name = "LastFM"
 
-    log_file = os.path.join(definitions.ROOT_DIR, ".log")
     logging.basicConfig(level=logging.DEBUG,
                         format="%(asctime)s %(levelname)s %(message)s",
                         handlers=[logging.handlers.RotatingFileHandler(
-                                    filename=log_file,
+                                    filename='spotify_recommender.log',
                                     maxBytes=20*1024*1024,
                                     backupCount=20,
                                     encoding='utf-8'),
