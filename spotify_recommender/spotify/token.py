@@ -1,4 +1,4 @@
-from ..parse_config import ApiKeysParser
+from ..parse_keys import ApiKeysParser
 import spotipy.oauth2 as oauth2
 import webbrowser
 

@@ -2,7 +2,7 @@ from configparser import ConfigParser
 
 
 class ApiKeysParser:
-    FILE = '.config'
+    FILE = '.keys'
     LAST_FM_SECTION = 'LastFM'
     LAST_FM_API_KEY = 'API'
     SPOTIFY_SECTION = 'Spotify'

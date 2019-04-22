@@ -1,5 +1,5 @@
 import logging, requests
-from ..parse_config import ApiKeysParser
+from ..parse_keys import ApiKeysParser
 from . import period, track_convert
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=user.gettoptracks'

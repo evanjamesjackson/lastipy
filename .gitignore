@@ -1,4 +1,5 @@
-.config
+.keys
+spotify_recommender.config
 venv
 .idea
 *.log*
