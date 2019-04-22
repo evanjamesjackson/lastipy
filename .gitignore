@@ -1,6 +1,6 @@
 api_keys.ini
 venv
 .idea
-.log
+.log*
 .cache*
 __pycache__

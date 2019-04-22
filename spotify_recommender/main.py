@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.7
 
 import logging, os
+import logging.handlers
 from spotify_recommender import definitions
 from spotify_recommender.lastfm import period
 from spotify_recommender.lastfm.top_tracks import TopTracksFetcher
@@ -21,7 +22,14 @@ def main():
     playlist_name = "LastFM"
 
     log_file = os.path.join(definitions.ROOT_DIR, ".log")
-    logging.basicConfig(level=logging.DEBUG, handlers=[logging.FileHandler(filename=log_file, mode='w', encoding='utf-8'), logging.StreamHandler()])
+    logging.basicConfig(level=logging.DEBUG,
+                        format="%(asctime)s %(levelname)s %(message)s",
+                        handlers=[logging.handlers.RotatingFileHandler(
+                                    filename=log_file,
+                                    maxBytes=20*1024*1024,
+                                    backupCount=20,
+                                    encoding='utf-8'),
+                                  logging.StreamHandler()])
 
     recommendations_fetcher = TopRecommendationsFetcher(similar_fetcher=SimilarTracksFetcher(),
                                                         top_fetcher=TopTracksFetcher(),
@@ -34,11 +42,11 @@ def main():
 
     track_ids = []
     for track in recommendations[:playlist_size]:
-        search_results = search.search(username=spotify_user, query=track.artist + " " + track.track_name)
-        if search_results['tracks']['items']:
-            track_ids.append(search_results['tracks']['items'][0]['id'])
+        track_ids = track_ids + search.search_for_tracks(
+            username=spotify_user,
+            query=track.artist + " " + track.track_name)
 
-    saved_tracks = library.get_saved_tracks('sonofjack3')
+    saved_tracks = library.get_saved_tracks(spotify_user)
     playlist_tracks = library.get_tracks_in_playlists(spotify_user)
 
     track_ids = [track_id for track_id in track_ids if track_id not in saved_tracks and track_id not in playlist_tracks]
