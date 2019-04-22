@@ -1,6 +1,8 @@
 from ..parse_keys import ApiKeysParser
 import spotipy.oauth2 as oauth2
 import webbrowser
+import os
+from .. import definitions
 
 REDIRECT_URI = 'https://www.example.com/callback/'
 
@@ -16,7 +18,7 @@ def get_token(username):
                                    client_secret,
                                    REDIRECT_URI,
                                    scope=scope,
-                                   cache_path='.cache-' + username)
+                                   cache_path=os.path.join(definitions.ROOT_DIR, '.cache-' + username))
 
     token_info = sp_oauth.get_cached_token()
 

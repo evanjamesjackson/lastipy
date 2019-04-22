@@ -1,4 +1,6 @@
 from configparser import ConfigParser
+import os
+from . import definitions
 
 
 class ApiKeysParser:
@@ -22,5 +24,5 @@ class ApiKeysParser:
         return self._get_property(self.SPOTIFY_SECTION, self.SPOTIFY_CLIENT_SECRET_KEY)
 
     def _get_property(self, section, key):
-        self.config_parser.read(self.FILE)
+        self.config_parser.read(os.path.join(definitions.ROOT_DIR, self.FILE))
         return self.config_parser[section][key]
