@@ -7,7 +7,7 @@ import os
 REDIRECT_URI = 'https://www.example.com/callback/'
 
 
-# Modified this from the spotipy util.py file because needed to make the cache path customizable
+# Modified from spotipy's util.py to expose cache path
 def get_token(username):
     keys_parser = ApiKeysParser()
     scope = 'playlist-modify-public'
