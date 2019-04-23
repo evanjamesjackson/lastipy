@@ -1,6 +1,4 @@
 from spotify_recommender.track import Track
-import logging
-import json
 
 
 def convert_tracks(tracks_to_convert):
@@ -12,8 +10,6 @@ def convert_tracks(tracks_to_convert):
 
 
 def _convert_track(track_to_convert):
-    logging.debug("Converting " + json.dumps(track_to_convert))
-
     track_name = track_to_convert['name']
 
     artist_json = track_to_convert['artist']
