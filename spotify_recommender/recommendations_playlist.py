@@ -78,6 +78,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.file:
+        if not os.path.exists(args.file.name):
+            raise Exception("Could not find " + args.file.name)
+
         config_parser = ConfigParser()
         config_parser.read(args.file.name)
         section = 'Config'
