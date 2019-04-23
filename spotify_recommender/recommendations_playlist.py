@@ -77,7 +77,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    if args.file and os.path.exists(args.file.name):
+    if args.file:
         config_parser = ConfigParser()
         config_parser.read(args.file.name)
         section = 'Config'
