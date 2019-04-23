@@ -11,13 +11,15 @@ from spotify_recommender.lastfm.recent_tracks import RecentTracksFetcher
 from spotify_recommender.spotify import library, playlist, search
 from random import shuffle
 from configparser import ConfigParser
+import os
+from spotify_recommender import definitions
 
 
-def build_recommendations_playlist(lastfm_user,
-                                   spotify_user,
-                                   recommendation_period=period.OVERALL,
-                                   max_recommendations_per_top_track=50,
-                                   playlist_size=40):
+def create_recommendations_playlist(lastfm_user,
+                                    spotify_user,
+                                    recommendation_period=period.OVERALL,
+                                    max_recommendations_per_top_track=50,
+                                    playlist_size=40):
 
     recommendations_fetcher = TopRecommendationsFetcher(similar_fetcher=SimilarTracksFetcher(),
                                                         top_fetcher=TopTracksFetcher(),
@@ -43,10 +45,14 @@ def build_recommendations_playlist(lastfm_user,
 
 
 def _setup_logging():
+    logs_directory = os.path.join(definitions.ROOT_DIR, 'logs')
+    if not os.path.exists(logs_directory):
+        os.makedirs(logs_directory)
+
     logging.basicConfig(level=logging.DEBUG,
                         format="%(asctime)s %(levelname)s %(message)s",
                         handlers=[logging.handlers.RotatingFileHandler(
-                            filename='spotify_recommender.log',
+                            filename=os.path.join(logs_directory, 'spotify_recommender.log'),
                             maxBytes=20 * 1024 * 1024,
                             backupCount=20,
                             encoding='utf-8'),
@@ -71,7 +77,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    if args.file:
+    if args.file and os.path.exists(args.file.name):
         config_parser = ConfigParser()
         config_parser.read(args.file.name)
         section = 'Config'
@@ -81,8 +87,8 @@ if __name__ == "__main__":
         args.max_recommendations_per_top_track = int(config_parser[section]['MaxRecommendationsPerTopTrack'])
         args.playlist_size = int(config_parser[section]['PlaylistSize'])
 
-    build_recommendations_playlist(args.lastfm_user,
-                                   args.spotify_user,
-                                   args.recommendation_period,
-                                   args.max_recommendations_per_top_track,
-                                   args.playlist_size)
+    create_recommendations_playlist(args.lastfm_user,
+                                    args.spotify_user,
+                                    args.recommendation_period,
+                                    args.max_recommendations_per_top_track,
+                                    args.playlist_size)
