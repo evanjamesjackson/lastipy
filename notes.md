@@ -11,7 +11,7 @@
     * Created setup.py and added main.py to scripts section then ran python setup.py develop --user
     * Added #!/usr/env/python to top of main.py
     * Ran chmod +x main.py
-* Not totally sure if this is necessary/correct, but this appears to make cron work
-    "0 6 1 * * cd /home/ec2-user/ && /usr/local/bin/python3.7 spotify_recommender/spotify_recommender/main.py"
+* Not totally sure if this is all correct, but this appears to make cron work
+    "0 9 * * * cd /home/ec2-user/ && /usr/local/bin/python3.7 spotify_recommender/spotify_recommender/recommendations_playlist.py -f spotify_recommender/spotify_recommender.config"
 
 
