@@ -1,17 +1,16 @@
 ~~* Get user's top tracks from Last.fm~~
-* For each track, get similar tracks
-    * ~~Should be threaded~~
-        * No no no no
-    * Limit how many similar tracks to get? 
-	* Yep easy to do
-* Find each similar track in Spotify and add it to playlist
-    * How to prevent duplicates across runs?
-	* Filter out recent tracks from Last.fm, filter out Spotify library and playlist tracks
-* Not really sure which of these steps actually made it runnable in Linux, but it works:
-    * Created setup.py and added main.py to scripts section then ran python setup.py develop --user
-    * Added #!/usr/env/python to top of main.py
-    * Ran chmod +x main.py
-* Not totally sure if this is all correct, but this appears to make cron work
-    "0 9 * * * cd /home/ec2-user/ && /usr/local/bin/python3.7 spotify_recommender/spotify_recommender/recommendations_playlist.py -f spotify_recommender/spotify_recommender.config"
-
-
+~~* For each track, get similar tracks~~
+    ~~*Should be threaded~~
+        ~~* No no no no~~
+    ~~* Limit how many similar tracks to get?~~
+    	~~* Built into the API~~
+~~* Find each similar track in Spotify and add it to playlist~~
+    ~~* How to prevent duplicates across runs?~~
+        ~~* Filter out recent tracks from Last.fm, filter out Spotify library and playlist tracks~~
+~~* Make it runnable in Linux~~
+~~* Schedule on cronjob~~
+* Make it a webapp
+    * Django?
+    * User enters their credentials and saves
+        * Maybe also say how often to get a playlist?
+    * Would need to show Spotify login then redirect back to my app
