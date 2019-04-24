@@ -46,6 +46,25 @@ def create_recommendations_playlist(lastfm_user,
     playlist.add_to_playlist(spotify_user, PLAYLIST_NAME, track_ids)
 
 
+def _main():
+    _setup_logging()
+
+    parser = _setup_arg_parser()
+    args = parser.parse_args()
+
+    if args.file:
+        if os.path.exists(args.file.name):
+            args = _extract_args_from_file(args)
+        else:
+            raise Exception("Could not find " + args.file.name)
+
+    create_recommendations_playlist(args.lastfm_user,
+                                    args.spotify_user,
+                                    args.recommendation_period,
+                                    args.max_recommendations_per_top_track,
+                                    args.playlist_size)
+
+
 def _setup_logging():
     logs_directory = os.path.join(definitions.ROOT_DIR, 'logs')
     if not os.path.exists(logs_directory):
@@ -73,27 +92,17 @@ def _setup_arg_parser():
     return parser
 
 
+def _extract_args_from_file(args):
+    config_parser = ConfigParser()
+    config_parser.read(args.file.name)
+    section = 'Config'
+    args.lastfm_user = config_parser[section]['LastFMUser']
+    args.spotify_user = config_parser[section]['SpotifyUser']
+    args.recommendation_period = config_parser[section]['RecommendationPeriod']
+    args.max_recommendations_per_top_track = int(config_parser[section]['MaxRecommendationsPerTopTrack'])
+    args.playlist_size = int(config_parser[section]['PlaylistSize'])
+    return args
+
+
 if __name__ == "__main__":
-    _setup_logging()
-    parser = _setup_arg_parser()
-
-    args = parser.parse_args()
-
-    if args.file:
-        if not os.path.exists(args.file.name):
-            raise Exception("Could not find " + args.file.name)
-
-        config_parser = ConfigParser()
-        config_parser.read(args.file.name)
-        section = 'Config'
-        args.lastfm_user = config_parser[section]['LastFMUser']
-        args.spotify_user = config_parser[section]['SpotifyUser']
-        args.recommendation_period = config_parser[section]['RecommendationPeriod']
-        args.max_recommendations_per_top_track = int(config_parser[section]['MaxRecommendationsPerTopTrack'])
-        args.playlist_size = int(config_parser[section]['PlaylistSize'])
-
-    create_recommendations_playlist(args.lastfm_user,
-                                    args.spotify_user,
-                                    args.recommendation_period,
-                                    args.max_recommendations_per_top_track,
-                                    args.playlist_size)
+    _main()
