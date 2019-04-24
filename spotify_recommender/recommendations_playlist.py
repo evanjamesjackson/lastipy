@@ -53,8 +53,8 @@ def _setup_logging():
                         format="%(asctime)s %(levelname)s %(message)s",
                         handlers=[logging.handlers.RotatingFileHandler(
                             filename=os.path.join(logs_directory, 'spotify_recommender.log'),
-                            maxBytes=20 * 1024 * 1024,
-                            backupCount=20,
+                            maxBytes=7 * 1024 * 1024,
+                            backupCount=10,
                             encoding='utf-8'),
                             logging.StreamHandler()])
 
