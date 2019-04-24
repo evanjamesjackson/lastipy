@@ -1,5 +1,5 @@
 .keys
-spotify_recommender.config
+config
 venv
 .idea
 *.log*
