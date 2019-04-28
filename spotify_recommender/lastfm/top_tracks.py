@@ -18,7 +18,9 @@ class TopTracksFetcher:
         logging.info("Fetching top tracks for user " + user + " over period " + a_period)
         while keep_fetching:
             json_response = self._send_request(self._build_json_payload(user, a_period, page))
-            converted_tracks = track_convert.convert_tracks(json_response['toptracks']['track'])
+            # Filter out tracks whose playcount <= 1, since those shouldn't be considered "top"
+            tracks_to_be_converted = [track for track in json_response['toptracks']['track'] if int(track['playcount']) > 1]
+            converted_tracks = track_convert.convert_tracks(tracks_to_be_converted)
             logging.debug("Fetched " + str(converted_tracks))
             top_tracks = top_tracks + converted_tracks
             page = page + 1
