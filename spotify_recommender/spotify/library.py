@@ -16,6 +16,8 @@ def get_tracks_in_playlists(username):
     for playlist in playlists:
         track_ids = track_ids + _get_tracks_in_playlist(spotify, username, playlist)
 
+    logging.info("Fetched tracks " + str(track_ids))
+
     return track_ids
 
 
@@ -50,6 +52,8 @@ def get_saved_tracks(username):
             track_ids = track_ids + [_get_track_id(track) for track in tracks]
         else:
             keep_fetching = False
+
+    logging.info("Fetched tracks " + str(track_ids))
 
     return track_ids
 

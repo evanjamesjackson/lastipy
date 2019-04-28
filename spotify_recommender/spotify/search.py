@@ -9,7 +9,7 @@ def search_for_tracks(username, query):
 
     spotify = spotipy.Spotify(auth=token.get_token(username))
     results = spotify.search(q=query)
-    logging.debug("Search results for query " + query + ": " + json.dumps(results))
+    logging.info("Search results for query " + query + ": " + json.dumps(results))
     return _extract_ids(results)
 
 
