@@ -79,10 +79,11 @@ def _setup_logging():
     console_handler.setLevel(logging.DEBUG)
     console_handler.setFormatter(formatter)
 
-    file_handler = logging.handlers.RotatingFileHandler(
+    file_handler = logging.handlers.TimedRotatingFileHandler(
         filename=os.path.join(logs_directory, 'spotify_recommender.log'),
-        maxBytes=7 * 1024 * 1024,  # 7 MB
-        backupCount=10,
+        when='d',
+        interval=1,
+        backupCount=14,
         encoding='utf-8')
     file_handler.setFormatter(formatter)
     file_handler.setLevel(logging.INFO)
