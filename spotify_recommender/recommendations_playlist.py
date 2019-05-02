@@ -32,16 +32,19 @@ def create_recommendations_playlist(lastfm_user,
 
     shuffle(recommendations)
 
-    track_ids = []
+    spotify_tracks = []
     for track in recommendations[:playlist_size]:
-        track_ids = track_ids + search.search_for_tracks(
-            username=spotify_user,
-            query=track.artist + " " + track.track_name)
+        search_results = search.search_for_tracks(username=spotify_user,
+                                                  query=track.artist + " " + track.track_name)
+        if search_results:
+            spotify_tracks.append(search_results[0])
 
     logging.info("Filtering out library and playlist tracks")
     saved_tracks = library.get_saved_tracks(spotify_user)
     playlist_tracks = library.get_tracks_in_playlists(spotify_user)
-    track_ids = [track_id for track_id in track_ids if track_id not in saved_tracks and track_id not in playlist_tracks]
+    track_ids = [track.spotify_id for track in spotify_tracks
+                 if track.spotify_id not in saved_tracks
+                 and track.spotify_id not in playlist_tracks]
 
     playlist.add_to_playlist(spotify_user, PLAYLIST_NAME, track_ids)
 
