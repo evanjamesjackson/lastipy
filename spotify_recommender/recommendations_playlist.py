@@ -42,9 +42,9 @@ def create_recommendations_playlist(lastfm_user,
     logging.info("Filtering out library and playlist tracks")
     saved_tracks = library.get_saved_tracks(spotify_user)
     playlist_tracks = library.get_tracks_in_playlists(spotify_user)
-    track_ids = [track.spotify_id for track in spotify_tracks
-                 if track.spotify_id not in saved_tracks
-                 and track.spotify_id not in playlist_tracks]
+    track_ids = [track for track in spotify_tracks
+                 if track not in saved_tracks
+                 and track not in playlist_tracks]
 
     playlist.add_to_playlist(spotify_user, PLAYLIST_NAME, track_ids)
 
@@ -82,11 +82,10 @@ def _setup_logging():
     console_handler.setLevel(logging.DEBUG)
     console_handler.setFormatter(formatter)
 
-    file_handler = logging.handlers.TimedRotatingFileHandler(
+    file_handler = logging.handlers.RotatingFileHandler(
         filename=os.path.join(logs_directory, 'spotify_recommender.log'),
-        when='d',
-        interval=1,
-        backupCount=14,
+        maxBytes=2 * 1024 * 1024,  # 2MB
+        backupCount=10,
         encoding='utf-8')
     file_handler.setFormatter(formatter)
     file_handler.setLevel(logging.INFO)

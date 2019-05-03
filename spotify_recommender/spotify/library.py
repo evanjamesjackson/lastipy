@@ -1,4 +1,5 @@
 from . import token
+from . import track_convert
 import spotipy
 import logging
 
@@ -12,29 +13,29 @@ def get_tracks_in_playlists(username):
 
     playlists = spotify.current_user_playlists()['items']
 
-    track_ids = []
+    tracks = []
     for playlist in playlists:
-        track_ids = track_ids + _get_tracks_in_playlist(spotify, username, playlist)
+        tracks = tracks + _get_tracks_in_playlist(spotify, username, playlist)
 
-    logging.info("Fetched tracks " + str(track_ids))
+    logging.info("Fetched tracks " + str(tracks))
 
-    return track_ids
+    return tracks
 
 
 def _get_tracks_in_playlist(spotify, username, playlist):
-    track_ids_in_playlist = []
+    tracks_in_playlist = []
 
     keep_fetching = True
     while keep_fetching:
-        tracks = spotify.user_playlist_tracks(user=username,
-                                              playlist_id=playlist['id'],
-                                              offset=len(track_ids_in_playlist))['items']
-        if tracks:
-            track_ids_in_playlist = track_ids_in_playlist + [_get_track_id(track) for track in tracks]
+        json_tracks = spotify.user_playlist_tracks(user=username,
+                                                   playlist_id=playlist['id'],
+                                                   offset=len(tracks_in_playlist))
+        if json_tracks['items']:
+            tracks_in_playlist = tracks_in_playlist + track_convert.convert_json_tracks(json_tracks['items'])
         else:
             keep_fetching = False
 
-    return track_ids_in_playlist
+    return tracks_in_playlist
 
 
 def get_saved_tracks(username):
@@ -44,21 +45,15 @@ def get_saved_tracks(username):
 
     spotify = spotipy.Spotify(auth=token.get_token(username))
 
-    track_ids = []
+    saved_tracks = []
     keep_fetching = True
     while keep_fetching:
-        tracks = spotify.current_user_saved_tracks(offset=len(track_ids))['items']
-        if tracks:
-            track_ids = track_ids + [_get_track_id(track) for track in tracks]
+        json_tracks = spotify.current_user_saved_tracks(offset=len(saved_tracks))
+        if json_tracks['items']:
+            saved_tracks = saved_tracks + track_convert.convert_json_tracks(json_tracks['items'])
         else:
             keep_fetching = False
 
-    logging.info("Fetched tracks " + str(track_ids))
+    logging.info("Fetched tracks " + str(saved_tracks))
 
-    return track_ids
-
-
-def _get_track_id(track):
-    return track['track']['id']
-
-
+    return saved_tracks
