@@ -8,5 +8,5 @@ setup(
     author_email='evanjamesjackson@gmail.com',
     packages=find_packages(),
     scripts='spotify_recommender/recommendations_playlist.py',
-    install_requires=['requests', 'spotipy']
+    install_requires=['numpy', 'requests', 'spotipy']
 )
