@@ -33,10 +33,10 @@ class TopRecommendationsFetcher:
 
         logging.info("Filtering out recent tracks from recommendations...")
         # TODO necessary since lists are made up of different types... could be more elegant
-        recommendations_as_regular_tracks = [Track(track.track_name, track.artist) for track in recommendations]
-        recents_as_regular_tracks = [Track(track.track_name, track.artist) for track in recent_tracks]
-        recommendations_as_regular_tracks = [track for track in recommendations_as_regular_tracks if track not in recents_as_regular_tracks]
-        recommendations = [track for track in recommendations if Track(track.track_name, track.artist) in recommendations_as_regular_tracks]
+        recommendations = [recommendation for recommendation in recommendations
+                           if not any(recommendation.track_name == recent_track.track_name
+                                      and recommendation.artist == recent_track.artist
+                                      for recent_track in recent_tracks)]
 
         logging.info("Getting a random list of up to " + str(size) + " recommendations from fetched list...")
         recommendations = self._get_random_weighted_recommendations(recommendations, size)
