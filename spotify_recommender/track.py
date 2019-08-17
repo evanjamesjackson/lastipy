@@ -11,6 +11,7 @@ class Track:
         return isinstance(other, Track) \
                and self.track_name == other.track_name \
                and self.artist == other.artist \
+               and self.playcount == other.playcount \
                and self.spotify_id == other.spotify_id
 
     def __repr__(self):
