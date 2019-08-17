@@ -1,6 +1,8 @@
+
 import unittest
 from spotify_recommender.lastfm import period
 from spotify_recommender.lastfm.top_tracks import TopTracksFetcher
+from spotify_recommender.spotify import playlist
 from spotify_recommender.track import Track
 from unittest.mock import patch, Mock
 from requests import HTTPError
@@ -75,7 +77,41 @@ class TopTracksFetcherTest(unittest.TestCase):
         fetcher = TopTracksFetcher()
         fetched_tracks = fetcher.fetch(user="sonofjack3", a_period=period.SEVEN_DAYS)
         self.assertCountEqual(fetched_tracks, expected_tracks)
-    
+
+    @patch('requests.get')
+    def test_songs_with_one_playcount_ignored(self, mock_get):
+        ignored_track_1 = Track(track_name="Stayin' Alive", artist="Bee Gees")
+        non_ignored_track = Track(track_name="Ventura Highway", artist="America")
+        ignored_track_2 = Track(track_name="Anesthetized Lesson", artist="Gum")
+
+        mock_get.ok = True
+
+        json_track_1 = self._build_json(ignored_track_1, playcount=1)
+        json_track_2 = self._build_json(non_ignored_track, playcount=2)
+        json_track_3 = self._build_json(ignored_track_2, playcount=1)
+
+        first_page_response = {
+            'toptracks': {
+                'track': [json_track_1, json_track_2, json_track_3]
+            }
+        }
+
+        second_page_response = {
+            'toptracks': {
+                'track': []
+            }
+        }
+
+        mock_responses = [Mock(), Mock()]
+        mock_responses[0].json.return_value = first_page_response
+        mock_responses[1].json.return_value = second_page_response
+        mock_get.side_effect = mock_responses
+
+        fetcher = TopTracksFetcher()
+        fetched_tracks = fetcher.fetch(user='sonofjack3', a_period=period.SEVEN_DAYS)
+        self.assertEqual(fetched_tracks.__len__(), 1)
+        self.assertEqual(fetched_tracks[0], non_ignored_track)
+
     @patch('requests.get')
     def test_failure(self, mock_get):
         mock_get.ok = False
@@ -85,10 +121,11 @@ class TopTracksFetcherTest(unittest.TestCase):
         with self.assertRaises(HTTPError):
             fetcher.fetch('sonofjack3', period.SEVEN_DAYS)
 
-    def _build_json(self, track):
+    def _build_json(self, track, playcount=2):
         return {
             'name': track.track_name,
             'artist': {
                 'name': track.artist
-            }
+            },
+            'playcount': playcount
         }
