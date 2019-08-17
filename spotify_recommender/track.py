@@ -1,9 +1,10 @@
 class Track:
     """Represents a track"""
 
-    def __init__(self, track_name, artist, spotify_id=None):
+    def __init__(self, track_name, artist, playcount=1, spotify_id=None):
         self.track_name = track_name
         self.artist = artist
+        self.playcount = playcount
         self.spotify_id = spotify_id
 
     def __eq__(self, other):

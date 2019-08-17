@@ -18,4 +18,9 @@ def _convert_track(track_to_convert):
     elif '#text' in artist_json:
         artist = artist_json['#text']
 
-    return Track(track_name, artist)
+    if 'playcount' in track_to_convert:
+        playcount = track_to_convert['playcount']
+    else:
+        playcount = 1
+
+    return Track(track_name, artist, playcount)
