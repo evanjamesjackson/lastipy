@@ -1,6 +1,5 @@
 import logging
 from numpy.random import choice
-from pandas import DataFrame
 from spotify_recommender.lastfm import period
 
 
