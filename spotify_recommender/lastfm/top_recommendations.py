@@ -1,6 +1,7 @@
 import logging
 from numpy.random import choice
 from spotify_recommender.lastfm import period
+from spotify_recommender.track import Track
 
 
 class TopRecommendationsFetcher:
@@ -30,10 +31,14 @@ class TopRecommendationsFetcher:
 
         recent_tracks = self.recent_fetcher.fetch(user=user)
 
-        # TODO This takes surprisingly long
         logging.info("Filtering out recent tracks from recommendations...")
-        recommendations = [track for track in recommendations if track not in recent_tracks]
+        # TODO necessary since lists are made up of different types... could be more elegant
+        recommendations_as_regular_tracks = [Track(track.track_name, track.artist) for track in recommendations]
+        recents_as_regular_tracks = [Track(track.track_name, track.artist) for track in recent_tracks]
+        recommendations_as_regular_tracks = [track for track in recommendations_as_regular_tracks if track not in recents_as_regular_tracks]
+        recommendations = [track for track in recommendations if Track(track.track_name, track.artist) in recommendations_as_regular_tracks]
 
+        logging.info("Getting a random list of up to " + str(size) + " recommendations from fetched list...")
         recommendations = self._get_random_weighted_recommendations(recommendations, size)
 
         # Filter out duplicates
