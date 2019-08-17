@@ -28,12 +28,13 @@ def create_recommendations_playlist(lastfm_user,
                                                         recent_fetcher=RecentTracksFetcher())
     recommendations = recommendations_fetcher.fetch(user=lastfm_user,
                                                     recommendation_period=recommendation_period,
-                                                    max_similar_tracks_per_top_track=max_recommendations_per_top_track)
+                                                    max_similar_tracks_per_top_track=max_recommendations_per_top_track,
+                                                    size=playlist_size)
 
     shuffle(recommendations)
 
     spotify_tracks = []
-    for track in recommendations[:playlist_size]:
+    for track in recommendations:
         search_results = search.search_for_tracks(username=spotify_user,
                                                   query=track.artist + " " + track.track_name)
         if search_results:

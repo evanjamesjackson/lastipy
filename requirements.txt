@@ -1,2 +1,3 @@
+numpys
 requests
 spotipy

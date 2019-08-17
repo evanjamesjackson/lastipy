@@ -14,5 +14,8 @@ class RecommendedTrack(Track):
             and self.artist == other.artist \
             and self.recommendation_rating == other.recommendation_rating
 
+    def __hash__(self):
+        return hash((self.track_name, self.artist, self.recommendation_rating))
+
     def __repr__(self):
         return str(self.__dict__)

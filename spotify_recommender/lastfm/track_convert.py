@@ -21,6 +21,6 @@ def _convert_track(track_to_convert):
 
     if 'playcount' in track_to_convert:
         # TODO kinda smelly having this here
-        return ScrobbledTrack(track_name, artist, track_to_convert['playcount'])
+        return ScrobbledTrack(track_name, artist, int(track_to_convert['playcount']))
 
     return Track(track_name, artist)

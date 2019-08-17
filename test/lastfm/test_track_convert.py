@@ -12,7 +12,7 @@ class TrackConverterTest(unittest.TestCase):
             'artist': {
                 'name': artist
             },
-            'playcount': playcount
+            'playcount': str(playcount)
         }
 
         converted = track_convert.convert_tracks([to_convert])
@@ -31,7 +31,7 @@ class TrackConverterTest(unittest.TestCase):
                 'mbid': '45c25199-fa62-4d4c-b0a2-11eeed6923c3',
                 '#text': artist
             },
-            'playcount': playcount
+            'playcount': str(playcount)
         }
 
         converted = track_convert.convert_tracks([to_convert])
