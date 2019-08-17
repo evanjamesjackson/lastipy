@@ -1,4 +1,4 @@
-from ..track import Track
+from ..spotify.spotify_track import SpotifyTrack
 
 
 def convert_json_tracks(json_tracks):
@@ -13,4 +13,4 @@ def convert_json_track(json_track):
     artist = json_track['artists'][0]['name']
     name = json_track['name']
     track_id = json_track['id']
-    return Track(track_name=name, artist=artist, spotify_id=track_id)
+    return SpotifyTrack(track_name=name, artist=artist, spotify_id=track_id)

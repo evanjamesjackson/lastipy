@@ -1,4 +1,5 @@
 from spotify_recommender.track import Track
+from .scrobbled_track import ScrobbledTrack
 
 
 def convert_tracks(tracks_to_convert):
@@ -19,8 +20,7 @@ def _convert_track(track_to_convert):
         artist = artist_json['#text']
 
     if 'playcount' in track_to_convert:
-        playcount = track_to_convert['playcount']
-    else:
-        playcount = 1
+        # TODO kinda smelly having this here
+        return ScrobbledTrack(track_name, artist, track_to_convert['playcount'])
 
-    return Track(track_name, artist, playcount)
+    return Track(track_name, artist)

@@ -1,6 +1,7 @@
 import logging, requests
 from ..parse_keys import ApiKeysParser
 from . import track_convert
+from .recommended_track import RecommendedTrack
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=track.getsimilar'
 
@@ -16,6 +17,10 @@ class SimilarTracksFetcher:
         json_response = self._send_request(self._build_json_payload(track, limit))
         if 'similartracks' in json_response:
             similar_tracks = track_convert.convert_tracks(json_response['similartracks']['track'])
+            similar_tracks = list(map(lambda similar_track: RecommendedTrack(similar_track.track_name,
+                                                                        similar_track.artist,
+                                                                        track.playcount),
+                                 similar_tracks))
             logging.info(f"Fetched " + str(len(similar_tracks)) + " similar tracks: " + str(similar_tracks))
             return similar_tracks
         elif 'errors' in json_response:
