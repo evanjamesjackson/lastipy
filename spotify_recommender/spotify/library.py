@@ -1,5 +1,5 @@
-from . import token
-from . import track_convert
+from spotify_recommender.spotify import token
+from spotify_recommender.spotify import track_convert
 import spotipy
 import logging
 

@@ -1,7 +1,7 @@
 import logging, requests
-from ..parse_keys import ApiKeysParser
-from . import track_convert
-from .recommended_track import RecommendedTrack
+from spotify_recommender.parse_keys import ApiKeysParser
+from spotify_recommender.lastfm import track_convert
+from spotify_recommender.lastfm.recommended_track import RecommendedTrack
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=track.getsimilar'
 

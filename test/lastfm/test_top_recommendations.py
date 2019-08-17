@@ -6,7 +6,6 @@ from spotify_recommender.lastfm.recent_tracks import RecentTracksFetcher
 from spotify_recommender.lastfm.top_recommendations import TopRecommendationsFetcher
 from spotify_recommender.lastfm.recommended_track import RecommendedTrack
 from spotify_recommender.lastfm.scrobbled_track import ScrobbledTrack
-from spotify_recommender.track import Track
 
 
 class TopRecommendationsFetcherTest(unittest.TestCase):
