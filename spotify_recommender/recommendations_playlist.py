@@ -36,21 +36,25 @@ def create_recommendations_playlist(lastfm_user,
     playlist_tracks = library.get_tracks_in_playlists(spotify_user)
 
     weights = _get_weights(recommendations)
+
+    # Potential endless loop here, if no satisfactory track can be found to get the playlist to the given size.
+    # This is unlikely to happen though due to the amount of recommendations generated compared to a typical
+    # playlist size (eg: 10000 recommendations vs. 40 tracks for a playlist)
     tracks_for_playlist = []
     while len(tracks_for_playlist) < playlist_size:
         recommendation = choice(recommendations, p=weights)
+
         search_results = search.search_for_tracks(username=spotify_user,
                                                   query=recommendation.artist + " " + recommendation.track_name)
+        # Always use the first result, which we can assume is the closest match
         first_result = search_results[0] if search_results else None
 
-        first_result = first_result \
-            if first_result is not None \
-            and Track.are_equivalent(first_result, recommendation) \
-            and first_result not in playlist_tracks \
-            and first_result not in saved_tracks \
-            else None
-        if first_result is not None:
-            tracks_for_playlist.append(search_results[0])
+        if first_result is not None \
+                and Track.are_equivalent(first_result, recommendation) \
+                and first_result not in tracks_for_playlist \
+                and first_result not in playlist_tracks \
+                and first_result not in saved_tracks:
+            tracks_for_playlist.append(first_result)
 
     playlist.add_to_playlist(spotify_user, PLAYLIST_NAME, tracks_for_playlist)
 
