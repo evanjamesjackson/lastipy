@@ -10,6 +10,7 @@
 ~~* Make it runnable in Linux~~
 ~~* Schedule on cronjob~~
 ~~* Make it so that tracks with higher play counts get more representation in recommendations than those with lower counts~~
+* Tracks from artists not yet listened to should be favored
 * "Fast" scrobbler - maybe there's a way to change the amount of time required for a scrobble?
 * Not part of this project, but a way to automatically take songs out of library after some time
     * Perhaps after 1 month in library, put into new favorites
