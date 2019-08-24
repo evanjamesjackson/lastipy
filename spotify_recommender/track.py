@@ -8,7 +8,8 @@ class Track:
     @staticmethod
     def are_equivalent(track_1, track_2):
         """Returns true if the given tracks are equivalent (ie: same track name and artist)"""
-        return track_1.track_name == track_2.track_name and track_1.artist == track_2.artist
+        return track_1.track_name.casefold() == track_2.track_name.casefold() \
+            and track_1.artist.casefold() == track_2.artist.casefold()
 
     def __eq__(self, other):
         return isinstance(other, Track) \
