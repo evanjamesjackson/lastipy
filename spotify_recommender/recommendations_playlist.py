@@ -9,11 +9,12 @@ from spotify_recommender.lastfm.similar_tracks import SimilarTracksFetcher
 from spotify_recommender.lastfm.top_recommendations import TopRecommendationsFetcher
 from spotify_recommender.lastfm.recent_tracks import RecentTracksFetcher
 from spotify_recommender.spotify import library, playlist, search
-from random import shuffle
 from configparser import ConfigParser
 import os
 from spotify_recommender import definitions
 from spotify_recommender.track import Track
+from numpy.random import choice
+
 
 PLAYLIST_NAME = "Last.fm"
 
@@ -29,30 +30,38 @@ def create_recommendations_playlist(lastfm_user,
                                                         recent_fetcher=RecentTracksFetcher())
     recommendations = recommendations_fetcher.fetch(user=lastfm_user,
                                                     recommendation_period=recommendation_period,
-                                                    max_similar_tracks_per_top_track=max_recommendations_per_top_track,
-                                                    size=playlist_size)
+                                                    max_similar_tracks_per_top_track=max_recommendations_per_top_track)
 
-    shuffle(recommendations)
-
-    tracks_for_playlist = []
-    for recommendation in recommendations:
-        search_results = search.search_for_tracks(username=spotify_user,
-                                                  query=recommendation.artist + " " + recommendation.track_name)
-        if search_results and Track.are_equivalent(search_results[0], recommendation):
-            # Checking to make sure the search result actually matches the track we were looking for, since
-            # occasionally that's not the case.
-            tracks_for_playlist.append(search_results[0])
-
-    logging.debug("Before filtering out library/playlist tracks, found " + str(len(tracks_for_playlist)) + " in Spotify")
-
-    logging.info("Filtering out library and playlist tracks")
     saved_tracks = library.get_saved_tracks(spotify_user)
     playlist_tracks = library.get_tracks_in_playlists(spotify_user)
-    track_ids = [track for track in tracks_for_playlist
-                 if track not in saved_tracks
-                 and track not in playlist_tracks]
 
-    playlist.add_to_playlist(spotify_user, PLAYLIST_NAME, track_ids)
+    weights = _get_weights(recommendations)
+    tracks_for_playlist = []
+    while len(tracks_for_playlist) < playlist_size:
+        recommendation = choice(recommendations, p=weights)
+        search_results = search.search_for_tracks(username=spotify_user,
+                                                  query=recommendation.artist + " " + recommendation.track_name)
+        first_result = search_results[0] if search_results else None
+
+        first_result = first_result \
+            if first_result is not None \
+            and Track.are_equivalent(first_result, recommendation) \
+            and first_result not in playlist_tracks \
+            and first_result not in saved_tracks \
+            else None
+        if first_result is not None:
+            tracks_for_playlist.append(search_results[0])
+
+    playlist.add_to_playlist(spotify_user, PLAYLIST_NAME, tracks_for_playlist)
+
+
+def _get_weights(recommendations):
+    ratings = [recommendation.recommendation_rating for recommendation in recommendations]
+    ratings_total = sum(ratings)
+    logging.debug(f"Ratings total: " + str(ratings_total))
+    weights = [recommendation.recommendation_rating / ratings_total for recommendation in recommendations]
+    logging.debug(f"Weights: " + str(weights))
+    return weights
 
 
 def _main():
