@@ -13,6 +13,7 @@ from random import shuffle
 from configparser import ConfigParser
 import os
 from spotify_recommender import definitions
+from spotify_recommender.track import Track
 
 PLAYLIST_NAME = "Last.fm"
 
@@ -33,17 +34,21 @@ def create_recommendations_playlist(lastfm_user,
 
     shuffle(recommendations)
 
-    spotify_tracks = []
-    for track in recommendations:
+    tracks_for_playlist = []
+    for recommendation in recommendations:
         search_results = search.search_for_tracks(username=spotify_user,
-                                                  query=track.artist + " " + track.track_name)
-        if search_results:
-            spotify_tracks.append(search_results[0])
+                                                  query=recommendation.artist + " " + recommendation.track_name)
+        if search_results and Track.are_equivalent(search_results[0], recommendation):
+            # Checking to make sure the search result actually matches the track we were looking for, since
+            # occasionally that's not the case.
+            tracks_for_playlist.append(search_results[0])
+
+    logging.debug("Before filtering out library/playlist tracks, found " + str(len(tracks_for_playlist)) + " in Spotify")
 
     logging.info("Filtering out library and playlist tracks")
     saved_tracks = library.get_saved_tracks(spotify_user)
     playlist_tracks = library.get_tracks_in_playlists(spotify_user)
-    track_ids = [track for track in spotify_tracks
+    track_ids = [track for track in tracks_for_playlist
                  if track not in saved_tracks
                  and track not in playlist_tracks]
 
