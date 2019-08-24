@@ -32,10 +32,8 @@ class TopRecommendationsFetcher:
         recent_tracks = self.recent_fetcher.fetch(user=user)
 
         logging.info("Filtering out recent tracks from recommendations...")
-        # TODO necessary since lists are made up of different types... could be more elegant
         recommendations = [recommendation for recommendation in recommendations
-                           if not any(recommendation.track_name == recent_track.track_name
-                                      and recommendation.artist == recent_track.artist
+                           if not any(Track.are_equivalent(recommendation, recent_track)
                                       for recent_track in recent_tracks)]
 
         logging.info("Getting a random list of up to " + str(size) + " recommendations from fetched list...")
