@@ -18,7 +18,7 @@ class RecentTracksFetcher:
         recent_tracks = []
         keep_fetching = True
         logging.info("Fetching recent tracks for " + user + "...")
-        max_retries = 3
+        max_retries = 10
         retries = 0
         while keep_fetching:
             try:
