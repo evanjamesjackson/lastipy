@@ -32,6 +32,7 @@ class RecentTracksFetcher:
             except Exception as e:
                 # This particular endpoint has a habit of throwing back error 500, so just retry if it does
                 if retries < max_retries:
+                    logging.warn("Failed to fetch recent tracks page " + str(page) +  ". Retrying..."
                     retries = retries + 1
                 else:
                     raise e
