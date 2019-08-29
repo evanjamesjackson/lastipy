@@ -5,7 +5,7 @@ import logging
 
 
 def get_tracks_in_playlists(username):
-    """Returns the IDs of all the tracks in the given user's playlists"""
+    """Returns the all tracks in the given user's playlists"""
 
     logging.info("Fetching all tracks in " + username + "'s playlists")
 
@@ -39,7 +39,7 @@ def _get_tracks_in_playlist(spotify, username, playlist):
 
 
 def get_saved_tracks(username):
-    """Returns the IDs of all the given user's saved tracks"""
+    """Returns the all of the given user's saved tracks"""
 
     logging.info("Fetching " + username + "'s saved tracks")
 
