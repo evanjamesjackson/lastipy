@@ -33,11 +33,21 @@ class TopRecommendationsFetcherTest(unittest.TestCase):
 
         self.assertCountEqual(recommendations, [new_recommendation])
 
-    def test_weighed_randomizer(self):
-        fetcher = TopRecommendationsFetcher(similar_fetcher=SimilarTracksFetcher(), top_fetcher=TopTracksFetcher(), recent_fetcher=RecentTracksFetcher())
-        recommended_track_1 = RecommendedTrack(track_name="Penny Lane", artist="The Beatles", recommendation_rating=5)
-        recommended_track_2 = RecommendedTrack(track_name="Strawberry Fields Forever", artist="The Beatles", recommendation_rating=10)
-        recommended_track_3 = RecommendedTrack(track_name="Hey Bulldog", artist="The Beatles", recommendation_rating=6)
-        recommendations = [recommended_track_1, recommended_track_2, recommended_track_3]
-        recommendations = fetcher._get_random_weighted_recommendations(recommendations=recommendations, size=3)
-        self.assertEqual(3, len(recommendations))
+    def test_blacklisted_artists_are_filtered(self):
+        recent_fetcher = RecentTracksFetcher()
+        recent_fetcher.fetch = MagicMock(return_value=[])
+        top_fetcher = TopTracksFetcher()
+        top_fetcher.fetch = MagicMock(return_value=[ScrobbledTrack(track_name='Here Comes the Sun', artist='The Beatles', playcount=5)])
+
+        similar_fetcher = SimilarTracksFetcher()
+        recommendation_1 = RecommendedTrack(track_name="Badge", artist="Cream", recommendation_rating=1)
+        recommendation_2 = RecommendedTrack(track_name="Penny Lane", artist="The Beatles", recommendation_rating=1)
+        similar_fetcher.fetch = MagicMock(return_value=[recommendation_1, recommendation_2])
+
+        recommendations = TopRecommendationsFetcher(similar_fetcher=similar_fetcher,
+                                                    top_fetcher=top_fetcher,
+                                                    recent_fetcher=recent_fetcher).fetch(
+                                                        user="meeee",
+                                                        blacklisted_artists=['The Beatles'])
+
+        self.assertCountEqual(recommendations, [recommendation_1])

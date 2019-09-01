@@ -9,7 +9,11 @@ class TopRecommendationsFetcher:
         self.top_fetcher = top_fetcher
         self.recent_fetcher = recent_fetcher
 
-    def fetch(self, user, recommendation_period=period.OVERALL, max_similar_tracks_per_top_track=100):
+    def fetch(self,
+              user,
+              recommendation_period=period.OVERALL,
+              max_similar_tracks_per_top_track=100,
+              blacklisted_artists=[]):
         """Fetches recommendations for the given user by fetching their top tracks, then getting tracks similar
         to them, and finally filtering out the user's recent tracks"""
 
@@ -34,6 +38,11 @@ class TopRecommendationsFetcher:
         recommendations = [recommendation for recommendation in recommendations
                            if not any(Track.are_equivalent(recommendation, recent_track)
                                       for recent_track in recent_tracks)]
+
+        logging.info("Filtering out blacklisted artists (" + str(blacklisted_artists) + ")...")
+        recommendations = [recommendation for recommendation in recommendations
+                           if not any(recommendation.artist == blacklisted_artist
+                                      for blacklisted_artist in blacklisted_artists)]
 
         # Filter out duplicates
         recommendations = list(set(recommendations))

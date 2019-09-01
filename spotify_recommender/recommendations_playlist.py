@@ -23,14 +23,16 @@ def create_recommendations_playlist(lastfm_user,
                                     spotify_user,
                                     recommendation_period=period.OVERALL,
                                     max_recommendations_per_top_track=50,
-                                    playlist_size=40):
+                                    playlist_size=40,
+                                    blacklisted_artists=[]):
 
     recommendations_fetcher = TopRecommendationsFetcher(similar_fetcher=SimilarTracksFetcher(),
                                                         top_fetcher=TopTracksFetcher(),
                                                         recent_fetcher=RecentTracksFetcher())
     recommendations = recommendations_fetcher.fetch(user=lastfm_user,
                                                     recommendation_period=recommendation_period,
-                                                    max_similar_tracks_per_top_track=max_recommendations_per_top_track)
+                                                    max_similar_tracks_per_top_track=max_recommendations_per_top_track,
+                                                    blacklisted_artists=blacklisted_artists)
 
     saved_tracks = library.get_saved_tracks(spotify_user)
     playlist_tracks = library.get_tracks_in_playlists(spotify_user)
@@ -84,7 +86,8 @@ def _main():
                                     args.spotify_user,
                                     args.recommendation_period,
                                     args.max_recommendations_per_top_track,
-                                    args.playlist_size)
+                                    args.playlist_size,
+                                    args.blacklisted_artists)
 
 
 def _setup_logging():
@@ -122,6 +125,7 @@ def _setup_arg_parser():
     group.add_argument('-lr', '--recommendation-period', type=str)
     group.add_argument('-ms', '--max-recommendations-per-top-track', type=int)
     group.add_argument('-ps', '--playlist-size', type=int)
+    group.add_argument('-ba', '--blacklisted-artists', type=str)
     return parser
 
 
@@ -134,6 +138,7 @@ def _extract_args_from_file(args):
     args.recommendation_period = config_parser[section]['RecommendationPeriod']
     args.max_recommendations_per_top_track = int(config_parser[section]['MaxRecommendationsPerTopTrack'])
     args.playlist_size = int(config_parser[section]['PlaylistSize'])
+    args.blacklisted_artists = config_parser[section]['BlacklistedArtists'].split(",")
     return args
 
 
