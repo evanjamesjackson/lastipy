@@ -45,6 +45,7 @@ class TopRecommendationsFetcher:
                                       for blacklisted_artist in blacklisted_artists)]
 
         # Filter out duplicates
+        # TODO maybe duplicates should mean a greater chance of getting that recommendation in the playlist?
         recommendations = list(set(recommendations))
 
         logging.info(f"Fetched " + str(len(recommendations)) + " recommendations: " + str(recommendations))
