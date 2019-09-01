@@ -16,6 +16,7 @@ from spotify_recommender.track import Track
 from numpy.random import choice
 
 
+# TODO Make this customizable
 PLAYLIST_NAME = "Last.fm"
 
 
