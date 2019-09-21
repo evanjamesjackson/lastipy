@@ -1,4 +1,5 @@
-import logging, requests
+import logging
+import requests
 from spotify_recommender.parse_keys import ApiKeysParser
 from spotify_recommender.lastfm import track_convert
 from spotify_recommender.lastfm.recommended_track import RecommendedTrack
