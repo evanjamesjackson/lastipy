@@ -8,6 +8,7 @@ from spotify_recommender.lastfm.top_tracks import TopTracksFetcher
 from spotify_recommender.lastfm.similar_tracks import SimilarTracksFetcher
 from spotify_recommender.lastfm.top_recommendations import TopRecommendationsFetcher
 from spotify_recommender.lastfm.recent_tracks import RecentTracksFetcher
+from spotify_recommender.lastfm.recent_artists import RecentArtistsFetcher
 from spotify_recommender.spotify import library, playlist, search
 from configparser import ConfigParser
 import os
@@ -25,15 +26,18 @@ def create_recommendations_playlist(lastfm_user,
                                     recommendation_period=period.OVERALL,
                                     max_recommendations_per_top_track=50,
                                     playlist_size=40,
-                                    blacklisted_artists=[]):
+                                    blacklisted_artists=[],
+                                    prefer_unheard_artists=True):
 
     recommendations_fetcher = TopRecommendationsFetcher(similar_fetcher=SimilarTracksFetcher(),
                                                         top_fetcher=TopTracksFetcher(),
-                                                        recent_fetcher=RecentTracksFetcher())
+                                                        recent_fetcher=RecentTracksFetcher(),
+                                                        recent_artists_fetcher=RecentArtistsFetcher())
     recommendations = recommendations_fetcher.fetch(user=lastfm_user,
                                                     recommendation_period=recommendation_period,
                                                     max_similar_tracks_per_top_track=max_recommendations_per_top_track,
-                                                    blacklisted_artists=blacklisted_artists)
+                                                    blacklisted_artists=blacklisted_artists,
+                                                    prefer_unheard_artists=prefer_unheard_artists)
 
     saved_tracks = library.get_saved_tracks(spotify_user)
     playlist_tracks = library.get_tracks_in_playlists(spotify_user)
@@ -140,7 +144,11 @@ def _extract_args_from_file(args):
     args.max_recommendations_per_top_track = int(config_parser[section]['MaxRecommendationsPerTopTrack'])
     args.playlist_size = int(config_parser[section]['PlaylistSize'])
     args.blacklisted_artists = config_parser[section]['BlacklistedArtists'].split(",")
+    args.prefer_unheard_artists = _str_to_bool(config_parser[section]['PreferUnheardArtists'])
     return args
+
+def _str_to_bool(to_convert):
+    return to_convert == "True"
 
 
 if __name__ == "__main__":
