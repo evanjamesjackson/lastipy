@@ -1,10 +1,12 @@
-import logging, requests
+import logging
+import requests
 from spotify_recommender.parse_keys import ApiKeysParser
 from spotify_recommender.lastfm import track_convert
+from requests import RequestException
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks'
-
 RESULTS_PER_PAGE_LIMIT = 200
+MAX_RETRIES = 10
 
 
 class RecentTracksFetcher:
@@ -14,28 +16,27 @@ class RecentTracksFetcher:
     def fetch(self, user):
         """Fetches recent tracks for the given user"""
 
-        page = 1
-        recent_tracks = []
-        keep_fetching = True
         logging.info("Fetching recent tracks for " + user + "...")
-        max_retries = 10
+        recent_tracks = []
+        page = 1
+        total_pages = 1
         retries = 0
-        while keep_fetching:
+        while page <= total_pages:
             try:
                 json_response = self._send_request(self._build_json_payload(user, page))
+                logging.debug("Response: " + str(json_response))
                 converted_tracks = track_convert.convert_tracks(json_response['recenttracks']['track'])
-                logging.debug("Fetched " + str(converted_tracks))
                 recent_tracks = recent_tracks + converted_tracks
+                total_pages = int(json_response['recenttracks']['@attr']['totalPages'])
                 page = page + 1
-                if not converted_tracks:
-                    keep_fetching = False
-            except Exception as e:
+            except RequestException:
                 # This particular endpoint has a habit of throwing back error 500, so just retry if it does
-                if retries < max_retries:
-                    logging.warning("Failed to fetch recent tracks page " + str(page) +  ". Retrying...")
+                if retries < MAX_RETRIES:
+                    logging.warning("Failed to fetch recent tracks page " + str(page) + ". Retrying...")
                     retries = retries + 1
                 else:
-                    logging.warning("Failed to fetch recent tracks page " + str(page) +  " after " + str(retries) + " retries. Giving up and moving on...")
+                    logging.warning("Failed to fetch recent tracks page " + str(page) +
+                                    " after " + str(retries) + " retries. Giving up and moving on...")
                     break
 
         logging.info(f"Fetched " + str(len(recent_tracks)) + " recent tracks: " + str(recent_tracks))
