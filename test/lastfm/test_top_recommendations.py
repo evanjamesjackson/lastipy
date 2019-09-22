@@ -1,11 +1,11 @@
 import unittest
 from unittest.mock import MagicMock
-from spotify_recommender.lastfm.similar_tracks import SimilarTracksFetcher
-from spotify_recommender.lastfm.top_tracks import TopTracksFetcher
-from spotify_recommender.lastfm.recent_tracks import RecentTracksFetcher
-from spotify_recommender.lastfm.top_recommendations import TopRecommendationsFetcher
-from spotify_recommender.lastfm.recommended_track import RecommendedTrack
-from spotify_recommender.lastfm.scrobbled_track import ScrobbledTrack
+from src.lastfm.similar_tracks import SimilarTracksFetcher
+from src.lastfm.top_tracks import TopTracksFetcher
+from src.lastfm.recent_tracks import RecentTracksFetcher
+from src.lastfm.top_recommendations import TopRecommendationsFetcher
+from src.lastfm.recommended_track import RecommendedTrack
+from src.lastfm.scrobbled_track import ScrobbledTrack
 
 
 class TopRecommendationsFetcherTest(unittest.TestCase):

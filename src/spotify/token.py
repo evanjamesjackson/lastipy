@@ -1,8 +1,8 @@
-from spotify_recommender.parse_keys import ApiKeysParser
+from src.parse_keys import ApiKeysParser
 import spotipy.oauth2 as oauth2
 import webbrowser
 import os
-from spotify_recommender import definitions
+from src import definitions
 
 REDIRECT_URI = 'https://www.example.com/callback/'
 

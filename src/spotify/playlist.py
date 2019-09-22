@@ -1,6 +1,6 @@
 import logging
 import spotipy
-from spotify_recommender.spotify import token
+from src.spotify import token
 
 
 def add_to_playlist(username, playlist_name, tracks):

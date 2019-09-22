@@ -1,5 +1,5 @@
 import unittest
-from spotify_recommender.lastfm import track_convert
+from src.lastfm import track_convert
 
 
 class TrackConverterTest(unittest.TestCase):

@@ -1,4 +1,4 @@
-from spotify_recommender.track import Track
+from src.track import Track
 
 
 class ScrobbledTrack(Track):

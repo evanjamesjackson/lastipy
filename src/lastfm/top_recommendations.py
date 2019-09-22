@@ -1,6 +1,6 @@
 import logging
-from spotify_recommender.lastfm import period
-from spotify_recommender.track import Track
+from src.lastfm import period
+from src.track import Track
 import numpy
 
 

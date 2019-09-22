@@ -1,5 +1,5 @@
-from spotify_recommender.track import Track
-from spotify_recommender.lastfm.scrobbled_track import ScrobbledTrack
+from src.track import Track
+from src.lastfm.scrobbled_track import ScrobbledTrack
 
 
 def convert_tracks(tracks_to_convert):

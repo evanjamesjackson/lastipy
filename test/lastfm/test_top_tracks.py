@@ -1,9 +1,9 @@
 
 import unittest
-from spotify_recommender.lastfm import period
-from spotify_recommender.lastfm.top_tracks import TopTracksFetcher
-from spotify_recommender.spotify import playlist
-from spotify_recommender.lastfm.scrobbled_track import ScrobbledTrack
+from src.lastfm import period
+from src.lastfm.top_tracks import TopTracksFetcher
+from src.spotify import playlist
+from src.lastfm.scrobbled_track import ScrobbledTrack
 from unittest.mock import patch, Mock
 from requests import HTTPError
 

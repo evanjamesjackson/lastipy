@@ -1,4 +1,4 @@
-from spotify_recommender.spotify.spotify_track import SpotifyTrack
+from src.spotify.spotify_track import SpotifyTrack
 
 
 def convert_json_tracks(json_tracks):

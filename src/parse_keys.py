@@ -1,6 +1,6 @@
 from configparser import ConfigParser
 import os
-from spotify_recommender import definitions
+from src import definitions
 
 
 class ApiKeysParser:

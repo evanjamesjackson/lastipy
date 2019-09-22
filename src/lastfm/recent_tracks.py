@@ -1,7 +1,7 @@
 import logging
 import requests
-from spotify_recommender.parse_keys import ApiKeysParser
-from spotify_recommender.lastfm import track_convert
+from src.parse_keys import ApiKeysParser
+from src.lastfm import track_convert
 from requests import RequestException
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks'

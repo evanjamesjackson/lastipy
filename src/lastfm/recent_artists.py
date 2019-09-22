@@ -1,8 +1,8 @@
 import logging, requests
-from spotify_recommender.parse_keys import ApiKeysParser
-from spotify_recommender.lastfm import track_convert
-from spotify_recommender.lastfm.recommended_track import RecommendedTrack
-from spotify_recommender.lastfm.scrobbled_artist import ScrobbledArtist
+from src.parse_keys import ApiKeysParser
+from src.lastfm import track_convert
+from src.lastfm.recommended_track import RecommendedTrack
+from src.lastfm.scrobbled_artist import ScrobbledArtist
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=library.getartists'
 RESULTS_PER_PAGE_LIMIT = 200
