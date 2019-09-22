@@ -18,5 +18,7 @@ python spotify_recommender -f configuration-file
 ```
 See example.config for an example configuration file.
 <h2>Improvements</h2>
+
 * Make a webapp where users can enter their information and have the playlists generated automatically
+
 * Reduce the chance of getting multiple songs from the same artist in a playlist
