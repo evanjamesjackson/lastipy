@@ -3,9 +3,35 @@
 from configparser import ConfigParser
 import argparse
 from src import recommendations_playlist
-from src import logging_setup
 import os
+import logging
+from src import definitions
 
+
+def _setup_logging():
+    logs_directory = os.path.join(definitions.ROOT_DIR, 'logs')
+    if not os.path.exists(logs_directory):
+        os.makedirs(logs_directory)
+
+    # Instantiating with the name __package__ works because this file is in the topmost package
+    logger = logging.getLogger(__package__)
+    formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
+    logger.setLevel(logging.DEBUG)
+
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.DEBUG)
+    console_handler.setFormatter(formatter)
+
+    file_handler = logging.handlers.RotatingFileHandler(
+        filename=os.path.join(logs_directory, 'spotify_recommender.log'),
+        maxBytes=2 * 1024 * 1024,  # 2MB
+        backupCount=25,
+        encoding='utf-8')
+    file_handler.setFormatter(formatter)
+    file_handler.setLevel(logging.INFO)
+
+    logger.addHandler(console_handler)
+    logger.addHandler(file_handler)
 
 def _setup_arg_parser():
     parser = argparse.ArgumentParser(description="Create a Spotify playlist based off recommendations from Last.fm")
@@ -42,7 +68,7 @@ def _str_to_bool(to_convert):
 
 
 if __name__ == "__main__":
-    logging_setup.setup_logging()
+    _setup_logging()
 
     parser = _setup_arg_parser()
     args = parser.parse_args()
