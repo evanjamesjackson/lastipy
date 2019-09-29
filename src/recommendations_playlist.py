@@ -56,6 +56,8 @@ def create_recommendations_playlist(lastfm_user,
             tracks_for_playlist.append(first_result)
 
     playlist.add_to_playlist(spotify_user, playlist_name, tracks_for_playlist)
+    
+    logging.info("Done!")
 
 
 def _get_weights(recommendations):
