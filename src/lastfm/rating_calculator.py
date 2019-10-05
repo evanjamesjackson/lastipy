@@ -1,5 +1,5 @@
 
-class RecommendationCalculator:
+class RatingCalculator:
 
     def __init__(self, recent_artist_fetcher):
         self.recent_artist_fetcher = recent_artist_fetcher
