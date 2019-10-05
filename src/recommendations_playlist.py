@@ -35,7 +35,7 @@ def create_recommendations_playlist(lastfm_user,
     saved_tracks = library.get_saved_tracks(spotify_user)
     playlist_tracks = library.get_tracks_in_playlists(spotify_user)
 
-    weights = [recommendation.recommendation_rating for recommendation in recommendations]
+    weights = _calculate_rating_weights(recommendations)
 
     # Potential endless loop here, if no satisfactory track can be found to get the playlist to the given size.
     # This is unlikely to happen though due to the amount of recommendations generated compared to a typical
@@ -59,3 +59,14 @@ def create_recommendations_playlist(lastfm_user,
     playlist.add_to_playlist(spotify_user, playlist_name, tracks_for_playlist)
 
     logging.info("Done!")
+
+
+def _calculate_rating_weights(recommendations):
+    total_ratings = 0
+    for recommendation in recommendations:
+        total_ratings += recommendation.recommendation_rating
+
+    rating_weights = []
+    for recommendation in recommendations:
+        rating_weights.append(recommendation.recommendation_rating / total_ratings)
+    return rating_weights
