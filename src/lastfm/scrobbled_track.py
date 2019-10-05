@@ -14,5 +14,8 @@ class ScrobbledTrack(Track):
             and self.artist == other.artist \
             and self.playcount == other.playcount
 
+    def __hash__(self):
+        return hash((self.track_name, self.artist, self.playcount))
+
     def __repr__(self):
         return str(self.__dict__)
