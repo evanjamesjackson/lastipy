@@ -4,7 +4,7 @@ from src.track import Track
 class RecommendedTrack(Track):
     """Represents a track recommended from Last.fm"""
 
-    def __init__(self, track_name, artist, recommendation_rating):
+    def __init__(self, track_name, artist, recommendation_rating=0):
         super().__init__(track_name, artist)
         self.recommendation_rating = recommendation_rating
 
