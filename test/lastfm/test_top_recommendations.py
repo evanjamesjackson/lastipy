@@ -23,13 +23,16 @@ class TopRecommendationsFetcherTest(unittest.TestCase):
         new_recommendation = RecommendedTrack(track_name="Key to the Highway", artist="Derek & the Dominos", recommendation_rating=8)
         already_scrobbled_recommendation_1 = RecommendedTrack(track_name="Badge", artist="Cream", recommendation_rating=8)
         already_scrobbled_recommendation_2 = RecommendedTrack(track_name="SWALBR", artist="Cream", recommendation_rating=8)
-        similar_fetcher.fetch = MagicMock(return_value=[new_recommendation,
-                                                        already_scrobbled_recommendation_1,
-                                                        already_scrobbled_recommendation_2])
+        recommendations = [new_recommendation, already_scrobbled_recommendation_1, already_scrobbled_recommendation_2]
+        similar_fetcher.fetch = MagicMock(return_value=recommendations)
+
+        rating_calculator = MagicMock()
+        rating_calculator.calculate = MagicMock(return_value=recommendations)
 
         recommendations = TopRecommendationsFetcher(similar_fetcher=similar_fetcher,
                                                     top_fetcher=top_fetcher,
-                                                    recent_fetcher=recent_fetcher).fetch(user="meeee")
+                                                    recent_fetcher=recent_fetcher,
+                                                    rating_calculator=rating_calculator).fetch(user="meeee")
 
         self.assertCountEqual(recommendations, [new_recommendation])
 
@@ -42,11 +45,16 @@ class TopRecommendationsFetcherTest(unittest.TestCase):
         similar_fetcher = SimilarTracksFetcher()
         recommendation_1 = RecommendedTrack(track_name="Badge", artist="Cream", recommendation_rating=1)
         recommendation_2 = RecommendedTrack(track_name="Penny Lane", artist="The Beatles", recommendation_rating=1)
-        similar_fetcher.fetch = MagicMock(return_value=[recommendation_1, recommendation_2])
+        recommendations = [recommendation_1, recommendation_2]
+        similar_fetcher.fetch = MagicMock(return_value=recommendations)
+
+        rating_calculator = MagicMock()
+        rating_calculator.calculate = MagicMock(return_value=recommendations)
 
         recommendations = TopRecommendationsFetcher(similar_fetcher=similar_fetcher,
                                                     top_fetcher=top_fetcher,
-                                                    recent_fetcher=recent_fetcher).fetch(
+                                                    recent_fetcher=recent_fetcher,
+                                                    rating_calculator=rating_calculator).fetch(
                                                         user="meeee",
                                                         blacklisted_artists=['The Beatles'])
 

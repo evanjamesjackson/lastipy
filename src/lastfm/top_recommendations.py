@@ -5,11 +5,11 @@ import numpy
 
 
 class TopRecommendationsFetcher:
-    def __init__(self, similar_fetcher, top_fetcher, recent_fetcher, recent_artists_fetcher):
+    def __init__(self, similar_fetcher, top_fetcher, recent_fetcher, rating_calculator):
         self.similar_fetcher = similar_fetcher
         self.top_fetcher = top_fetcher
         self.recent_fetcher = recent_fetcher
-        self.recent_artists_fetcher = recent_artists_fetcher
+        self.rating_calculator = rating_calculator
 
     def fetch(self,
               user,
@@ -24,41 +24,34 @@ class TopRecommendationsFetcher:
 
         top_tracks = self.top_fetcher.fetch(user=user, a_period=recommendation_period)
 
-        recommendations = []
+        top_tracks_to_recommendations = {}
+        all_recommendations = []
         for top_track in top_tracks:
             try:
-                similar_tracks = self.similar_fetcher.fetch(top_track, max_similar_tracks_per_top_track)
-                if similar_tracks:
-                    recommendations = recommendations + similar_tracks
+                current_recommendations = self.similar_fetcher.fetch(top_track, max_similar_tracks_per_top_track)
+                if current_recommendations:
+                    all_recommendations = all_recommendations + current_recommendations
+                    top_tracks_to_recommendations[top_track] = current_recommendations
             except Exception as e:
                 logging.error(f"Error occurred fetching similar tracks: " + str(e))
 
-        logging.debug(f"Before filtering, fetched " + str(len(recommendations)) + " recommendations: " + str(recommendations))
+        all_recommendations = self.rating_calculator.calculate(user=user,
+                                                               prefer_unheard_artists=prefer_unheard_artists,
+                                                               top_tracks_to_recommendations=top_tracks_to_recommendations)
 
-        recent_tracks = self.recent_fetcher.fetch(user=user)
+        logging.debug(f"Before filtering, fetched " + str(len(all_recommendations)) + " recommendations: " + str(all_recommendations))
 
-        recommendations = self._filter_out_recent_tracks(recent_tracks, recommendations)
+        all_recommendations = self._filter_out_recent_tracks(user, all_recommendations)
 
-        recommendations = self._filter_out_blacklisted_artists(blacklisted_artists, recommendations)
-
-        if prefer_unheard_artists:
-            self._adjust_recommendation_rating_by_artist(recommendations, user)
+        all_recommendations = self._filter_out_blacklisted_artists(blacklisted_artists, all_recommendations)
 
         # Filter out duplicates
         # TODO maybe duplicates should mean a greater chance of getting that recommendation in the playlist?
-        recommendations = list(set(recommendations))
+        all_recommendations = list(set(all_recommendations))
 
-        logging.info(f"Fetched " + str(len(recommendations)) + " recommendations: " + str(recommendations))
+        logging.info(f"Fetched " + str(len(all_recommendations)) + " recommendations: " + str(all_recommendations))
 
-        return recommendations
-
-    def _adjust_recommendation_rating_by_artist(self, recommendations, user):
-        logging.info("Adjusting recommendations so that tracks by frequently-played artists get lower ratings...")
-        recent_artists = self.recent_artists_fetcher.fetch(user)
-        for recommendation in recommendations:
-            for artist in recent_artists:
-                if recommendation.artist == artist.artist_name:
-                    recommendation.recommendation_rating = (1 / artist.playcount) * recommendation.recommendation_rating
+        return all_recommendations
 
     def _filter_out_blacklisted_artists(self, blacklisted_artists, recommendations):
         logging.info("Filtering out blacklisted artists (" + str(blacklisted_artists) + ")...")
@@ -67,7 +60,8 @@ class TopRecommendationsFetcher:
                                       for blacklisted_artist in blacklisted_artists)]
         return recommendations
 
-    def _filter_out_recent_tracks(self, recent_tracks, recommendations):
+    def _filter_out_recent_tracks(self, user, recommendations):
+        recent_tracks = self.recent_fetcher.fetch(user=user)
         logging.info("Filtering out recent tracks from recommendations...")
         recommendations = [recommendation for recommendation in recommendations
                            if not any(Track.are_equivalent(recommendation, recent_track)

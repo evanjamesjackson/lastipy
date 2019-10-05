@@ -6,6 +6,7 @@ from src.lastfm.similar_tracks import SimilarTracksFetcher
 from src.lastfm.top_recommendations import TopRecommendationsFetcher
 from src.lastfm.recent_tracks import RecentTracksFetcher
 from src.lastfm.recent_artists import RecentArtistsFetcher
+from src.lastfm.rating_calculator import RatingCalculator
 from src.spotify import library, playlist, search
 from src.track import Track
 from numpy.random import choice
@@ -24,7 +25,7 @@ def create_recommendations_playlist(lastfm_user,
     recommendations_fetcher = TopRecommendationsFetcher(similar_fetcher=SimilarTracksFetcher(),
                                                         top_fetcher=TopTracksFetcher(),
                                                         recent_fetcher=RecentTracksFetcher(),
-                                                        recent_artists_fetcher=RecentArtistsFetcher())
+                                                        rating_calculator=RatingCalculator())
     recommendations = recommendations_fetcher.fetch(user=lastfm_user,
                                                     recommendation_period=recommendation_period,
                                                     max_similar_tracks_per_top_track=max_recommendations_per_top_track,
@@ -34,7 +35,7 @@ def create_recommendations_playlist(lastfm_user,
     saved_tracks = library.get_saved_tracks(spotify_user)
     playlist_tracks = library.get_tracks_in_playlists(spotify_user)
 
-    weights = _get_weights(recommendations)
+    weights = [recommendation.recommendation_rating for recommendation in recommendations]
 
     # Potential endless loop here, if no satisfactory track can be found to get the playlist to the given size.
     # This is unlikely to happen though due to the amount of recommendations generated compared to a typical
@@ -56,14 +57,5 @@ def create_recommendations_playlist(lastfm_user,
             tracks_for_playlist.append(first_result)
 
     playlist.add_to_playlist(spotify_user, playlist_name, tracks_for_playlist)
-    
+
     logging.info("Done!")
-
-
-def _get_weights(recommendations):
-    ratings = [recommendation.recommendation_rating for recommendation in recommendations]
-    ratings_total = sum(ratings)
-    logging.debug(f"Ratings total: " + str(ratings_total))
-    weights = [recommendation.recommendation_rating / ratings_total for recommendation in recommendations]
-    logging.debug(f"Weights: " + str(weights))
-    return weights
