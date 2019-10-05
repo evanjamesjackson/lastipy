@@ -25,7 +25,7 @@ def create_recommendations_playlist(lastfm_user,
     recommendations_fetcher = TopRecommendationsFetcher(similar_fetcher=SimilarTracksFetcher(),
                                                         top_fetcher=TopTracksFetcher(),
                                                         recent_fetcher=RecentTracksFetcher(),
-                                                        rating_calculator=RatingCalculator())
+                                                        rating_calculator=RatingCalculator(RecentArtistsFetcher()))
     recommendations = recommendations_fetcher.fetch(user=lastfm_user,
                                                     recommendation_period=recommendation_period,
                                                     max_similar_tracks_per_top_track=max_recommendations_per_top_track,
