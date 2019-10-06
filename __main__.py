@@ -2,7 +2,7 @@
 
 from configparser import ConfigParser
 import argparse
-from src import recommendations_playlist
+from src import build_playlist
 import os
 import logging
 from src import definitions
@@ -79,11 +79,11 @@ if __name__ == "__main__":
         else:
             raise Exception("Could not find " + args.file.name)
 
-    recommendations_playlist.create_recommendations_playlist(args.lastfm_user,
-                                    args.spotify_user,
-                                    args.recommendation_period,
-                                    args.max_recommendations_per_top_track,
-                                    args.playlist_name,
-                                    args.playlist_size,
-                                    args.blacklisted_artists,
-                                    args.prefer_unheard_artists)
+    build_playlist.build_recommendations_playlist(args.lastfm_user,
+                                                  args.spotify_user,
+                                                  args.recommendation_period,
+                                                  args.max_recommendations_per_top_track,
+                                                  args.playlist_name,
+                                                  args.playlist_size,
+                                                  args.blacklisted_artists,
+                                                  args.prefer_unheard_artists)

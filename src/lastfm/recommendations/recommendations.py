@@ -3,7 +3,7 @@ from src.lastfm.library import period
 from src.track import Track
 
 
-class TopRecommendationsFetcher:
+class RecommendationsFetcher:
 
     def __init__(self, similar_fetcher, top_fetcher, recent_fetcher, rating_calculator):
         self.similar_fetcher = similar_fetcher

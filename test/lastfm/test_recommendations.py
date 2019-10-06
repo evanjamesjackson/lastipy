@@ -3,12 +3,12 @@ from unittest.mock import MagicMock
 from src.lastfm.recommendations.similar_tracks import SimilarTracksFetcher
 from src.lastfm.library.top_tracks import TopTracksFetcher
 from src.lastfm.library.recent_tracks import RecentTracksFetcher
-from src.lastfm.recommendations.top_recommendations import TopRecommendationsFetcher
+from src.lastfm.recommendations.recommendations import RecommendationsFetcher
 from src.lastfm.recommendations.recommended_track import RecommendedTrack
 from src.lastfm.library.scrobbled_track import ScrobbledTrack
 
 
-class TopRecommendationsFetcherTest(unittest.TestCase):
+class RecommendationsFetcherTest(unittest.TestCase):
     def test_recent_tracks_are_filtered(self):
         recent_fetcher = RecentTracksFetcher()
         recent_track_1 = ScrobbledTrack(track_name="SWALBR", artist="Cream", playcount=1)
@@ -29,10 +29,10 @@ class TopRecommendationsFetcherTest(unittest.TestCase):
         rating_calculator = MagicMock()
         rating_calculator.calculate = MagicMock(return_value=recommendations)
 
-        recommendations = TopRecommendationsFetcher(similar_fetcher=similar_fetcher,
-                                                    top_fetcher=top_fetcher,
-                                                    recent_fetcher=recent_fetcher,
-                                                    rating_calculator=rating_calculator).fetch(user="meeee")
+        recommendations = RecommendationsFetcher(similar_fetcher=similar_fetcher,
+                                                 top_fetcher=top_fetcher,
+                                                 recent_fetcher=recent_fetcher,
+                                                 rating_calculator=rating_calculator).fetch(user="meeee")
 
         self.assertCountEqual(recommendations, [new_recommendation])
 
@@ -51,10 +51,10 @@ class TopRecommendationsFetcherTest(unittest.TestCase):
         rating_calculator = MagicMock()
         rating_calculator.calculate = MagicMock(return_value=recommendations)
 
-        recommendations = TopRecommendationsFetcher(similar_fetcher=similar_fetcher,
-                                                    top_fetcher=top_fetcher,
-                                                    recent_fetcher=recent_fetcher,
-                                                    rating_calculator=rating_calculator).fetch(
+        recommendations = RecommendationsFetcher(similar_fetcher=similar_fetcher,
+                                                 top_fetcher=top_fetcher,
+                                                 recent_fetcher=recent_fetcher,
+                                                 rating_calculator=rating_calculator).fetch(
                                                         user="meeee",
                                                         blacklisted_artists=['The Beatles'])
 

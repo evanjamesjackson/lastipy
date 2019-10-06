@@ -3,7 +3,7 @@ import logging.handlers
 from src.lastfm.library import period
 from src.lastfm.library.top_tracks import TopTracksFetcher
 from src.lastfm.recommendations.similar_tracks import SimilarTracksFetcher
-from src.lastfm.recommendations.top_recommendations import TopRecommendationsFetcher
+from src.lastfm.recommendations.recommendations import RecommendationsFetcher
 from src.lastfm.library.recent_tracks import RecentTracksFetcher
 from src.lastfm.library.recent_artists import RecentArtistsFetcher
 from src.lastfm.recommendations.rating_calculator import RatingCalculator
@@ -12,20 +12,20 @@ from src.track import Track
 from numpy.random import choice
 
 #TODO test
-def create_recommendations_playlist(lastfm_user,
-                                    spotify_user,
-                                    recommendation_period=period.OVERALL,
-                                    max_recommendations_per_top_track=50,
-                                    playlist_name="Last.fm",
-                                    playlist_size=40,
-                                    blacklisted_artists=[],
-                                    prefer_unheard_artists=True):
+def build_recommendations_playlist(lastfm_user,
+                                   spotify_user,
+                                   recommendation_period=period.OVERALL,
+                                   max_recommendations_per_top_track=50,
+                                   playlist_name="Last.fm",
+                                   playlist_size=40,
+                                   blacklisted_artists=[],
+                                   prefer_unheard_artists=True):
     """Creates a playlist for the given Spotify user based on the given Last.fm user's recommendations"""
 
-    recommendations_fetcher = TopRecommendationsFetcher(similar_fetcher=SimilarTracksFetcher(),
-                                                        top_fetcher=TopTracksFetcher(),
-                                                        recent_fetcher=RecentTracksFetcher(),
-                                                        rating_calculator=RatingCalculator(RecentArtistsFetcher()))
+    recommendations_fetcher = RecommendationsFetcher(similar_fetcher=SimilarTracksFetcher(),
+                                                     top_fetcher=TopTracksFetcher(),
+                                                     recent_fetcher=RecentTracksFetcher(),
+                                                     rating_calculator=RatingCalculator(RecentArtistsFetcher()))
     recommendations = recommendations_fetcher.fetch(user=lastfm_user,
                                                     recommendation_period=recommendation_period,
                                                     max_similar_tracks_per_top_track=max_recommendations_per_top_track,
