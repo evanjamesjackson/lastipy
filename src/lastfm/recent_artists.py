@@ -1,7 +1,5 @@
 import logging, requests
 from src.parse_keys import ApiKeysParser
-from src.lastfm import track_convert
-from src.lastfm.recommended_track import RecommendedTrack
 from src.lastfm.scrobbled_artist import ScrobbledArtist
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=library.getartists'
@@ -48,14 +46,3 @@ class RecentArtistsFetcher:
             'user': user
         }
         return payload
-
-
-if __name__ == "__main__":
-    logger = logging.getLogger()
-    formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
-    console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.DEBUG)
-    console_handler.setFormatter(formatter)
-    logger.addHandler(console_handler)
-    fetcher = RecentArtistsFetcher()
-    fetcher.fetch('sonofjack3')
