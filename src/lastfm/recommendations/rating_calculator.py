@@ -39,7 +39,9 @@ class RatingCalculator:
             for recommendation in recommendations:
                 for artist in recent_artists:
                     if recommendation.artist == artist.artist_name:
-                        recommendation.recommendation_rating = (1 / artist.playcount) * recommendation.recommendation_rating
+                        # Adjusting the rating by the reciprocal of the artist's playcount, plus one. The "plus one" is
+                        # to account for artist's with a playcount of just 1 - those should reduce the rating too.
+                        recommendation.recommendation_rating = (1 / (artist.playcount + 1)) * recommendation.recommendation_rating
 
     def _extract_tracks_from_map(self, top_tracks_to_recommendations):
         all_recommendations = []
