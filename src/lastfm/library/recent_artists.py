@@ -1,6 +1,6 @@
 import logging, requests
 from src.parse_keys import ApiKeysParser
-from src.lastfm.scrobbled_artist import ScrobbledArtist
+from src.lastfm.library.scrobbled_artist import ScrobbledArtist
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=library.getartists'
 RESULTS_PER_PAGE_LIMIT = 200

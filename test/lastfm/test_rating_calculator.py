@@ -1,10 +1,10 @@
 import unittest
-from src.lastfm.scrobbled_track import ScrobbledTrack
-from src.lastfm.recommended_track import RecommendedTrack
-from src.lastfm.rating_calculator import RatingCalculator
+from src.lastfm.library.scrobbled_track import ScrobbledTrack
+from src.lastfm.recommendations.recommended_track import RecommendedTrack
+from src.lastfm.recommendations.rating_calculator import RatingCalculator
 from unittest.mock import MagicMock
-from src.lastfm.recent_artists import RecentArtistsFetcher
-from src.lastfm.scrobbled_artist import ScrobbledArtist
+from src.lastfm.library.recent_artists import RecentArtistsFetcher
+from src.lastfm.library.scrobbled_artist import ScrobbledArtist
 
 
 class RatingCalculatorTest(unittest.TestCase):

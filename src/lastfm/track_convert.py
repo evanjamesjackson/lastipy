@@ -1,5 +1,5 @@
 from src.track import Track
-from src.lastfm.scrobbled_track import ScrobbledTrack
+from src.lastfm.library.scrobbled_track import ScrobbledTrack
 
 
 def convert_tracks(tracks_to_convert):

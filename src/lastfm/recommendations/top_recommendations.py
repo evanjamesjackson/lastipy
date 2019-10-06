@@ -1,7 +1,6 @@
 import logging
-from src.lastfm import period
+from src.lastfm.library import period
 from src.track import Track
-import numpy
 
 
 class TopRecommendationsFetcher:

@@ -1,12 +1,12 @@
 import logging
 import logging.handlers
-from src.lastfm import period
-from src.lastfm.top_tracks import TopTracksFetcher
-from src.lastfm.similar_tracks import SimilarTracksFetcher
-from src.lastfm.top_recommendations import TopRecommendationsFetcher
-from src.lastfm.recent_tracks import RecentTracksFetcher
-from src.lastfm.recent_artists import RecentArtistsFetcher
-from src.lastfm.rating_calculator import RatingCalculator
+from lastfm.library import period
+from lastfm.library.top_tracks import TopTracksFetcher
+from lastfm.recommendations.similar_tracks import SimilarTracksFetcher
+from lastfm.recommendations.top_recommendations import TopRecommendationsFetcher
+from lastfm.library.recent_tracks import RecentTracksFetcher
+from lastfm.library.recent_artists import RecentArtistsFetcher
+from lastfm.recommendations.rating_calculator import RatingCalculator
 from src.spotify import library, playlist, search
 from src.track import Track
 from numpy.random import choice

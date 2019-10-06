@@ -1,7 +1,7 @@
 import unittest
-from src.lastfm.similar_tracks import SimilarTracksFetcher
-from src.lastfm.scrobbled_track import ScrobbledTrack
-from src.lastfm.recommended_track import RecommendedTrack
+from src.lastfm.recommendations.similar_tracks import SimilarTracksFetcher
+from src.lastfm.library.scrobbled_track import ScrobbledTrack
+from src.lastfm.recommendations.recommended_track import RecommendedTrack
 from unittest.mock import patch
 
 

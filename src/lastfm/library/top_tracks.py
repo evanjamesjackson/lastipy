@@ -1,6 +1,7 @@
 import logging, requests
 from src.parse_keys import ApiKeysParser
-from src.lastfm import period, track_convert
+from src.lastfm import track_convert
+from src.lastfm.library import period
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=user.gettoptracks'
 
