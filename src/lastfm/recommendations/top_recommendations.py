@@ -4,6 +4,7 @@ from src.track import Track
 
 
 class TopRecommendationsFetcher:
+
     def __init__(self, similar_fetcher, top_fetcher, recent_fetcher, rating_calculator):
         self.similar_fetcher = similar_fetcher
         self.top_fetcher = top_fetcher
@@ -24,33 +25,35 @@ class TopRecommendationsFetcher:
         top_tracks = self.top_fetcher.fetch(user=user, a_period=recommendation_period)
 
         top_tracks_to_recommendations = {}
-        all_recommendations = []
+        recommendations = []
         for top_track in top_tracks:
             try:
-                current_recommendations = self.similar_fetcher.fetch(top_track, max_similar_tracks_per_top_track)
-                if current_recommendations:
-                    all_recommendations = all_recommendations + current_recommendations
-                    top_tracks_to_recommendations[top_track] = current_recommendations
+                recommendations_for_current_track = self.similar_fetcher.fetch(top_track,
+                                                                               max_similar_tracks_per_top_track)
+                if recommendations_for_current_track:
+                    recommendations = recommendations + recommendations_for_current_track
+                    top_tracks_to_recommendations[top_track] = recommendations_for_current_track
             except Exception as e:
                 logging.error(f"Error occurred fetching similar tracks: " + str(e))
 
-        all_recommendations = self.rating_calculator.calculate(user=user,
-                                                               prefer_unheard_artists=prefer_unheard_artists,
-                                                               top_tracks_to_recommendations=top_tracks_to_recommendations)
+        recommendations = self.rating_calculator.calculate(user=user,
+                                                           prefer_unheard_artists=prefer_unheard_artists,
+                                                           top_tracks_to_recommendations=top_tracks_to_recommendations)
 
-        logging.debug(f"Before filtering, fetched " + str(len(all_recommendations)) + " recommendations: " + str(all_recommendations))
+        logging.debug(f"Before filtering, fetched " + str(len(recommendations))
+                      + " recommendations: " + str(recommendations))
 
-        all_recommendations = self._filter_out_recent_tracks(user, all_recommendations)
+        recommendations = self._filter_out_recent_tracks(user, recommendations)
 
-        all_recommendations = self._filter_out_blacklisted_artists(blacklisted_artists, all_recommendations)
+        recommendations = self._filter_out_blacklisted_artists(blacklisted_artists, recommendations)
 
         # Filter out duplicates
         # TODO maybe duplicates should mean a greater chance of getting that recommendation in the playlist?
-        all_recommendations = list(set(all_recommendations))
+        recommendations = list(set(recommendations))
 
-        logging.info(f"Fetched " + str(len(all_recommendations)) + " recommendations: " + str(all_recommendations))
+        logging.info(f"Fetched " + str(len(recommendations)) + " recommendations: " + str(recommendations))
 
-        return all_recommendations
+        return recommendations
 
     def _filter_out_blacklisted_artists(self, blacklisted_artists, recommendations):
         logging.info("Filtering out blacklisted artists (" + str(blacklisted_artists) + ")...")
