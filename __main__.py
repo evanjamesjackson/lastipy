@@ -6,6 +6,13 @@ from src import recommendations_playlist
 import os
 import logging
 from src import definitions
+from src.lastfm.library.top_tracks import TopTracksFetcher
+from src.lastfm.recommendations.similar_tracks import SimilarTracksFetcher
+from src.lastfm.recommendations.recommendations import RecommendationsFetcher
+from src.lastfm.library.recent_tracks import RecentTracksFetcher
+from src.lastfm.library.recent_artists import RecentArtistsFetcher
+from src.lastfm.recommendations.rating_calculator import RatingCalculator
+from src.recommendations_playlist import RecommendationsPlaylist
 
 
 def _setup_logging():
@@ -79,6 +86,12 @@ if __name__ == "__main__":
         else:
             raise Exception("Could not find " + args.file.name)
 
+
+    recommendations_fetcher = RecommendationsFetcher(similar_fetcher=SimilarTracksFetcher(),
+                                                    top_fetcher=TopTracksFetcher(),
+                                                    recent_fetcher=RecentTracksFetcher(),
+                                                    rating_calculator=RatingCalculator(RecentArtistsFetcher()))
+    recommendations_playlist = RecommendationsPlaylist(recommendations_fetcher)
     recommendations_playlist.build_recommendations_playlist(args.lastfm_user,
                                                   args.spotify_user,
                                                   args.recommendation_period,
