@@ -92,7 +92,7 @@ if __name__ == "__main__":
                                                     recent_fetcher=RecentTracksFetcher(),
                                                     rating_calculator=RatingCalculator(RecentArtistsFetcher()))
     recommendations_playlist = RecommendationsPlaylist(recommendations_fetcher)
-    recommendations_playlist.build_recommendations_playlist(args.lastfm_user,
+    recommendations_playlist.build_playlist(args.lastfm_user,
                                                   args.spotify_user,
                                                   args.recommendation_period,
                                                   args.max_recommendations_per_top_track,

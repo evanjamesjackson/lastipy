@@ -11,15 +11,15 @@ class RecommendationsPlaylist:
         self.recommendations_fetcher = recommendations_fetcher
 
     #TODO test
-    def build_recommendations_playlist(self,
-                                    lastfm_user,
-                                    spotify_user,
-                                    recommendation_period=period.OVERALL,
-                                    max_recommendations_per_top_track=50,
-                                    playlist_name="Last.fm",
-                                    playlist_size=40,
-                                    blacklisted_artists=[],
-                                    prefer_unheard_artists=True):
+    def build_playlist(self,
+                       lastfm_user,
+                       spotify_user,
+                       recommendation_period=period.OVERALL,
+                       max_recommendations_per_top_track=50,
+                       playlist_name="Last.fm",
+                       playlist_size=40,
+                       blacklisted_artists=[],
+                       prefer_unheard_artists=True):
         """Creates a playlist for the given Spotify user based on the given Last.fm user's recommendations"""
 
         recommendations = self.recommendations_fetcher.fetch(user=lastfm_user,
