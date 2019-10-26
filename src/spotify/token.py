@@ -10,7 +10,7 @@ REDIRECT_URI = 'https://www.example.com/callback/'
 # Modified from spotipy's util.py to expose cache path
 def get_token(username):
     keys_parser = ApiKeysParser()
-    scope = 'playlist-modify-public'
+    scope = 'playlist-modify-public user-library-read'
     client_id = keys_parser.get_spotify_client_id()
     client_secret = keys_parser.get_spotify_client_secret()
 
