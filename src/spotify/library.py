@@ -6,7 +6,7 @@ import logging
 
 #TODO test
 def get_tracks_in_playlists(username):
-    """Returns the all tracks in the given user's playlists"""
+    """Returns all tracks in the given user's playlists"""
 
     logging.info("Fetching all tracks in " + username + "'s playlists")
 
