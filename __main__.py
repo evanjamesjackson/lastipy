@@ -11,7 +11,7 @@ from src.lastfm.recommendations.similar_tracks import fetch_similar_tracks
 from src.lastfm.recommendations.recommendations import fetch_recommendations
 from src.lastfm.library.recent_tracks import fetch_recent_tracks
 from src.lastfm.library.recent_artists import fetch_recent_artists
-from src.lastfm.recommendations.rating_calculator import calculate
+from src.lastfm.recommendations.rating_calculator import calculate_ratings
 from src.recommendations_playlist import build_recommendations_playlist
 
 

@@ -3,7 +3,7 @@ import logging
 from src.lastfm.library.recent_artists import fetch_recent_artists
 
 
-def calculate(user, top_tracks_to_recommendations, prefer_unheard_artists=True):
+def calculate_ratings(user, top_tracks_to_recommendations, prefer_unheard_artists=True):
     """Returns a copy of the list of recommendations in the given map, with ratings set based on recommendation
     'strength', which can be used to determine its chances of showing up in the final playlist"""
 

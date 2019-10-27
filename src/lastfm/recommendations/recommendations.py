@@ -4,7 +4,7 @@ from src.lastfm.library.top_tracks import fetch_top_tracks
 from src.lastfm.recommendations.similar_tracks import fetch_similar_tracks
 from src.lastfm.library import period
 from src.track import Track
-from src.lastfm.recommendations.rating_calculator import calculate
+from src.lastfm.recommendations.rating_calculator import calculate_ratings
 from src.lastfm.library.recent_tracks import fetch_recent_tracks
 
 
@@ -32,7 +32,7 @@ def fetch_recommendations(
         except Exception as e:
             logging.error(f"Error occurred fetching similar tracks: " + str(e))
 
-    recommendations = calculate(user=user,
+    recommendations = calculate_ratings(user=user,
                                 prefer_unheard_artists=prefer_unheard_artists,
                                 top_tracks_to_recommendations=top_tracks_to_recommendations)
 

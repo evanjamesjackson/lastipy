@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from src.lastfm.library.scrobbled_artist import ScrobbledArtist
 from src.lastfm.library.scrobbled_track import ScrobbledTrack
-from src.lastfm.recommendations.rating_calculator import calculate 
+from src.lastfm.recommendations.rating_calculator import calculate_ratings 
 from src.lastfm.recommendations.recommended_track import RecommendedTrack
 
 
@@ -17,7 +17,7 @@ class RatingCalculatorTest(unittest.TestCase):
         top_tracks_to_recommendations = {
             scrobbled_track: [recommended_track_1]
         }
-        recommendations = calculate('test', top_tracks_to_recommendations)
+        recommendations = calculate_ratings('test', top_tracks_to_recommendations)
         self.assertEqual(10, recommendations[0].recommendation_rating)
 
     @patch('src.lastfm.recommendations.rating_calculator.fetch_recent_artists')
@@ -30,7 +30,7 @@ class RatingCalculatorTest(unittest.TestCase):
         top_tracks_to_recommendations = {
             scrobbled_track: [recommended_track_1, recommended_track_2, recommended_track_3]
         }
-        recommendations = calculate('test', top_tracks_to_recommendations)
+        recommendations = calculate_ratings('test', top_tracks_to_recommendations)
         self.assertEqual(10, recommendations[0].recommendation_rating)
         self.assertEqual(10, recommendations[1].recommendation_rating)
         self.assertEqual(10, recommendations[2].recommendation_rating)
@@ -49,7 +49,7 @@ class RatingCalculatorTest(unittest.TestCase):
             scrobbled_track_1: [recommended_track_1, recommended_track_2, recommended_track_3],
             scrobbled_track_2: [recommended_track_4, recommended_track_5]
         }
-        recommendations = calculate('test', top_tracks_to_recommendations)
+        recommendations = calculate_ratings('test', top_tracks_to_recommendations)
         self.assertEqual(10, recommendations[0].recommendation_rating)
         self.assertEqual(10, recommendations[1].recommendation_rating)
         self.assertEqual(10, recommendations[2].recommendation_rating)
@@ -65,7 +65,7 @@ class RatingCalculatorTest(unittest.TestCase):
         top_tracks_to_recommendations = {
             scrobbled_track: [recommended_track_1, recommended_track_2]
         }
-        recommendations = calculate('test', top_tracks_to_recommendations)
+        recommendations = calculate_ratings('test', top_tracks_to_recommendations)
         self.assertEqual(0.5, recommendations[0].recommendation_rating)
         self.assertEqual(0.5, recommendations[1].recommendation_rating)
 
@@ -82,7 +82,7 @@ class RatingCalculatorTest(unittest.TestCase):
             scrobbled_track_1: [recommended_track_1],
             scrobbled_track_2: [recommended_track_2, recommended_track_3]
         }
-        recommendations = calculate('test', top_tracks_to_recommendations)
+        recommendations = calculate_ratings('test', top_tracks_to_recommendations)
         self.assertEqual(0.5, recommendations[0].recommendation_rating)
         self.assertEqual(10, recommendations[1].recommendation_rating)
         self.assertEqual(0.5, recommendations[2].recommendation_rating)
@@ -95,5 +95,5 @@ class RatingCalculatorTest(unittest.TestCase):
         top_tracks_to_recommendations = {
             scrobbled_track: [recommended_track_1]
         }
-        recommendations = calculate('test', top_tracks_to_recommendations)
+        recommendations = calculate_ratings('test', top_tracks_to_recommendations)
         self.assertEqual(5, recommendations[0].recommendation_rating)
