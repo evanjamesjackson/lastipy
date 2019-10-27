@@ -13,7 +13,9 @@ def get_token(username):
     it is returned; otherwise, the given user will be prompted to authorize the app. 
     This functionw was modified from util.py in spotipy in order to expose cache path'''
     
+    # These are the only scopes required by this app so no need to parameterize this
     scope = 'playlist-modify-public user-library-read'
+
     client_id = get_spotify_client_id()
     client_secret = get_spotify_client_secret()
 
@@ -49,7 +51,7 @@ def get_token(username):
 
         code = sp_oauth.parse_response_code(response)
         token_info = sp_oauth.get_access_token(code)
-    # Auth'ed API request
+    
     if token_info:
         return token_info['access_token']
     else:
