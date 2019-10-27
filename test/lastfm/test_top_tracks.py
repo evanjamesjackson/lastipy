@@ -1,10 +1,10 @@
 
 import unittest
 from src.lastfm.library import period
-from src.lastfm.library.top_tracks import TopTracksFetcher
 from src.lastfm.library.scrobbled_track import ScrobbledTrack
 from unittest.mock import patch, Mock
 from requests import HTTPError
+from src.lastfm.library.top_tracks import fetch_top_tracks
 
 
 class TopTracksFetcherTest(unittest.TestCase):
@@ -33,8 +33,7 @@ class TopTracksFetcherTest(unittest.TestCase):
         mock_responses[1].json.return_value = second_page_response
         mock_get.side_effect = mock_responses
 
-        fetcher = TopTracksFetcher()
-        self.assertEqual(fetcher.fetch(user='sonofjack3', a_period=period.SEVEN_DAYS)[0], expected_track)
+        self.assertEqual(fetch_top_tracks(user='sonofjack3', a_period=period.SEVEN_DAYS)[0], expected_track)
 
     @patch('requests.get')
     def test_multiple_tracks_over_multiple_pages(self, mock_get):
@@ -73,8 +72,7 @@ class TopTracksFetcherTest(unittest.TestCase):
         mock_responses[2].json.return_value = third_page_response
         mock_get.side_effect = mock_responses
 
-        fetcher = TopTracksFetcher()
-        fetched_tracks = fetcher.fetch(user="sonofjack3", a_period=period.SEVEN_DAYS)
+        fetched_tracks = fetch_top_tracks(user="sonofjack3", a_period=period.SEVEN_DAYS)
         self.assertCountEqual(fetched_tracks, expected_tracks)
 
     @patch('requests.get')
@@ -106,8 +104,7 @@ class TopTracksFetcherTest(unittest.TestCase):
         mock_responses[1].json.return_value = second_page_response
         mock_get.side_effect = mock_responses
 
-        fetcher = TopTracksFetcher()
-        fetched_tracks = fetcher.fetch(user='sonofjack3', a_period=period.SEVEN_DAYS)
+        fetched_tracks = fetch_top_tracks(user='sonofjack3', a_period=period.SEVEN_DAYS)
         self.assertEqual(fetched_tracks.__len__(), 1)
         self.assertEqual(fetched_tracks[0], non_ignored_track)
 
@@ -116,9 +113,8 @@ class TopTracksFetcherTest(unittest.TestCase):
         mock_get.ok = False
         mock_get.side_effect = HTTPError("Mock")
 
-        fetcher = TopTracksFetcher()
         with self.assertRaises(HTTPError):
-            fetcher.fetch('sonofjack3', period.SEVEN_DAYS)
+            fetch_top_tracks('sonofjack3', period.SEVEN_DAYS)
 
     def _build_json(self, track):
         return {

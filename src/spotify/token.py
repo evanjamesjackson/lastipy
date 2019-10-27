@@ -1,5 +1,5 @@
-from src.parse_keys import ApiKeysParser
 import spotipy.oauth2 as oauth2
+from src.parse_keys import get_spotify_client_id, get_spotify_client_secret
 import webbrowser
 import os
 from src import definitions
@@ -9,10 +9,9 @@ REDIRECT_URI = 'https://www.example.com/callback/'
 
 # Modified from spotipy's util.py to expose cache path
 def get_token(username):
-    keys_parser = ApiKeysParser()
     scope = 'playlist-modify-public user-library-read'
-    client_id = keys_parser.get_spotify_client_id()
-    client_secret = keys_parser.get_spotify_client_secret()
+    client_id = get_spotify_client_id()
+    client_secret = get_spotify_client_secret()
 
     sp_oauth = oauth2.SpotifyOAuth(client_id,
                                    client_secret,

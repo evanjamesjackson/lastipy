@@ -1,8 +1,8 @@
 import unittest
-from src.lastfm.recommendations.similar_tracks import SimilarTracksFetcher
 from src.lastfm.library.scrobbled_track import ScrobbledTrack
 from src.lastfm.recommendations.recommended_track import RecommendedTrack
 from unittest.mock import patch
+from src.lastfm.recommendations.similar_tracks import fetch_similar_tracks
 
 
 class SimilarTracksFetcherTest(unittest.TestCase):
@@ -33,8 +33,7 @@ class SimilarTracksFetcherTest(unittest.TestCase):
         
         mock_get.return_value.json.return_value = json_response
 
-        fetcher = SimilarTracksFetcher()
-        fetched_tracks = fetcher.fetch(track_to_check, 2)
+        fetched_tracks = fetch_similar_tracks(track_to_check, 2)
         self.assertCountEqual(expected_similar_tracks, fetched_tracks)
         for track in fetched_tracks:
             self.assertEqual(playcount, track.recommendation_rating)
