@@ -40,18 +40,10 @@ def _setup_logging():
     logger.addHandler(console_handler)
     logger.addHandler(file_handler)
 
+
 def _setup_arg_parser():
     parser = argparse.ArgumentParser(description="Create a Spotify playlist based off recommendations from Last.fm")
     parser.add_argument('-f', '--file', type=argparse.FileType('r', encoding='UTF-8'))
-    group = parser.add_argument_group()
-    group.add_argument('-lu', '--lastfm-user', type=str)
-    group.add_argument('-su', '--spotify-user', type=str)
-    group.add_argument('-lr', '--recommendation-period', type=str)
-    group.add_argument('-ms', '--max-recommendations-per-top-track', type=int)
-    group.add_argument('-ps', '--playlist-size', type=int)
-    group.add_argument('-ba', '--blacklisted-artists', type=str)
-    group.add_argument('-pu', '--prefer-unheard-artists', type=str)
-    group.add_argument('-pn', '--playlist-name', type=str)
     return parser
 
 
