@@ -7,8 +7,10 @@ from src import definitions
 REDIRECT_URI = 'https://www.example.com/callback/'
 
 
-# Modified from spotipy's util.py to expose cache path
+#TODO test
 def get_token(username):
+    '''Returns a Spotify token for the given user. Modified from util.py in spotipy in order 
+    to expose cache path'''
     scope = 'playlist-modify-public user-library-read'
     client_id = get_spotify_client_id()
     client_secret = get_spotify_client_secret()

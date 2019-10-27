@@ -5,6 +5,7 @@ from src.spotify import track_convert
 import json
 
 
+#TODO test
 def search_for_tracks(username, query):
     """Returns a list of tracks for the given query"""
 

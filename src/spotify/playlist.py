@@ -3,6 +3,7 @@ import spotipy
 from src.spotify import token
 
 
+#TODO test
 def add_to_playlist(username, playlist_name, tracks):
     """Adds the given tracks to the given user's given playlist. If the playlist does not exist, creates it first"""
 
