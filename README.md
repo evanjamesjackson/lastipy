@@ -14,7 +14,7 @@ See example.keys for the correct layout.
 Run from a command-line like so:
 
 ```
-python spotify_recommender -f configuration-file 
+python spotify_recommender configuration-file 
 ```
 See example.config for an example configuration file.<br/><br/>
 The first time the app is run, the Spotify user will need to give authorization to the application in order to add tracks to a playlist. Once prompted, open the URL in a browser, log into Spotify, then copy the URL to which you are redirected and paste it into the console. This will only need to be done the first time, since spotipy will cache the authorization.  
