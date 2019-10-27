@@ -9,8 +9,10 @@ REDIRECT_URI = 'https://www.example.com/callback/'
 
 #TODO test
 def get_token(username):
-    '''Returns a Spotify token for the given user. Modified from util.py in spotipy in order 
-    to expose cache path'''
+    '''Returns a Spotify token for the given user. If a cached token file exists (with the format .cache-<username>), 
+    it is returned; otherwise, the given user will be prompted to authorize the app. 
+    This functionw was modified from util.py in spotipy in order to expose cache path'''
+    
     scope = 'playlist-modify-public user-library-read'
     client_id = get_spotify_client_id()
     client_secret = get_spotify_client_secret()
