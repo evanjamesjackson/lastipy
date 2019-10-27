@@ -43,7 +43,7 @@ def _setup_logging():
 
 def _setup_arg_parser():
     parser = argparse.ArgumentParser(description="Create a Spotify playlist based off recommendations from Last.fm")
-    parser.add_argument('-f', '--file', type=argparse.FileType('r', encoding='UTF-8'))
+    parser.add_argument('file', type=argparse.FileType('r', encoding='UTF-8'))
     return parser
 
 
