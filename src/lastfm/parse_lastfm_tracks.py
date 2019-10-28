@@ -15,7 +15,8 @@ def _parse_track(json_track):
         artist = artist_json['#text']
 
     if 'playcount' in json_track:
-        # TODO kinda smelly having this here
+        # If a playcount exists, this is a track that's been scrobbled so we'll return that instead of 
+        # a regular Track object
         return ScrobbledTrack(track_name, artist, int(json_track['playcount']))
-
-    return Track(track_name, artist)
+    else:
+        return Track(track_name, artist)
