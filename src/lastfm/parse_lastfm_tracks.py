@@ -3,11 +3,7 @@ from src.lastfm.library.scrobbled_track import ScrobbledTrack
 
 
 def parse_tracks(json_tracks):
-    converted_tracks = []
-    for track in json_tracks:
-        converted_tracks.append(_parse_track(track))
-    return converted_tracks
-
+    return [_parse_track(json_track) for json_track in json_tracks]
 
 def _parse_track(json_track):
     track_name = json_track['name']
