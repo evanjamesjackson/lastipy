@@ -3,10 +3,10 @@ from src.spotify.spotify_track import SpotifyTrack
 #TODO test
 
 def parse_tracks(json_tracks):
-    return [parse_track(json_track) for json_track in json_tracks]
+    return [_parse_track(json_track) for json_track in json_tracks]
 
 
-def parse_track(json_track):
+def _parse_track(json_track):
     if 'track' in json_track:
         # Some endpoints do this, others don't
         json_track = json_track['track']
