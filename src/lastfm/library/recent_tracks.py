@@ -1,6 +1,6 @@
 import logging
 import requests
-from src.lastfm import track_convert
+from src.lastfm.parse_lastfm_tracks import parse_tracks
 from requests import RequestException
 from src.parse_keys import get_lastfm_key
 
@@ -21,7 +21,7 @@ def fetch_recent_tracks(user):
         try:
             json_response = _send_request(_build_json_payload(user, page))
             logging.debug("Response: " + str(json_response))
-            converted_tracks = track_convert.convert_tracks(json_response['recenttracks']['track'])
+            converted_tracks = parse_tracks(json_response['recenttracks']['track'])
             recent_tracks = recent_tracks + converted_tracks
             total_pages = int(json_response['recenttracks']['@attr']['totalPages'])
             page = page + 1

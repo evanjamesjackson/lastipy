@@ -1,5 +1,5 @@
 import logging, requests
-from src.lastfm import track_convert
+from src.lastfm.parse_lastfm_tracks import parse_tracks
 from src.lastfm.library import period
 from src.parse_keys import get_lastfm_key
 
@@ -16,7 +16,7 @@ def fetch_top_tracks(user, a_period=period.OVERALL):
     while keep_fetching:
         json_response = _send_request(_build_json_payload(user, a_period, page))
         tracks_to_be_converted = [track for track in json_response['toptracks']['track']]
-        converted_tracks = track_convert.convert_tracks(tracks_to_be_converted)
+        converted_tracks = parse_tracks(tracks_to_be_converted)
         
         # Filter out tracks with a playcount of 1, since those shouldn't be considered "top"
         converted_tracks = [track for track in converted_tracks if track.playcount > 1]

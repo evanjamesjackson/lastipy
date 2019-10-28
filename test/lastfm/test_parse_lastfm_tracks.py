@@ -1,8 +1,8 @@
 import unittest
-from src.lastfm import track_convert
+from src.lastfm.parse_lastfm_tracks import parse_tracks
 
 
-class TrackConverterTest(unittest.TestCase):
+class ParseTracksTest(unittest.TestCase):
     def test_convert_succeeds_with_valid_json(self):
         track_name = "Stayin' Alive"
         artist = "Bee Gees"
@@ -15,7 +15,7 @@ class TrackConverterTest(unittest.TestCase):
             'playcount': str(playcount)
         }
 
-        converted = track_convert.convert_tracks([to_convert])
+        converted = parse_tracks([to_convert])
 
         self.assertEqual(converted[0].track_name, track_name)
         self.assertEqual(converted[0].artist, artist)
@@ -34,7 +34,7 @@ class TrackConverterTest(unittest.TestCase):
             'playcount': str(playcount)
         }
 
-        converted = track_convert.convert_tracks([to_convert])
+        converted = parse_tracks([to_convert])
 
         self.assertEqual(converted[0].track_name, track_name)
         self.assertEqual(converted[0].artist, artist)
@@ -47,4 +47,4 @@ class TrackConverterTest(unittest.TestCase):
 
         # If you make a regular call to your testable function, the error will happen before assertRaises can catch it
         # Passing your test argument(s) directly to assertRaises makes sure things happen in the right sequence
-        self.assertRaises(KeyError, track_convert.convert_tracks, [invalid_json])
+        self.assertRaises(KeyError, parse_tracks, [invalid_json])
