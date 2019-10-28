@@ -2,11 +2,11 @@ from src.spotify.spotify_track import SpotifyTrack
 
 #TODO test
 
-def convert_json_tracks(json_tracks):
-    return [convert_json_track(json_track) for json_track in json_tracks]
+def parse_tracks(json_tracks):
+    return [parse_track(json_track) for json_track in json_tracks]
 
 
-def convert_json_track(json_track):
+def parse_track(json_track):
     if 'track' in json_track:
         # Some endpoints do this, others don't
         json_track = json_track['track']

@@ -1,5 +1,5 @@
 from src.spotify import token
-from src.spotify import track_convert
+from src.spotify.parse_spotify_tracks import parse_tracks
 import spotipy
 import logging
 
@@ -28,11 +28,11 @@ def _get_tracks_in_playlist(spotify, username, playlist):
 
     keep_fetching = True
     while keep_fetching:
-        json_tracks = spotify.user_playlist_tracks(user=username,
+        json_response = spotify.user_playlist_tracks(user=username,
                                                    playlist_id=playlist['id'],
                                                    offset=len(tracks_in_playlist))
-        if json_tracks['items']:
-            tracks_in_playlist = tracks_in_playlist + track_convert.convert_json_tracks(json_tracks['items'])
+        if json_response['items']:
+            tracks_in_playlist = tracks_in_playlist + parse_tracks(json_response['items'])
         else:
             keep_fetching = False
 
@@ -49,9 +49,9 @@ def get_saved_tracks(username):
     saved_tracks = []
     keep_fetching = True
     while keep_fetching:
-        json_tracks = spotify.current_user_saved_tracks(offset=len(saved_tracks))
-        if json_tracks['items']:
-            saved_tracks = saved_tracks + track_convert.convert_json_tracks(json_tracks['items'])
+        json_response = spotify.current_user_saved_tracks(offset=len(saved_tracks))
+        if json_response['items']:
+            saved_tracks = saved_tracks + parse_tracks(json_response['items'])
         else:
             keep_fetching = False
 
