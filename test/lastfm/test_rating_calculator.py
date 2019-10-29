@@ -97,3 +97,14 @@ class RatingCalculatorTest(unittest.TestCase):
         }
         recommendations = calculate_ratings('test', top_tracks_to_recommendations)
         self.assertEqual(5, recommendations[0].recommendation_rating)
+
+    @patch('src.lastfm.recommendations.rating_calculator.fetch_recent_artists')
+    def test_reducing_based_on_recent_artists_ignores_case(self, mock_recent_artists):
+        mock_recent_artists.return_value = [ScrobbledArtist(artist_name='LANY', playcount=3)]
+        scrobbled_track = ScrobbledTrack(artist='LANY', track_name='Some Whiny Crap', playcount=2)
+        recommended_track = RecommendedTrack(artist='Lany', track_name='Some Other Whiny Crap')
+        top_tracks_to_recommendations = {
+            scrobbled_track: [recommended_track]
+        }
+        recommendations = calculate_ratings('test', top_tracks_to_recommendations)
+        self.assertEqual(0.5, recommendations[0].recommendation_rating)
