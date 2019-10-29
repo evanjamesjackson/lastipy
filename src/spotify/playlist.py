@@ -17,7 +17,7 @@ def add_to_playlist(username, playlist_name, tracks):
         logging.info("Creating playlist " + playlist_name)
         playlist_id = spotify.user_playlist_create(user=spotify.current_user()['id'], name=playlist_name)['id']
 
-    logging.info("Adding " + str(len(tracks)) + " tracks to playlist " + playlist_name + ": " + str(tracks))
+    logging.info("Adding " + str(len(tracks)) + " tracks to " + username + "'s playlist " + playlist_name + ": " + str(tracks))
 
     spotify.user_playlist_replace_tracks(user=spotify.current_user()['id'],
                                          playlist_id=playlist_id,
