@@ -1,7 +1,7 @@
 import logging
 import requests
-from src.lastfm.library.parse_scrobbled_tracks import parse_scrobbled_tracks
-from src.lastfm.library.scrobbled_track import ScrobbledTrack
+from src.lastfm.parse_lastfm_tracks import parse_artist, parse_track_name
+from src.track import Track
 from requests import RequestException
 from src.parse_keys import get_lastfm_key
 
@@ -23,7 +23,8 @@ def fetch_recent_tracks(user):
             json_response = _send_request(_build_json_payload(user, page))
             logging.debug("Response: " + str(json_response))
             json_tracks = json_response['recenttracks']['track']
-            recent_tracks = parse_scrobbled_tracks(json_tracks)
+            recent_tracks = [Track(parse_track_name(json_track), parse_artist(json_track))
+                             for json_track in json_tracks]
             all_recent_tracks = all_recent_tracks + recent_tracks
             total_pages = int(json_response['recenttracks']['@attr']['totalPages'])
             page = page + 1

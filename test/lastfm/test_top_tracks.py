@@ -1,7 +1,7 @@
 
 import unittest
 from src.lastfm.library import period
-from src.lastfm.library.scrobbled_track import ScrobbledTrack
+from src.lastfm.library.top_track import TopTrack
 from unittest.mock import patch, Mock
 from requests import HTTPError
 from src.lastfm.library.top_tracks import fetch_top_tracks
@@ -10,7 +10,7 @@ from src.lastfm.library.top_tracks import fetch_top_tracks
 class TopTracksFetcherTest(unittest.TestCase):
     @patch('requests.get')
     def test_one_page_of_results(self, mock_get):
-        expected_track = ScrobbledTrack(track_name="Stayin' Alive", artist="Bee Gees", playcount=2)
+        expected_track = TopTrack(track_name="Stayin' Alive", artist="Bee Gees", playcount=2)
 
         mock_get.ok = True
 
@@ -37,9 +37,9 @@ class TopTracksFetcherTest(unittest.TestCase):
 
     @patch('requests.get')
     def test_multiple_tracks_over_multiple_pages(self, mock_get):
-        expected_track_1 = ScrobbledTrack(track_name="Penny Lane", artist="The Beatles", playcount=5)
-        expected_track_2 = ScrobbledTrack(track_name="Won't Get Fooled Again", artist="The Who", playcount=6)
-        expected_track_3 = ScrobbledTrack(track_name="Like the FBI", artist="Bob Dylan", playcount=10)
+        expected_track_1 = TopTrack(track_name="Penny Lane", artist="The Beatles", playcount=5)
+        expected_track_2 = TopTrack(track_name="Won't Get Fooled Again", artist="The Who", playcount=6)
+        expected_track_3 = TopTrack(track_name="Like the FBI", artist="Bob Dylan", playcount=10)
         expected_tracks = [expected_track_1, expected_track_2, expected_track_3]
 
         mock_get.ok = True
@@ -77,9 +77,9 @@ class TopTracksFetcherTest(unittest.TestCase):
 
     @patch('requests.get')
     def test_songs_with_one_playcount_ignored(self, mock_get):
-        ignored_track_1 = ScrobbledTrack(track_name="Stayin' Alive", artist="Bee Gees", playcount=1)
-        non_ignored_track = ScrobbledTrack(track_name="Ventura Highway", artist="America", playcount=5)
-        ignored_track_2 = ScrobbledTrack(track_name="Anesthetized Lesson", artist="Gum", playcount=1)
+        ignored_track_1 = TopTrack(track_name="Stayin' Alive", artist="Bee Gees", playcount=1)
+        non_ignored_track = TopTrack(track_name="Ventura Highway", artist="America", playcount=5)
+        ignored_track_2 = TopTrack(track_name="Anesthetized Lesson", artist="Gum", playcount=1)
 
         mock_get.ok = True
 
