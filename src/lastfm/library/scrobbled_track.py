@@ -1,6 +1,6 @@
 from src.track import Track
 
-
+#TODO rename to TopTrack, since playcount is only a concern of top tracks and not recent tracks
 class ScrobbledTrack(Track):
     """Represents a track that has been scrobbled (ie: exists in the user's Last.fm library)"""
 

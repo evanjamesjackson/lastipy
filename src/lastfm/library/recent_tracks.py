@@ -1,6 +1,7 @@
 import logging
 import requests
-from src.lastfm.parse_lastfm_tracks import parse_tracks
+from src.lastfm.library.parse_scrobbled_tracks import parse_scrobbled_tracks
+from src.lastfm.library.scrobbled_track import ScrobbledTrack
 from requests import RequestException
 from src.parse_keys import get_lastfm_key
 
@@ -13,7 +14,7 @@ def fetch_recent_tracks(user):
     """Fetches recent tracks for the given user"""
 
     logging.info("Fetching recent tracks for " + user + "...")
-    recent_tracks = []
+    all_recent_tracks = []
     page = 1
     total_pages = 1
     retries = 0
@@ -21,8 +22,9 @@ def fetch_recent_tracks(user):
         try:
             json_response = _send_request(_build_json_payload(user, page))
             logging.debug("Response: " + str(json_response))
-            converted_tracks = parse_tracks(json_response['recenttracks']['track'])
-            recent_tracks = recent_tracks + converted_tracks
+            json_tracks = json_response['recenttracks']['track']
+            recent_tracks = parse_scrobbled_tracks(json_tracks)
+            all_recent_tracks = all_recent_tracks + recent_tracks
             total_pages = int(json_response['recenttracks']['@attr']['totalPages'])
             page = page + 1
         except RequestException:
@@ -36,7 +38,7 @@ def fetch_recent_tracks(user):
                 break
 
     logging.info(f"Fetched " + str(len(recent_tracks)) + " recent tracks: " + str(recent_tracks))
-    return recent_tracks
+    return all_recent_tracks
 
 def _send_request(json_payload):
     response = requests.get(URL, params=json_payload)

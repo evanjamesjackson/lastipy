@@ -1,8 +1,8 @@
 import logging
 import requests
 from src.parse_keys import get_lastfm_key
-from src.lastfm.parse_lastfm_tracks import parse_tracks
 from src.lastfm.recommendations.recommended_track import RecommendedTrack
+from src.lastfm.parse_lastfm_tracks import parse_track_name, parse_artist
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=track.getsimilar'
 
@@ -13,11 +13,9 @@ def fetch_similar_tracks(track, limit):
     logging.info("Fetching up to " + str(limit) + " tracks similar to " + str(track))
     json_response = _send_request(_build_json_payload(track, limit))
     if 'similartracks' in json_response:
-        similar_tracks = parse_tracks(json_response['similartracks']['track'])
-        similar_tracks = list(map(lambda similar_track: RecommendedTrack(similar_track.track_name,
-                                                                    similar_track.artist,
-                                                                    track.playcount),
-                                similar_tracks))
+        json_tracks = json_response['similartracks']['track']
+        similar_tracks = [RecommendedTrack(parse_track_name(json_track), parse_artist(json_track), float(json_track['match'])) 
+                          for json_track in json_tracks]
         logging.info(f"Fetched " + str(len(similar_tracks)) + " similar tracks: " + str(similar_tracks))
         return similar_tracks
     elif 'errors' in json_response:
