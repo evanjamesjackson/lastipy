@@ -10,7 +10,6 @@
             "request": "launch",
             "program": "${workspaceFolder}/__main__.py",
             "args": [
-                "-f",
                 "${workspaceFolder}/example.config"
             ],
             "console": "integratedTerminal"
