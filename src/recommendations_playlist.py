@@ -25,8 +25,8 @@ def build_recommendations_playlist(
                                             blacklisted_artists=blacklisted_artists,
                                             prefer_unheard_artists=prefer_unheard_artists)
 
-    saved_tracks = library.get_saved_tracks(spotify_user)
-    playlist_tracks = library.get_tracks_in_playlists(spotify_user)
+    library_saved_tracks = library.get_saved_tracks(spotify_user)
+    library_playlist_tracks = library.get_tracks_in_playlists(spotify_user)
 
     weights = _calculate_rating_weights(recommendations)
 
@@ -45,9 +45,9 @@ def build_recommendations_playlist(
         if first_result is not None \
                 and Track.are_equivalent(first_result, recommendation) \
                 and first_result not in tracks_for_playlist \
-                and first_result not in playlist_tracks \
-                and first_result not in saved_tracks \
-                and not any(first_result.artist == item.artist for item in playlist_tracks):
+                and first_result not in library_playlist_tracks \
+                and first_result not in library_saved_tracks \
+                and not any(first_result.artist == item.artist for item in tracks_for_playlist):
             tracks_for_playlist.append(first_result)
 
     playlist.add_to_playlist(spotify_user, playlist_name, tracks_for_playlist)
