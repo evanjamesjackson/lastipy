@@ -30,7 +30,7 @@ def build_recommendations_playlist(
 
     weights = _calculate_rating_weights(recommendations)
 
-    # Potential endless loop here, if no satisfactory track can be found to get the playlist to the given size.
+    # TODO potential endless loop here, if no satisfactory track can be found to get the playlist to the given size.
     # This is unlikely to happen though due to the amount of recommendations generated compared to a typical
     # playlist size (eg: 10000 recommendations vs. 40 tracks for a playlist)
     tracks_for_playlist = []
@@ -46,7 +46,8 @@ def build_recommendations_playlist(
                 and Track.are_equivalent(first_result, recommendation) \
                 and first_result not in tracks_for_playlist \
                 and first_result not in playlist_tracks \
-                and first_result not in saved_tracks:
+                and first_result not in saved_tracks \
+                and not any(first_result.artist == item.artist for item in playlist_tracks):
             tracks_for_playlist.append(first_result)
 
     playlist.add_to_playlist(spotify_user, playlist_name, tracks_for_playlist)
