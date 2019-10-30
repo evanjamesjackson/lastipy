@@ -15,7 +15,7 @@ def fetch_recommendations(
           blacklisted_artists=[],
           prefer_unheard_artists=True):
     """Fetches recommendations for the given user by fetching their top tracks, then getting tracks similar
-    to them, and finally filtering out the user's recent tracks"""
+    to them, and filtering out the user's recent tracks and blacklisted artists"""
 
     logging.info("Fetching top recommendations for " + user)
 
