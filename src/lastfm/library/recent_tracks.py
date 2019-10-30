@@ -24,7 +24,7 @@ def fetch_recent_tracks(user):
             logging.debug("Response: " + str(json_response))
             json_tracks = json_response['recenttracks']['track']
             recent_tracks_on_curr_page = [Track(parse_track_name(json_track), parse_artist(json_track))
-                             for json_track in json_tracks]
+                                          for json_track in json_tracks]
             all_recent_tracks = all_recent_tracks + recent_tracks_on_curr_page
             total_pages = int(json_response['recenttracks']['@attr']['totalPages'])
             page = page + 1
