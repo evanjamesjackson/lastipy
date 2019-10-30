@@ -23,9 +23,9 @@ def fetch_recent_tracks(user):
             json_response = _send_request(_build_json_payload(user, page))
             logging.debug("Response: " + str(json_response))
             json_tracks = json_response['recenttracks']['track']
-            recent_tracks = [Track(parse_track_name(json_track), parse_artist(json_track))
+            recent_tracks_on_curr_page = [Track(parse_track_name(json_track), parse_artist(json_track))
                              for json_track in json_tracks]
-            all_recent_tracks = all_recent_tracks + recent_tracks
+            all_recent_tracks = all_recent_tracks + recent_tracks_on_curr_page
             total_pages = int(json_response['recenttracks']['@attr']['totalPages'])
             page = page + 1
         except RequestException:
@@ -38,7 +38,7 @@ def fetch_recent_tracks(user):
                                 " after " + str(retries) + " retries. Giving up and moving on...")
                 break
 
-    logging.info(f"Fetched " + str(len(recent_tracks)) + " recent tracks: " + str(recent_tracks))
+    logging.info(f"Fetched " + str(len(all_recent_tracks)) + " recent tracks: " + str(all_recent_tracks))
     return all_recent_tracks
 
 def _send_request(json_payload):
