@@ -38,7 +38,7 @@ def build_recommendations_playlist(
         recommendation = choice(recommendations, p=weights)
 
         search_results = search.search_for_tracks(username=spotify_user,
-                                                query=recommendation.artist + " " + recommendation.track_name)
+                                                  query=recommendation.artist + " " + recommendation.track_name)
         # Always use the first result, which we can assume is the closest match
         first_result = search_results[0] if search_results else None
 
