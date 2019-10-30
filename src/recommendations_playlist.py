@@ -28,14 +28,10 @@ def build_recommendations_playlist(
     library_saved_tracks = library.get_saved_tracks(spotify_user)
     library_playlist_tracks = library.get_tracks_in_playlists(spotify_user)
 
-    weights = _calculate_rating_weights(recommendations)
-
-    # TODO potential endless loop here, if no satisfactory track can be found to get the playlist to the given size.
-    # This is unlikely to happen though due to the amount of recommendations generated compared to a typical
-    # playlist size (eg: 10000 recommendations vs. 40 tracks for a playlist)
     tracks_for_playlist = []
     while len(tracks_for_playlist) < playlist_size:
-        recommendation = choice(recommendations, p=weights)
+        recommendation = choice(recommendations, p=_calculate_rating_weights(recommendations))
+        recommendations.remove(recommendation)
 
         search_results = search.search_for_tracks(username=spotify_user,
                                                   query=recommendation.artist + " " + recommendation.track_name)
@@ -43,11 +39,12 @@ def build_recommendations_playlist(
         first_result = search_results[0] if search_results else None
 
         if first_result is not None \
-                and Track.are_equivalent(first_result, recommendation) \
-                and first_result not in tracks_for_playlist \
-                and first_result not in library_playlist_tracks \
-                and first_result not in library_saved_tracks \
-                and not any(first_result.artist == item.artist for item in tracks_for_playlist):
+           and Track.are_equivalent(first_result, recommendation) \
+           and first_result not in tracks_for_playlist \
+           and first_result not in library_playlist_tracks \
+           and first_result not in library_saved_tracks \
+           and not any(first_result.artist == item.artist for item in tracks_for_playlist):
+            logging.debug("Adding " + str(first_result))
             tracks_for_playlist.append(first_result)
 
     playlist.add_to_playlist(spotify_user, playlist_name, tracks_for_playlist)
