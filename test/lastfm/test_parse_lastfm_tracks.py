@@ -15,7 +15,7 @@ class ParseTracksTest(unittest.TestCase):
 
         parsed_track_name = parse_track_name(to_parse)
 
-        self.assertEqual(parsed_track_name, track_name)
+        self.dassertEqual(parsed_track_name, track_name)
 
     def test_parse_artist_with_weird_artist_data(self):
         track_name = "Stayin' Alive"
