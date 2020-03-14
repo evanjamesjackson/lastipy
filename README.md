@@ -1,3 +1,4 @@
+
 <h1>Spotify Recommender</h1>
 Creates Spotify playlists based on your listening habits by pulling from sources like Last.fm.
 <h2>Prerequisites</h2>
@@ -21,3 +22,4 @@ The first time the app is run, the Spotify user will need to give authorization 
 <h2>Improvements</h2>
 
 * Make a webapp where users can enter their information and have the playlists generated automatically
+* Figure out how to use venv properly and set up a Jenkins autobuilder so I don't have to log into the Amazon instance every time I change something
