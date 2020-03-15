@@ -8,7 +8,7 @@ from src.lastfm.recommendations.similar_tracks import fetch_similar_tracks
 class SimilarTracksFetcherTest(unittest.TestCase):
     
     @patch('requests.get')
-    @patch('get_lastfm_key')
+    @patch('src.parse_keys.get_lastfm_key')
     # The order of the mock parameters is the reverse of the above patched functions. Yes, really.
     def test_track_has_multiple_similar_tracks(self, mock_parse_keys, mock_requests_get):
         playcount = 5
