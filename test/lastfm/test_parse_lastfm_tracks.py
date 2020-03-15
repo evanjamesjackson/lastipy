@@ -15,7 +15,7 @@ class ParseTracksTest(unittest.TestCase):
 
         parsed_track_name = parse_track_name(to_parse)
 
-        self.afdsatrack_name, track_name)
+        self.track_name, track_name)
 
     def test_parse_artist_with_weird_artist_data(self):
         track_name = "Stayin' Alive"
