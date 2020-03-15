@@ -1,15 +1,14 @@
 import logging
 import spotipy
-from src.spotify import token
-from src.spotify.parse_spotify_tracks import parse_tracks
+from spotify_recommender.spotify import token
+from spotify_recommender.spotify.parse_spotify_tracks import parse_tracks
 import json
 
 
 #TODO test
-def search_for_tracks(username, query):
+def search_for_tracks(spotify, username, query):
     """Returns a list of tracks for the given query"""
 
-    spotify = spotipy.Spotify(auth=token.get_token(username))
     json_response = spotify.search(q=query)
     logging.debug("All search results for query " + query + ": " + json.dumps(json_response))
 

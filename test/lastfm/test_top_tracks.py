@@ -1,17 +1,16 @@
 
 import unittest
-from src.lastfm.library import period
-from src.lastfm.library.top_track import TopTrack
+from spotify_recommender.lastfm.library import period
+from spotify_recommender.lastfm.library.top_track import TopTrack
 from unittest.mock import patch, Mock
 from requests import HTTPError
-from src.lastfm.library.top_tracks import fetch_top_tracks
+from spotify_recommender.lastfm.library.top_tracks import fetch_top_tracks
 
 
-@patch('src.lastfm.library.top_tracks.get_lastfm_key')
 class TopTracksFetcherTest(unittest.TestCase):
     
     @patch('requests.get')
-    def test_one_page_of_results(self, mock_requests_get, mock_parse_keys):
+    def test_one_page_of_results(self, mock_requests_get):
         expected_track = TopTrack(track_name="Stayin' Alive", artist="Bee Gees", playcount=2)
 
         mock_requests_get.ok = True
@@ -35,12 +34,10 @@ class TopTracksFetcherTest(unittest.TestCase):
         mock_responses[1].json.return_value = second_page_response
         mock_requests_get.side_effect = mock_responses
 
-        mock_parse_keys.return_value = ''
-
-        self.assertEqual(fetch_top_tracks(user='sonofjack3', a_period=period.SEVEN_DAYS)[0], expected_track)
+        self.assertEqual(fetch_top_tracks(api_key='', user='sonofjack3', a_period=period.SEVEN_DAYS)[0], expected_track)
 
     @patch('requests.get')
-    def test_multiple_tracks_over_multiple_pages(self, mock_requests_get, mock_parse_keys):
+    def test_multiple_tracks_over_multiple_pages(self, mock_requests_get):
         expected_track_1 = TopTrack(track_name="Penny Lane", artist="The Beatles", playcount=5)
         expected_track_2 = TopTrack(track_name="Won't Get Fooled Again", artist="The Who", playcount=6)
         expected_track_3 = TopTrack(track_name="Like the FBI", artist="Bob Dylan", playcount=10)
@@ -76,13 +73,11 @@ class TopTracksFetcherTest(unittest.TestCase):
         mock_responses[2].json.return_value = third_page_response
         mock_requests_get.side_effect = mock_responses
 
-        mock_parse_keys.return_value = ''
-
-        fetched_tracks = fetch_top_tracks(user="sonofjack3", a_period=period.SEVEN_DAYS)
+        fetched_tracks = fetch_top_tracks(api_key='', user="sonofjack3", a_period=period.SEVEN_DAYS)
         self.assertCountEqual(fetched_tracks, expected_tracks)
     
     @patch('requests.get')
-    def test_songs_with_one_playcount_ignored(self, mock_requests_get, mock_parse_keys):
+    def test_songs_with_one_playcount_ignored(self, mock_requests_get):
         ignored_track_1 = TopTrack(track_name="Stayin' Alive", artist="Bee Gees", playcount=1)
         non_ignored_track = TopTrack(track_name="Ventura Highway", artist="America", playcount=5)
         ignored_track_2 = TopTrack(track_name="Anesthetized Lesson", artist="Gum", playcount=1)
@@ -110,21 +105,17 @@ class TopTracksFetcherTest(unittest.TestCase):
         mock_responses[1].json.return_value = second_page_response
         mock_requests_get.side_effect = mock_responses
 
-        mock_parse_keys.return_value = ''
-
-        fetched_tracks = fetch_top_tracks(user='sonofjack3', a_period=period.SEVEN_DAYS)
+        fetched_tracks = fetch_top_tracks(api_key='', user='sonofjack3', a_period=period.SEVEN_DAYS)
         self.assertEqual(fetched_tracks.__len__(), 1)
         self.assertEqual(fetched_tracks[0], non_ignored_track)
     
     @patch('requests.get')
-    def test_failure(self, mock_requests_get, mock_parse_keys):
+    def test_failure(self, mock_requests_get):
         mock_requests_get.ok = False
         mock_requests_get.side_effect = HTTPError("Mock")
 
-        mock_parse_keys.return_value = ''
-
         with self.assertRaises(HTTPError):
-            fetch_top_tracks('sonofjack3', period.SEVEN_DAYS)
+            fetch_top_tracks(api_key='', user='sonofjack3', a_period=period.SEVEN_DAYS)
 
     def _build_json(self, track):
         return {

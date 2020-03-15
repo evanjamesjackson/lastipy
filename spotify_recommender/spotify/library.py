@@ -1,16 +1,13 @@
-from src.spotify import token
-from src.spotify.parse_spotify_tracks import parse_tracks
+from spotify_recommender.spotify.parse_spotify_tracks import parse_tracks
 import spotipy
 import logging
 
 
 #TODO test
-def get_tracks_in_playlists(username):
+def get_tracks_in_playlists(spotify, username):
     """Returns all tracks in the given user's playlists"""
 
     logging.info("Fetching all tracks in " + username + "'s playlists")
-
-    spotify = spotipy.Spotify(auth=token.get_token(username))
 
     playlists = spotify.current_user_playlists()['items']
 
@@ -39,12 +36,10 @@ def _get_tracks_in_playlist(spotify, username, playlist):
     return tracks_in_playlist
 
 
-def get_saved_tracks(username):
+def get_saved_tracks(spotify, username):
     """Returns the all of the given user's saved tracks"""
 
     logging.info("Fetching " + username + "'s saved tracks")
-
-    spotify = spotipy.Spotify(auth=token.get_token(username))
 
     saved_tracks = []
     keep_fetching = True

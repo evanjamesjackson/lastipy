@@ -1,13 +1,9 @@
 import logging
-import spotipy
-from src.spotify import token
 
 
 #TODO test
-def add_to_playlist(username, playlist_name, tracks):
+def add_to_playlist(spotify, username, playlist_name, tracks):
     """Adds the given tracks to the given user's given playlist. If the playlist does not exist, creates it first"""
-
-    spotify = spotipy.Spotify(auth=token.get_token(username))
 
     playlists = spotify.current_user_playlists()
     playlists = [playlist for playlist in playlists['items'] if playlist['name'] == playlist_name]

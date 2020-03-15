@@ -1,16 +1,21 @@
 import logging
 import logging.handlers
-from src.lastfm.library import period
-from src.spotify import library, playlist, search
-from src.track import Track
+from spotify_recommender.lastfm.library import period
+from spotify_recommender.spotify import library, playlist, search
+from spotify_recommender.track import Track
 from numpy.random import choice
-from src.lastfm.recommendations.recommendations import fetch_recommendations
+from spotify_recommender.lastfm.recommendations.recommendations import fetch_recommendations
+from spotipy import Spotify
+from spotify_recommender.spotify import token
 
 
 #TODO test
 def build_recommendations_playlist(
                    lastfm_user,
+                   lastfm_api_key,
                    spotify_user,
+                   spotify_client_id_key,
+                   spotify_client_secret_key,
                    recommendation_period=period.OVERALL,
                    max_recommendations_per_top_track=50,
                    playlist_name="Last.fm",
@@ -20,13 +25,16 @@ def build_recommendations_playlist(
     """Creates a playlist for the given Spotify user based on the given Last.fm user's recommendations"""
 
     recommendations = fetch_recommendations(user=lastfm_user,
+                                            api_key=lastfm_api_key,
                                             recommendation_period=recommendation_period,
                                             max_similar_tracks_per_top_track=max_recommendations_per_top_track,
                                             blacklisted_artists=blacklisted_artists,
                                             prefer_unheard_artists=prefer_unheard_artists)
 
-    library_saved_tracks = library.get_saved_tracks(spotify_user)
-    library_playlist_tracks = library.get_tracks_in_playlists(spotify_user)
+    spotify = Spotify(auth=token.get_token(spotify_user, spotify_client_id_key, spotify_client_secret_key))
+    
+    library_saved_tracks = library.get_saved_tracks(username=spotify_user, spotify=spotify)
+    library_playlist_tracks = library.get_tracks_in_playlists(username=spotify_user, spotify=spotify)
 
     tracks_for_playlist = []
     while len(tracks_for_playlist) < playlist_size:
@@ -34,6 +42,7 @@ def build_recommendations_playlist(
         recommendations.remove(recommendation)
 
         search_results = search.search_for_tracks(username=spotify_user,
+                                                  spotify=spotify,
                                                   query=recommendation.artist + " " + recommendation.track_name)
         # Always use the first result, which we can assume is the closest match
         first_result = search_results[0] if search_results else None
@@ -47,7 +56,7 @@ def build_recommendations_playlist(
             logging.debug("Adding " + str(first_result))
             tracks_for_playlist.append(first_result)
 
-    playlist.add_to_playlist(spotify_user, playlist_name, tracks_for_playlist)
+    playlist.add_to_playlist(spotify, spotify_user, playlist_name, tracks_for_playlist)
 
     logging.info("Done!")
 

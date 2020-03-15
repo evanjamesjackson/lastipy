@@ -1,14 +1,13 @@
 import spotipy.oauth2 as oauth2
-from src.parse_keys import get_spotify_client_id, get_spotify_client_secret
 import webbrowser
 import os
-from src import definitions
+from spotify_recommender import definitions
 
 REDIRECT_URI = 'https://www.example.com/callback/'
 
 
 #TODO test
-def get_token(username):
+def get_token(username, client_id_key, client_secret_key):
     '''Returns a Spotify token for the given user. If a cached token file exists (with the format .cache-<username>), 
     it is returned; otherwise, the given user will be prompted to authorize the app. 
     This functionw was modified from util.py in spotipy in order to expose cache path'''
@@ -16,11 +15,8 @@ def get_token(username):
     # These are the only scopes required by this app so no need to parameterize this
     scope = 'playlist-modify-public user-library-read'
 
-    client_id = get_spotify_client_id()
-    client_secret = get_spotify_client_secret()
-
-    sp_oauth = oauth2.SpotifyOAuth(client_id,
-                                   client_secret,
+    sp_oauth = oauth2.SpotifyOAuth(client_id_key,
+                                   client_secret_key,
                                    REDIRECT_URI,
                                    scope=scope,
                                    cache_path=os.path.join(definitions.ROOT_DIR, '.cache-' + username))

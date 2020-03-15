@@ -8,9 +8,10 @@
             "name": "Spotify Recommender",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/__main__.py",
+            "program": "${workspaceFolder}/spotify_recommender",
             "args": [
-                "${workspaceFolder}/example.config"
+                "${workspaceFolder}/example.config",
+                "${workspaceFolder}/../config/.keys"
             ],
             "console": "integratedTerminal"
         }

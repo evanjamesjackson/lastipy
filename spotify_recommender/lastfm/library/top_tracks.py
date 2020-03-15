@@ -1,13 +1,12 @@
 import logging, requests
-from src.lastfm.library import period
-from src.parse_keys import get_lastfm_key
-from src.lastfm.parse_lastfm_tracks import parse_track_name, parse_artist
-from src.lastfm.library.top_track import TopTrack
+from spotify_recommender.lastfm.library import period
+from spotify_recommender.lastfm.parse_lastfm_tracks import parse_track_name, parse_artist
+from spotify_recommender.lastfm.library.top_track import TopTrack
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=user.gettoptracks'
 
 
-def fetch_top_tracks(user, a_period=period.OVERALL):
+def fetch_top_tracks(user, api_key, a_period=period.OVERALL):
     """Fetches the top tracks for the given user over the given period"""
 
     page = 1
@@ -15,7 +14,7 @@ def fetch_top_tracks(user, a_period=period.OVERALL):
     keep_fetching = True
     logging.info("Fetching top tracks for user " + user + " over period " + a_period)
     while keep_fetching:
-        json_response = _send_request(_build_json_payload(user, a_period, page))
+        json_response = _send_request(_build_json_payload(user, api_key, a_period, page))
         json_tracks = json_response['toptracks']['track']
         top_tracks = [TopTrack(parse_track_name(json_track), parse_artist(json_track), int(json_track['playcount']))
                       for json_track in json_tracks]
@@ -40,8 +39,7 @@ def _send_request(json_payload):
     else:
         response.raise_for_status()
 
-def _build_json_payload(user, period, page):
-    api_key = get_lastfm_key()
+def _build_json_payload(user, api_key, period, page):
     payload = {
         'user': user,
         'api_key': api_key,

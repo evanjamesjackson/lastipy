@@ -1,4 +1,4 @@
-from src.track import Track
+from spotify_recommender.track import Track
 
 class TopTrack(Track):
     """Represents a "top" track that a user has scrobbled, with an associated playcount"""

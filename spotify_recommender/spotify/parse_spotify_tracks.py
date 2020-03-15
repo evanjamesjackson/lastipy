@@ -1,4 +1,4 @@
-from src.spotify.spotify_track import SpotifyTrack
+from spotify_recommender.spotify.spotify_track import SpotifyTrack
 
 #TODO test
 

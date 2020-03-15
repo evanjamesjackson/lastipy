@@ -1,12 +1,11 @@
 import logging, requests
-from src.lastfm.library.scrobbled_artist import ScrobbledArtist
-from src.parse_keys import get_lastfm_key
+from spotify_recommender.lastfm.library.scrobbled_artist import ScrobbledArtist
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=library.getartists'
 RESULTS_PER_PAGE_LIMIT = 200
 
 
-def fetch_recent_artists(user):
+def fetch_recent_artists(user, api_key):
     """Fetches tracks similar to the given track"""
 
     logging.info("Fetching recent artists for user " + user)
@@ -14,7 +13,7 @@ def fetch_recent_artists(user):
     page = 1
     total_pages = 1
     while page <= total_pages:
-        json_response = _send_request(_build_json_payload(user, page))
+        json_response = _send_request(_build_json_payload(user, api_key, page))
         logging.debug("Response: " + str(json_response))
         for artist in json_response['artists']['artist']:
             artists.append(ScrobbledArtist(artist_name=artist['name'], playcount=int(artist['playcount'])))
@@ -32,8 +31,7 @@ def _send_request(json_payload):
     else:
         response.raise_for_status()
 
-def _build_json_payload(user, page):
-    api_key = get_lastfm_key()
+def _build_json_payload(user, api_key, page):
     payload = {
         'format': 'json',
         'page': page,

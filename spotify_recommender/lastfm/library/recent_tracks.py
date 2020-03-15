@@ -1,16 +1,15 @@
 import logging
 import requests
-from src.lastfm.parse_lastfm_tracks import parse_artist, parse_track_name
-from src.track import Track
+from spotify_recommender.lastfm.parse_lastfm_tracks import parse_artist, parse_track_name
+from spotify_recommender.track import Track
 from requests import RequestException
-from src.parse_keys import get_lastfm_key
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks'
 RESULTS_PER_PAGE_LIMIT = 200
 MAX_RETRIES = 10
 
 
-def fetch_recent_tracks(user):
+def fetch_recent_tracks(user, api_key):
     """Fetches recent tracks for the given user"""
 
     logging.info("Fetching recent tracks for " + user + "...")
@@ -20,7 +19,7 @@ def fetch_recent_tracks(user):
     retries = 0
     while page <= total_pages:
         try:
-            json_response = _send_request(_build_json_payload(user, page))
+            json_response = _send_request(_build_json_payload(user, api_key, page))
             logging.debug("Response: " + str(json_response))
             json_tracks = json_response['recenttracks']['track']
             recent_tracks_on_curr_page = [Track(parse_track_name(json_track), parse_artist(json_track))
@@ -48,8 +47,7 @@ def _send_request(json_payload):
     else:
         response.raise_for_status()
 
-def _build_json_payload(user, page):
-    api_key = get_lastfm_key()
+def _build_json_payload(user, api_key, page):
     payload = {
         'user': user,
         'format': 'json',

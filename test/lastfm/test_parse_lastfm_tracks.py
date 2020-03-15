@@ -1,5 +1,5 @@
 import unittest
-from src.lastfm.parse_lastfm_tracks import parse_artist, parse_track_name
+from spotify_recommender.lastfm.parse_lastfm_tracks import parse_artist, parse_track_name
 
 
 class ParseTracksTest(unittest.TestCase):
