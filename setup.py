@@ -7,4 +7,5 @@ setup(name='spotify_recommender',
       author='Evan Jackson',
       author_email='evanjamesjackson@gmail.com',
       packages=find_packages(where='src'),
+      package_dir={'':'src'},
       install_requires=['numpy', 'requests', 'spotipy', 'pytest'])
