@@ -6,8 +6,11 @@ from src.lastfm.recommendations.similar_tracks import fetch_similar_tracks
 
 
 class SimilarTracksFetcherTest(unittest.TestCase):
+    
     @patch('requests.get')
-    def test_track_has_multiple_similar_tracks(self, mock_get):
+    @patch('get_lastfm_key')
+    # The order of the mock parameters is the reverse of the above patched functions. Yes, really.
+    def test_track_has_multiple_similar_tracks(self, mock_parse_keys, mock_requests_get):
         playcount = 5
         track_to_check = TopTrack(track_name="Night Fever", artist="Bee Gees", playcount=playcount)
         expected_similar_tracks = [
@@ -32,7 +35,8 @@ class SimilarTracksFetcherTest(unittest.TestCase):
             }
         }
         
-        mock_get.return_value.json.return_value = json_response
+        mock_requests_get.return_value.json.return_value = json_response
+        mock_parse_keys.return_value = ''
 
         fetched_tracks = fetch_similar_tracks(track_to_check, 2)
         self.assertCountEqual(expected_similar_tracks, fetched_tracks)
