@@ -7,9 +7,9 @@ from requests import HTTPError
 from src.lastfm.library.top_tracks import fetch_top_tracks
 
 
+@patch('src.lastfm.library.top_tracks.get_lastfm_key')
 class TopTracksFetcherTest(unittest.TestCase):
-
-    @patch('src.parse_keys.get_lastfm_key')
+    
     @patch('requests.get')
     def test_one_page_of_results(self, mock_requests_get, mock_parse_keys):
         expected_track = TopTrack(track_name="Stayin' Alive", artist="Bee Gees", playcount=2)
@@ -39,7 +39,6 @@ class TopTracksFetcherTest(unittest.TestCase):
 
         self.assertEqual(fetch_top_tracks(user='sonofjack3', a_period=period.SEVEN_DAYS)[0], expected_track)
 
-    @patch('src.parse_keys.get_lastfm_key')
     @patch('requests.get')
     def test_multiple_tracks_over_multiple_pages(self, mock_requests_get, mock_parse_keys):
         expected_track_1 = TopTrack(track_name="Penny Lane", artist="The Beatles", playcount=5)
@@ -81,8 +80,7 @@ class TopTracksFetcherTest(unittest.TestCase):
 
         fetched_tracks = fetch_top_tracks(user="sonofjack3", a_period=period.SEVEN_DAYS)
         self.assertCountEqual(fetched_tracks, expected_tracks)
-
-    @patch('src.parse_keys.get_lastfm_key')
+    
     @patch('requests.get')
     def test_songs_with_one_playcount_ignored(self, mock_requests_get, mock_parse_keys):
         ignored_track_1 = TopTrack(track_name="Stayin' Alive", artist="Bee Gees", playcount=1)
@@ -117,8 +115,7 @@ class TopTracksFetcherTest(unittest.TestCase):
         fetched_tracks = fetch_top_tracks(user='sonofjack3', a_period=period.SEVEN_DAYS)
         self.assertEqual(fetched_tracks.__len__(), 1)
         self.assertEqual(fetched_tracks[0], non_ignored_track)
-
-    @patch('src.parse_keys.get_lastfm_key')
+    
     @patch('requests.get')
     def test_failure(self, mock_requests_get, mock_parse_keys):
         mock_requests_get.ok = False

@@ -8,7 +8,8 @@ from src.lastfm.recommendations.similar_tracks import fetch_similar_tracks
 class SimilarTracksFetcherTest(unittest.TestCase):
     
     @patch('requests.get')
-    @patch('src.parse_keys.get_lastfm_key')
+    # This is the correct way to patch a function that's imported into the module under test. It's ugly as hell but it works.
+    @patch('src.lastfm.recommendations.similar_tracks.get_lastfm_key')
     # The order of the mock parameters is the reverse of the above patched functions. Yes, really.
     def test_track_has_multiple_similar_tracks(self, mock_parse_keys, mock_requests_get):
         playcount = 5
