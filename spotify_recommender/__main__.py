@@ -20,8 +20,7 @@ def _setup_logging():
     if not os.path.exists(logs_directory):
         os.makedirs(logs_directory)
 
-    # Instantiating with the name __package__ works because this file is in the topmost package
-    logger = logging.getLogger(__package__)
+    logger = logging.getLogger()
     formatter = logging.Formatter("%(asctime)s %(levelname)s %(message)s")
     logger.setLevel(logging.DEBUG)
 
