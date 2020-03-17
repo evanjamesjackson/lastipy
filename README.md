@@ -22,4 +22,3 @@ The first time the app is run, the Spotify user will need to give authorization 
 <h2>Improvements</h2>
 
 * Make a webapp where users can enter their information and have the playlists generated automatically
-* Figure out somewhere to store config stuff... probably not this repo
