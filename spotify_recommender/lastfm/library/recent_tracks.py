@@ -5,7 +5,7 @@ from spotify_recommender.track import Track
 from requests import RequestException
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks'
-RESULTS_PER_PAGE_LIMIT = 200
+MAX_RESULTS_PER_PAGE = 200
 MAX_RETRIES = 10
 
 
@@ -52,7 +52,7 @@ def _build_json_payload(user, api_key, page):
         'user': user,
         'format': 'json',
         'api_key': api_key,
-        'limit': RESULTS_PER_PAGE_LIMIT,
+        'limit': MAX_RESULTS_PER_PAGE,
         'page': page
     }
     return payload
