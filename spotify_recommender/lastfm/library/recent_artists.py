@@ -2,7 +2,7 @@ import logging, requests
 from spotify_recommender.lastfm.library.scrobbled_artist import ScrobbledArtist
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=library.getartists'
-RESULTS_PER_PAGE_LIMIT = 200
+MAX_RESULTS_PER_PAGE = 200
 
 
 def fetch_recent_artists(user, api_key):
@@ -36,7 +36,7 @@ def _build_json_payload(user, api_key, page):
         'format': 'json',
         'page': page,
         'api_key': api_key,
-        'limit': RESULTS_PER_PAGE_LIMIT,
+        'limit': MAX_RESULTS_PER_PAGE,
         'user': user
     }
     return payload
