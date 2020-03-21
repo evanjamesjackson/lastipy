@@ -66,8 +66,8 @@ class RatingCalculatorTest(unittest.TestCase):
             top_track: [recommended_track_1, recommended_track_2]
         }
         recommendations = calculate_ratings('test', '', top_tracks_to_recommendations)
-        self.assertEqual(0.5, recommendations[0].recommendation_rating)
-        self.assertEqual(0.5, recommendations[1].recommendation_rating)
+        self.assertEqual(0.1, recommendations[0].recommendation_rating)
+        self.assertEqual(0.1, recommendations[1].recommendation_rating)
 
     @patch('spotify_recommender.lastfm.recommendations.rating_calculator.fetch_recent_artists')
     def test_multiple_recommendations_and_multiple_recent_artists(self, mock_recent_artists):
@@ -83,9 +83,9 @@ class RatingCalculatorTest(unittest.TestCase):
             top_track_2: [recommended_track_2, recommended_track_3]
         }
         recommendations = calculate_ratings('test', '', top_tracks_to_recommendations)
-        self.assertEqual(0.5, recommendations[0].recommendation_rating)
+        self.assertEqual(0.1, recommendations[0].recommendation_rating)
         self.assertEqual(10, recommendations[1].recommendation_rating)
-        self.assertEqual(0.5, recommendations[2].recommendation_rating)
+        self.assertEqual(0.1, recommendations[2].recommendation_rating)
 
     @patch('spotify_recommender.lastfm.recommendations.rating_calculator.fetch_recent_artists')
     def test_recommendations_where_artist_has_one_playcount_should_get_rating_halved(self, mock_recent_artists):
@@ -96,7 +96,7 @@ class RatingCalculatorTest(unittest.TestCase):
             top_track: [recommended_track_1]
         }
         recommendations = calculate_ratings('test', '', top_tracks_to_recommendations)
-        self.assertEqual(5, recommendations[0].recommendation_rating)
+        self.assertEqual(1, recommendations[0].recommendation_rating)
 
     @patch('spotify_recommender.lastfm.recommendations.rating_calculator.fetch_recent_artists')
     def test_reducing_based_on_recent_artists_ignores_case(self, mock_recent_artists):
@@ -107,4 +107,4 @@ class RatingCalculatorTest(unittest.TestCase):
             top_track: [recommended_track]
         }
         recommendations = calculate_ratings('test', '', top_tracks_to_recommendations)
-        self.assertEqual(0.5, recommendations[0].recommendation_rating)
+        self.assertEqual(0.1, recommendations[0].recommendation_rating)

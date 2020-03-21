@@ -2,6 +2,9 @@ import copy
 import logging
 from spotify_recommender.lastfm.library.recent_artists import fetch_recent_artists
 
+# Basically represents how strongly to reduce ratings for tracks by listened-to artists
+# TODO make this user configurable? 
+ARTIST_REDUCTION_STRENGTH = 5
 
 def calculate_ratings(user, api_key, top_tracks_to_recommendations, prefer_unheard_artists=True):
     """Returns a copy of the list of recommendations in the given map, with ratings set based on recommendation
@@ -12,8 +15,7 @@ def calculate_ratings(user, api_key, top_tracks_to_recommendations, prefer_unhea
 
     _adjust_ratings_based_on_playcounts(top_tracks_to_recommendations_copy)
 
-    if prefer_unheard_artists:
-        _adjust_ratings_based_on_recent_artists(top_tracks_to_recommendations_copy, user, api_key)
+    if prefer_unheard_artists: _adjust_ratings_based_on_recent_artists(top_tracks_to_recommendations_copy, user, api_key)
 
     return _extract_tracks_from_map(top_tracks_to_recommendations_copy)
 
@@ -33,9 +35,10 @@ def _adjust_ratings_based_on_recent_artists(top_tracks_to_recommendations, user,
         for recommendation in recommendations:
             for artist in recent_artists:
                 if recommendation.artist.lower() == artist.artist_name.lower():
-                    # Adjusting the rating by the reciprocal of the artist's playcount, plus one. The "plus one" is
+                    # Adjusting the rating by the reciprocal of the artist's playcount (plus one)
+                    # multiplied by the artist reduction strength factor. The "plus one" is
                     # to account for artist's with a playcount of just 1 - those should reduce the rating too.
-                    recommendation.recommendation_rating = (1 / (artist.playcount + 1)) * recommendation.recommendation_rating
+                    recommendation.recommendation_rating *= 1 / ((artist.playcount + 1) * ARTIST_REDUCTION_STRENGTH)
 
 def _extract_tracks_from_map(top_tracks_to_recommendations):
     all_recommendations = []
