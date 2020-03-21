@@ -56,7 +56,7 @@ def fetch_recommendations(
 def _filter_out_blacklisted_artists(blacklisted_artists, recommendations):
     logging.info("Filtering out blacklisted artists (" + str(blacklisted_artists) + ")...")
     recommendations = [recommendation for recommendation in recommendations
-                        if not any(recommendation.artist == blacklisted_artist
+                        if not any(recommendation.artist.lower() == blacklisted_artist.lower()
                                     for blacklisted_artist in blacklisted_artists)]
     return recommendations
 

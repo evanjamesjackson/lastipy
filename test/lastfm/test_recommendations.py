@@ -47,3 +47,21 @@ class RecommendationsFetcherTest(unittest.TestCase):
         recommendations = fetch_recommendations(user="meeee", api_key='', blacklisted_artists=['The Beatles'])
 
         self.assertCountEqual(recommendations, [recommendation_1])
+
+    @patch('spotify_recommender.lastfm.recommendations.recommendations.fetch_recent_tracks')
+    @patch('spotify_recommender.lastfm.recommendations.recommendations.fetch_top_tracks')
+    @patch('spotify_recommender.lastfm.recommendations.recommendations.fetch_similar_tracks')
+    @patch('spotify_recommender.lastfm.recommendations.recommendations.calculate_ratings')
+    def test_blacklisted_artists_filtering_should_ignore_case(self, mock_calculate_ratings, mock_similar_tracks, mock_top_tracks, mock_recent_tracks):
+        mock_recent_tracks.return_value = []
+        mock_top_tracks.return_value = [TopTrack(track_name='everything i wanted', artist='Billie Eilish', playcount=5)]
+
+        recommendation = RecommendedTrack(track_name="Bad Music", artist="Zayn", recommendation_rating=1)
+        recommendations = [recommendation]
+        mock_similar_tracks.return_value = recommendations
+
+        mock_calculate_ratings.return_value = recommendations
+
+        recommendations = fetch_recommendations(user="", api_key='', blacklisted_artists=['ZAYN'])
+
+        self.assertEqual(0, len(recommendations))
