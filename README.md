@@ -1,5 +1,5 @@
 
-<h1>Spotify Recommender</h1>
+<h1>Lastipy Recommender</h1>
 Creates Spotify playlists based on your listening habits by pulling from sources like Last.fm.
 <h2>Installation</h2>
 Clone the project, navigate to the project directory then use pip to install (will automatically pick up setup.py):
