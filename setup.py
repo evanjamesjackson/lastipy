@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='lastipy_recommender',
-      version='0.0.0',
+      version='0.0.1',
       description='Creates Spotify playlists based on your listening habits by pulling from sources like Last.fm.',
       url='http://github.com/evanjamesjackson/lastipy_recommender',
       author='Evan Jackson',
