@@ -1,6 +1,6 @@
 import copy
 import logging
-from spotify_recommender.lastfm.library.recent_artists import fetch_recent_artists
+from lastipy.lastfm.library.recent_artists import fetch_recent_artists
 
 # Basically represents how strongly to reduce ratings for tracks by listened-to artists
 # TODO make this user configurable? 

@@ -10,4 +10,4 @@ setup(name='spotify_recommender',
       entry_points={'console_scripts': [
           'spotify_recommender = spotify_recommender.__main__:main'
       ]},
-      install_requires=['numpy', 'requests', 'spotipy', 'pytest'])
+      install_requires=['lastipy', 'numpy', 'requests', 'spotipy', 'pytest'])

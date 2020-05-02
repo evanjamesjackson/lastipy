@@ -11,7 +11,7 @@
             "program": "${workspaceFolder}/spotify_recommender",
             "args": [
                 "${workspaceFolder}/example.config",
-                "${workspaceFolder}/../config/.keys"
+                "${workspaceFolder}/../spotify_recommender_config/.keys"
             ],
             "console": "integratedTerminal"
         }

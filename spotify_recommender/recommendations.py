@@ -1,11 +1,11 @@
 import logging
 
-from spotify_recommender.lastfm.library.top_tracks import fetch_top_tracks 
-from spotify_recommender.lastfm.recommendations.similar_tracks import fetch_similar_tracks
-from spotify_recommender.lastfm.library import period
-from spotify_recommender.track import Track
-from spotify_recommender.lastfm.recommendations.rating_calculator import calculate_ratings
-from spotify_recommender.lastfm.library.recent_tracks import fetch_recent_tracks
+from lastipy.lastfm.library.top_tracks import fetch_top_tracks 
+from lastipy.lastfm.recommendations.similar_tracks import fetch_similar_tracks
+from lastipy.lastfm.library import period
+from lastipy.track import Track
+from spotify_recommender.rating_calculator import calculate_ratings
+from lastipy.lastfm.library.recent_tracks import fetch_recent_tracks
 
 
 def fetch_recommendations(

@@ -1,12 +1,12 @@
 import logging
 import logging.handlers
-from spotify_recommender.lastfm.library import period
-from spotify_recommender.spotify import library, playlist, search
-from spotify_recommender.track import Track
+from lastipy.lastfm.library import period
+from lastipy.spotify import library, playlist, search
+from lastipy.track import Track
 from numpy.random import choice
-from spotify_recommender.lastfm.recommendations.recommendations import fetch_recommendations
+from spotify_recommender.recommendations import fetch_recommendations
 from spotipy import Spotify
-from spotify_recommender.spotify import token
+from lastipy.spotify import token
 
 
 #TODO test

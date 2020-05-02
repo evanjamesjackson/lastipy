@@ -1,16 +1,16 @@
 import unittest
 from unittest.mock import patch
 
-from spotify_recommender.lastfm.recommendations.recommendations import fetch_recommendations
-from spotify_recommender.lastfm.library.top_track import TopTrack
-from spotify_recommender.lastfm.recommendations.recommended_track import RecommendedTrack
+from spotify_recommender.recommendations import fetch_recommendations
+from lastipy.lastfm.library.top_track import TopTrack
+from lastipy.lastfm.recommendations.recommended_track import RecommendedTrack
 
 class RecommendationsFetcherTest(unittest.TestCase):
 
-    @patch('spotify_recommender.lastfm.recommendations.recommendations.fetch_recent_tracks')
-    @patch('spotify_recommender.lastfm.recommendations.recommendations.fetch_top_tracks')
-    @patch('spotify_recommender.lastfm.recommendations.recommendations.fetch_similar_tracks')
-    @patch('spotify_recommender.lastfm.recommendations.recommendations.calculate_ratings')
+    @patch('spotify_recommender.recommendations.fetch_recent_tracks')
+    @patch('spotify_recommender.recommendations.fetch_top_tracks')
+    @patch('spotify_recommender.recommendations.fetch_similar_tracks')
+    @patch('spotify_recommender.recommendations.calculate_ratings')
     def test_recent_tracks_are_filtered(self, mock_calculate_ratings, mock_similar_tracks, mock_top_tracks, mock_recent_tracks):
         recent_track_1 = TopTrack(track_name="SWALBR", artist="Cream", playcount=1)
         recent_track_2 = TopTrack(track_name="Badge", artist="Cream", playcount=1)
@@ -29,10 +29,10 @@ class RecommendationsFetcherTest(unittest.TestCase):
 
         self.assertCountEqual(fetch_recommendations('test', ''), [new_recommendation])
 
-    @patch('spotify_recommender.lastfm.recommendations.recommendations.fetch_recent_tracks')
-    @patch('spotify_recommender.lastfm.recommendations.recommendations.fetch_top_tracks')
-    @patch('spotify_recommender.lastfm.recommendations.recommendations.fetch_similar_tracks')
-    @patch('spotify_recommender.lastfm.recommendations.recommendations.calculate_ratings')
+    @patch('spotify_recommender.recommendations.fetch_recent_tracks')
+    @patch('spotify_recommender.recommendations.fetch_top_tracks')
+    @patch('spotify_recommender.recommendations.fetch_similar_tracks')
+    @patch('spotify_recommender.recommendations.calculate_ratings')
     def test_blacklisted_artists_are_filtered(self, mock_calculate_ratings, mock_similar_tracks, mock_top_tracks, mock_recent_tracks):
         mock_recent_tracks.return_value = []
         mock_top_tracks.return_value = [TopTrack(track_name='Here Comes the Sun', artist='The Beatles', playcount=5)]
@@ -48,10 +48,10 @@ class RecommendationsFetcherTest(unittest.TestCase):
 
         self.assertCountEqual(recommendations, [recommendation_1])
 
-    @patch('spotify_recommender.lastfm.recommendations.recommendations.fetch_recent_tracks')
-    @patch('spotify_recommender.lastfm.recommendations.recommendations.fetch_top_tracks')
-    @patch('spotify_recommender.lastfm.recommendations.recommendations.fetch_similar_tracks')
-    @patch('spotify_recommender.lastfm.recommendations.recommendations.calculate_ratings')
+    @patch('spotify_recommender.recommendations.fetch_recent_tracks')
+    @patch('spotify_recommender.recommendations.fetch_top_tracks')
+    @patch('spotify_recommender.recommendations.fetch_similar_tracks')
+    @patch('spotify_recommender.recommendations.calculate_ratings')
     def test_blacklisted_artists_filtering_should_ignore_case(self, mock_calculate_ratings, mock_similar_tracks, mock_top_tracks, mock_recent_tracks):
         mock_recent_tracks.return_value = []
         mock_top_tracks.return_value = [TopTrack(track_name='everything i wanted', artist='Billie Eilish', playcount=5)]

@@ -6,12 +6,12 @@ from spotify_recommender import recommendations_playlist
 import os
 import logging
 from spotify_recommender import definitions
-from spotify_recommender.lastfm.library.top_tracks import fetch_top_tracks
-from spotify_recommender.lastfm.recommendations.similar_tracks import fetch_similar_tracks
-from spotify_recommender.lastfm.recommendations.recommendations import fetch_recommendations
-from spotify_recommender.lastfm.library.recent_tracks import fetch_recent_tracks
-from spotify_recommender.lastfm.library.recent_artists import fetch_recent_artists
-from spotify_recommender.lastfm.recommendations.rating_calculator import calculate_ratings
+from lastipy.lastfm.library.top_tracks import fetch_top_tracks
+from lastipy.lastfm.recommendations.similar_tracks import fetch_similar_tracks
+from spotify_recommender.recommendations import fetch_recommendations
+from lastipy.lastfm.library.recent_tracks import fetch_recent_tracks
+from lastipy.lastfm.library.recent_artists import fetch_recent_artists
+from spotify_recommender.rating_calculator import calculate_ratings
 from spotify_recommender.recommendations_playlist import build_recommendations_playlist
 
 
