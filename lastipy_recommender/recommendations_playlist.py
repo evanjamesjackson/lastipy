@@ -4,7 +4,7 @@ from lastipy.lastfm.library import period
 from lastipy.spotify import library, playlist, search
 from lastipy.track import Track
 from numpy.random import choice
-from spotify_recommender.recommendations import fetch_recommendations
+from lastipy_recommender.recommendations import fetch_recommendations
 from spotipy import Spotify
 from lastipy.spotify import token
 

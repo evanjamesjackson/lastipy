@@ -34,7 +34,7 @@ debug_coverage*/**
 languageServer/**
 languageServer.*/**
 !uitests/features/languageServer/**
-!uitests/spotify_recommender/languageServer/**
+!uitests/lastipy_recommender/languageServer/**
 !uitests/code/**/languageServer/**
 bin/**
 obj/**

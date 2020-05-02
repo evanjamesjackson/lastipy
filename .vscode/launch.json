@@ -8,10 +8,10 @@
             "name": "Spotify Recommender",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/spotify_recommender",
+            "program": "${workspaceFolder}/lastipy_recommender",
             "args": [
                 "${workspaceFolder}/example.config",
-                "${workspaceFolder}/../spotify_recommender_config/.keys"
+                "${workspaceFolder}/../lastipy_recommender_config/.keys"
             ],
             "console": "integratedTerminal"
         }

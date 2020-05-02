@@ -11,7 +11,7 @@ pip install .
 Run from a command-line like so:
 
 ```
-python spotify_recommender user-configuration-file api-keys-file 
+python lastipy_recommender user-configuration-file api-keys-file 
 ```
 See example.config for an example user configuration file.<br/>
 You will also need a file containing API keys for Last.fm: https://www.last.fm/api/<br/>

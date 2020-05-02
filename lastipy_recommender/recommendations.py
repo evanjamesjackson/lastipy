@@ -4,7 +4,7 @@ from lastipy.lastfm.library.top_tracks import fetch_top_tracks
 from lastipy.lastfm.recommendations.similar_tracks import fetch_similar_tracks
 from lastipy.lastfm.library import period
 from lastipy.track import Track
-from spotify_recommender.rating_calculator import calculate_ratings
+from lastipy_recommender.rating_calculator import calculate_ratings
 from lastipy.lastfm.library.recent_tracks import fetch_recent_tracks
 
 

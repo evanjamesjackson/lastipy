@@ -2,17 +2,17 @@
 
 from configparser import ConfigParser
 import argparse
-from spotify_recommender import recommendations_playlist
+from lastipy_recommender import recommendations_playlist
 import os
 import logging
-from spotify_recommender import definitions
+from lastipy_recommender import definitions
 from lastipy.lastfm.library.top_tracks import fetch_top_tracks
 from lastipy.lastfm.recommendations.similar_tracks import fetch_similar_tracks
-from spotify_recommender.recommendations import fetch_recommendations
+from lastipy_recommender.recommendations import fetch_recommendations
 from lastipy.lastfm.library.recent_tracks import fetch_recent_tracks
 from lastipy.lastfm.library.recent_artists import fetch_recent_artists
-from spotify_recommender.rating_calculator import calculate_ratings
-from spotify_recommender.recommendations_playlist import build_recommendations_playlist
+from lastipy_recommender.rating_calculator import calculate_ratings
+from lastipy_recommender.recommendations_playlist import build_recommendations_playlist
 
 
 def _setup_logging():
@@ -29,7 +29,7 @@ def _setup_logging():
     console_handler.setFormatter(formatter)
 
     file_handler = logging.handlers.RotatingFileHandler(
-        filename=os.path.join(logs_directory, 'spotify_recommender.log'),
+        filename=os.path.join(logs_directory, 'lastipy_recommender.log'),
         maxBytes=2 * 1024 * 1024,  # 2MB
         backupCount=25,
         encoding='utf-8')
