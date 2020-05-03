@@ -34,7 +34,7 @@ debug_coverage*/**
 languageServer/**
 languageServer.*/**
 !uitests/features/languageServer/**
-!uitests/lastipy_recommender/languageServer/**
+!uitests/lastipy/languageServer/**
 !uitests/code/**/languageServer/**
 bin/**
 obj/**

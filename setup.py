@@ -1,13 +1,13 @@
 from setuptools import setup, find_packages
 
-setup(name='lastipy_recommender',
-      version='0.0.2',
-      description='Creates Spotify playlists based on your listening habits by pulling from sources like Last.fm.',
-      url='http://github.com/evanjamesjackson/lastipy_recommender',
+setup(name='lastipy',
+      version='0.0.0',
+      description='Python library that combines Last.fm and Spotify',
+      url='http://github.com/evanjamesjackson/lastipy',
       author='Evan Jackson',
       author_email='evanjamesjackson@gmail.com',
       packages=find_packages(),
       entry_points={'console_scripts': [
-          'lastipy_recommender = lastipy_recommender.__main__:main'
+          'recommendations_playlist = lastipy.recommendations.__main__:main'
       ]},
-      install_requires=['lastipy', 'numpy', 'requests', 'spotipy', 'pytest'])
+      install_requires=['numpy', 'requests', 'spotipy', 'pytest'])

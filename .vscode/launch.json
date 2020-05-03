@@ -2,16 +2,16 @@
     // Use IntelliSense to learn about possible attributes.
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
+    "version": "0.0.1",
     "configurations": [
         {
-            "name": "Spotify Recommender",
+            "name": "Recommendations playlist",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/lastipy_recommender",
+            "program": "${workspaceFolder}/lastipy/recommendations/recommendations_playlist.py",
             "args": [
-                "${workspaceFolder}/example.config",
-                "${workspaceFolder}/../lastipy_recommender_config/.keys"
+                "${workspaceFolder}/lastipy/recommendations/example.config",
+                "${workspaceFolder}/../lastipy_config/.keys"
             ],
             "console": "integratedTerminal"
         }
