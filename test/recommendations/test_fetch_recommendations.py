@@ -8,10 +8,10 @@ from lastipy.lastfm.recommendations.recommended_track import RecommendedTrack
 
 class RecommendationsFetcherTest(unittest.TestCase):
 
-    @patch('lastipy.lastfm.library.fetch_recent_tracks')
-    @patch('lastipy.lastfm.library.fetch_top_tracks')
-    @patch('lastipy.lastfm.recommendations.fetch_similar_tracks')
-    @patch('lastipy.recommendations.calculate_ratings')
+    @patch('lastipy.recommendations.fetch_recommendations.fetch_recent_tracks')
+    @patch('lastipy.recommendations.fetch_recommendations.fetch_top_tracks')
+    @patch('lastipy.recommendations.fetch_recommendations.fetch_similar_tracks')
+    @patch('lastipy.recommendations.fetch_recommendations.calculate_ratings')
     def test_recent_tracks_are_filtered(self, mock_calculate_ratings, mock_similar_tracks, mock_top_tracks, mock_recent_tracks):
         recent_track_1 = TopTrack(track_name="SWALBR", artist="Cream", playcount=1)
         recent_track_2 = TopTrack(track_name="Badge", artist="Cream", playcount=1)
@@ -30,10 +30,10 @@ class RecommendationsFetcherTest(unittest.TestCase):
 
         self.assertCountEqual(fetch_recommendations('test', ''), [new_recommendation])
 
-    @patch('lastipy.lastfm.library.recent_tracks.fetch_recent_tracks')
-    @patch('lastipy.lastfm.library.top_tracks.fetch_top_tracks')
-    @patch('lastipy.lastfm.recommendations.similar_tracks.fetch_similar_tracks')
-    @patch('lastipy.recommendations.rating_calculator.calculate_ratings')
+    @patch('lastipy.recommendations.fetch_recommendations.fetch_recent_tracks')
+    @patch('lastipy.recommendations.fetch_recommendations.fetch_top_tracks')
+    @patch('lastipy.recommendations.fetch_recommendations.fetch_similar_tracks')
+    @patch('lastipy.recommendations.fetch_recommendations.calculate_ratings')
     def test_blacklisted_artists_are_filtered(self, mock_calculate_ratings, mock_similar_tracks, mock_top_tracks, mock_recent_tracks):
         mock_recent_tracks.return_value = []
         mock_top_tracks.return_value = [TopTrack(track_name='Here Comes the Sun', artist='The Beatles', playcount=5)]
@@ -49,10 +49,10 @@ class RecommendationsFetcherTest(unittest.TestCase):
 
         self.assertCountEqual(recommendations, [recommendation_1])
 
-    @patch('lastipy.lastfm.library.fetch_recent_tracks')
-    @patch('lastipy.lastfm.library.fetch_top_tracks')
-    @patch('lastipy.lastfm.recommendations.fetch_similar_tracks')
-    @patch('lastipy.recommendations.calculate_ratings')
+    @patch('lastipy.recommendations.fetch_recommendations.fetch_recent_tracks')
+    @patch('lastipy.recommendations.fetch_recommendations.fetch_top_tracks')
+    @patch('lastipy.recommendations.fetch_recommendations.fetch_similar_tracks')
+    @patch('lastipy.recommendations.fetch_recommendations.calculate_ratings')
     def test_blacklisted_artists_filtering_should_ignore_case(self, mock_calculate_ratings, mock_similar_tracks, mock_top_tracks, mock_recent_tracks):
         mock_recent_tracks.return_value = []
         mock_top_tracks.return_value = [TopTrack(track_name='everything i wanted', artist='Billie Eilish', playcount=5)]
