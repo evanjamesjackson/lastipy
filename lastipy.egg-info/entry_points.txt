@@ -1,3 +1,0 @@
-[console_scripts]
-recommendations_playlist = lastipy.recommendations.recommendations_playlist:build_recommendations_playlist
-
