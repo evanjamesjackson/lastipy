@@ -3,6 +3,7 @@ import logging
 import logging.handlers
 import os
 
+
 def setup_logging(filename):
     logs_directory = os.path.join(definitions.ROOT_DIR, 'logs')
     if not os.path.exists(logs_directory):

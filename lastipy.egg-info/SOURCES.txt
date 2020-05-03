@@ -33,6 +33,8 @@ lastipy/spotify/playlist.py
 lastipy/spotify/search.py
 lastipy/spotify/spotify_track.py
 lastipy/spotify/token.py
+lastipy/util/__init__.py
+lastipy/util/setup_logging.py
 test/__init__.py
 test/test_requests.py
 test/lastfm/__init__.py
