@@ -8,6 +8,6 @@ setup(name='lastipy',
       author_email='evanjamesjackson@gmail.com',
       packages=find_packages(),
       entry_points={'console_scripts': [
-          'recommendations_playlist = lastipy.recommendations.__main__:main'
+          'recommendations_playlist = lastipy.recommendations.recommendations_playlist.__main__:main'
       ]},
       install_requires=['numpy', 'requests', 'spotipy', 'pytest'])
