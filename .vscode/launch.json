@@ -14,6 +14,17 @@
                 "${workspaceFolder}/../lastipy_config/.keys"
             ],
             "console": "integratedTerminal"
+        },
+        {
+            "name": "New releases playlist",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/lastipy/new_releases/new_releases_playlist.py",
+            "args": [
+                "${workspaceFolder}/lastipy/new_releases/example.config",
+                "${workspaceFolder}/../lastipy_config/.keys"
+            ],
+            "console": "integratedTerminal" 
         }
     ]
 }

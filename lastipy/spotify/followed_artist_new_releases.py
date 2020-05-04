@@ -3,7 +3,7 @@ from lastipy.spotify.parse_spotify_tracks import parse_tracks
 from datetime import datetime
 
 
-def get_tracks_from_followed_artists(spotify, as_of_date):
+def get_tracks_from_followed_artists(spotify, as_of_date=datetime.today().date()):
     followed_artists = []
 
     curr_response = spotify.current_user_followed_artists(limit=50)
@@ -12,7 +12,7 @@ def get_tracks_from_followed_artists(spotify, as_of_date):
         curr_response = spotify.current_user_followed_artists(limit=50, after=curr_response['artists']['items'][len(curr_response) - 1]['id'])
         followed_artists += curr_response['artists']['items']
 
-    # The above Spotipy function doesn't really function properly and results in duplicates, 
+    # The above Spotipy function doesn't really seem to function properly and results in duplicates, 
     # so we remove them here by converting the list to just the IDs (not doing so results in
     # an unhashable error), then converting to a set and back to a list 
     followed_artists = [artist['id'] for artist in followed_artists]

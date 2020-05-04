@@ -13,20 +13,30 @@ def get_tracks_in_playlists(spotify, username):
 
     tracks = []
     for playlist in playlists:
-        tracks = tracks + _get_tracks_in_playlist(spotify, username, playlist)
+        tracks = tracks + get_tracks_in_playlist(spotify, username, playlist['id'])
 
     logging.info("Fetched tracks " + str(tracks))
 
     return tracks
 
+def get_tracks_in_playlist(spotify, username, playlist_name=None, playlist_id=None):
+    if playlist_id == None:
+        if playlist_name == None:
+            raise Exception("Playlist ID or playlist name required")
+        playlists = spotify.current_user_playlists()
+        matching_playlists = [playlist for playlist in playlists['items'] if playlist['name'] == playlist_name]
+        if not matching_playlists:
+            logging.warn("No playlist with name " + playlist_name + " found for user " + username)
+            return []
+        else:
+            playlist_id = matching_playlists[0]['id']
 
-def _get_tracks_in_playlist(spotify, username, playlist):
     tracks_in_playlist = []
 
     keep_fetching = True
     while keep_fetching:
         json_response = spotify.user_playlist_tracks(user=username,
-                                                   playlist_id=playlist['id'],
+                                                   playlist_id=playlist_id,
                                                    offset=len(tracks_in_playlist))
         if json_response['items']:
             tracks_in_playlist = tracks_in_playlist + parse_tracks(json_response['items'])

@@ -56,7 +56,7 @@ def build_recommendations_playlist():
             logging.debug("Adding " + str(first_result))
             tracks_for_playlist.append(first_result)
 
-    playlist.add_to_playlist(spotify, args.spotify_user, args.playlist_name, tracks_for_playlist)
+    playlist.replace_tracks_in_playlist(spotify, args.spotify_user, args.playlist_name, tracks_for_playlist)
 
     logging.info("Done!")
 
