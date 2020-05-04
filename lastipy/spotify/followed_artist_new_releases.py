@@ -49,4 +49,6 @@ def get_tracks_from_followed_artists(spotify, as_of_date=datetime.today().date()
             album_tracks += curr_response['items']
         all_tracks += album_tracks
 
+    # TODO remove duplicates in album tracks too
+
     return parse_tracks(all_tracks)
