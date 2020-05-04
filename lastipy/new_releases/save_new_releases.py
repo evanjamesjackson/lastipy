@@ -17,33 +17,32 @@ from spotipy import Spotify
 from lastipy.spotify import token
 from lastipy.util.setup_logging import setup_logging
 import logging
-from lastipy.spotify.followed_artist_new_releases import get_tracks_from_followed_artists
+from lastipy.spotify.new_followed_artist_releases import fetch_new_releases
 from datetime import datetime
 from lastipy.lastfm.library.recent_tracks import fetch_recent_tracks
 
 
 def save_new_releases():
+    """Saves new releases (as of the current date) from the specified Spotify user's followed artists to their library"""
+
     setup_logging('new_releases.log')
     args = _extract_args()
 
     spotify = Spotify(auth=token.get_token(args.spotify_user, args.spotify_client_id_key, args.spotify_client_secret_key))
 
-    new_tracks = get_tracks_from_followed_artists(spotify=spotify)
-    
-    library_saved_tracks = library.get_saved_tracks(username=args.spotify_user, spotify=spotify)
-    library_playlist_tracks = library.get_tracks_in_playlists(username=args.spotify_user, spotify=spotify)
-    scrobbled_tracks = fetch_recent_tracks(user=args.lastfm_user, api_key=args.lastfm_api_key)
+    new_tracks = fetch_new_releases(spotify=spotify)
 
-    tracks_to_add = []
-    for track in new_tracks:
-        if track not in library_saved_tracks \
-            and track not in library_playlist_tracks \
-            and not any(Track.are_equivalent(track, scrobbled_track) for scrobbled_track in scrobbled_tracks):
-                tracks_to_add.append(track)
-    
-    logging.debug("Tracks to be added: " + str(tracks_to_add))
+    if len(new_tracks) > 0:
+        # Only process further if we actually fetched any new tracks; otherwise there's no point
 
-    library.add_tracks_to_library(spotify, tracks_to_add)
+        # Filter out new tracks that are already saved in the library        
+        saved_tracks = library.get_saved_tracks(username=args.spotify_user, spotify=spotify)
+        tracks_to_save = [new_track for new_track in new_tracks 
+                            if not any(new_track == saved_track for saved_track in saved_tracks)]
+        
+        library.add_tracks_to_library(spotify, tracks_to_save)
+    else:
+        logging.info("No new tracks to add!")
 
     logging.info("Done!")
 
