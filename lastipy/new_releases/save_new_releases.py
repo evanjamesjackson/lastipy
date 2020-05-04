@@ -76,7 +76,6 @@ def _extract_user_configs(user_configs_file, args):
     section = 'Config'
     args.lastfm_user = config_parser[section]['LastFMUser']
     args.spotify_user = config_parser[section]['SpotifyUser']
-    args.playlist_name = config_parser[section]['PlaylistName']
     return args
 
 def _extract_api_keys(api_keys_file, args):
