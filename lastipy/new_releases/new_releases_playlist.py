@@ -28,7 +28,7 @@ def build_new_releases_playlist():
 
     spotify = Spotify(auth=token.get_token(args.spotify_user, args.spotify_client_id_key, args.spotify_client_secret_key))
 
-    new_tracks = get_tracks_from_followed_artists(spotify=spotify, as_of_date=datetime(year=2019, month=1, day=1).date())
+    new_tracks = get_tracks_from_followed_artists(spotify=spotify)
     
     library_saved_tracks = library.get_saved_tracks(username=args.spotify_user, spotify=spotify)
     library_playlist_tracks = library.get_tracks_in_playlists(username=args.spotify_user, spotify=spotify)
