@@ -19,7 +19,7 @@
             "name": "New releases playlist",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/lastipy/new_releases/new_releases_playlist.py",
+            "program": "${workspaceFolder}/lastipy/new_releases/save_new_releases.py",
             "args": [
                 "${workspaceFolder}/lastipy/new_releases/example.config",
                 "${workspaceFolder}/../lastipy_config/.keys"
