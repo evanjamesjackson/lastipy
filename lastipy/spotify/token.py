@@ -13,7 +13,7 @@ def get_token(username, client_id_key, client_secret_key):
     This functionw was modified from util.py in spotipy in order to expose cache path'''
     
     # These are the only scopes required by this app so no need to parameterize this
-    scope = 'playlist-modify-public user-library-read user-follow-read'
+    scope = 'playlist-modify-public user-library-read user-library-modify user-follow-read'
 
     sp_oauth = oauth2.SpotifyOAuth(client_id_key,
                                    client_secret_key,

@@ -22,7 +22,7 @@ from datetime import datetime
 from lastipy.lastfm.library.recent_tracks import fetch_recent_tracks
 
 
-def build_new_releases_playlist():
+def save_new_releases():
     setup_logging('new_releases.log')
     args = _extract_args()
 
@@ -34,28 +34,16 @@ def build_new_releases_playlist():
     library_playlist_tracks = library.get_tracks_in_playlists(username=args.spotify_user, spotify=spotify)
     scrobbled_tracks = fetch_recent_tracks(user=args.lastfm_user, api_key=args.lastfm_api_key)
 
-    tracks_for_playlist = []
-
-    # Get tracks already in the playlist (if there are any) and filter out any that have been scrobbled
-    tracks_in_playlist = library.get_tracks_in_playlist(spotify=spotify, username=args.spotify_user, playlist_name=args.playlist_name)
-    logging.debug("Tracks already in playlist before removing those that are scrobbled: " + str(tracks_in_playlist))
-    tracks_in_playlist = [track for track in tracks_in_playlist
-                            if not any(Track.are_equivalent(track, scrobbled_track)
-                                for scrobbled_track in scrobbled_tracks)]
-    logging.debug("Tracks already in playlist after filtering: " + str(tracks_in_playlist))
-
-    tracks_for_playlist = tracks_in_playlist
-
+    tracks_to_add = []
     for track in new_tracks:
         if track not in library_saved_tracks \
             and track not in library_playlist_tracks \
             and not any(Track.are_equivalent(track, scrobbled_track) for scrobbled_track in scrobbled_tracks):
-                logging.debug("Adding " + str(track) + " to list")
-                tracks_for_playlist.append(track)
+                tracks_to_add.append(track)
     
-    logging.debug("Tracks to be added: " + str(tracks_for_playlist))
+    logging.debug("Tracks to be added: " + str(tracks_to_add))
 
-    playlist.add_tracks_to_playlist(spotify, args.spotify_user, args.playlist_name, tracks_for_playlist)
+    library.add_tracks_to_library(spotify, tracks_to_add)
 
     logging.info("Done!")
 
@@ -101,4 +89,4 @@ def _extract_api_keys(api_keys_file, args):
     return args
 
 if __name__ == "__main__":
-    build_new_releases_playlist()
+    save_new_releases()

@@ -63,3 +63,10 @@ def get_saved_tracks(spotify, username):
     logging.info("Fetched tracks " + str(saved_tracks))
 
     return saved_tracks
+
+def add_tracks_to_library(spotify, tracks):
+    logging.info("Adding " + str(tracks) + " to library")
+    # Spotify only allows 50 tracks to be added to a library at once, so we need to chunk 'em up
+    track_chunks = [tracks[i:i + 50] for i in range(0, len(tracks), 50)]  
+    for chunk in track_chunks:
+        spotify.current_user_saved_tracks_add([track.spotify_id for track in chunk])
