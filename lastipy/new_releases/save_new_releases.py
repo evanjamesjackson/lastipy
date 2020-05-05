@@ -20,6 +20,7 @@ import logging
 from lastipy.spotify.new_followed_artist_releases import fetch_new_releases
 from datetime import datetime
 from lastipy.lastfm.library.recent_tracks import fetch_recent_tracks
+from lastipy.util.parse_api_keys import ApiKeysParser
 
 
 def save_new_releases():
@@ -47,44 +48,20 @@ def save_new_releases():
     logging.info("Done!")
 
 def _extract_args():
-    args = _setup_arg_parser().parse_args()
+    args = _parse_args()
 
-    if args.user_configs_file:
-        if os.path.exists(args.user_configs_file.name,):
-            args = _extract_user_configs(args.user_configs_file.name, args)
-        else:
-            raise Exception("Could not find " + args.user_configs_file.name)
-
-    if args.api_keys_file:
-        if (os.path.exists(args.api_keys_file.name)):
-            args = _extract_api_keys(args.api_keys_file.name, args)
-        else:
-            raise Exception("Could not find " + args.api_keys_file.name)
+    # Parse API keys file
+    keys_parser = ApiKeysParser(args.api_keys_file)
+    args.spotify_client_id_key = keys_parser.spotify_client_id_key
+    args.spotify_client_secret_key = keys_parser.spotify_client_secret_key
     
     return args
 
-def _setup_arg_parser():
-    parser = argparse.ArgumentParser(description="Adds new tracks from followed artists to a Spotify playlist")
-    parser.add_argument('user_configs_file', type=argparse.FileType('r', encoding='UTF-8'))
-    parser.add_argument('api_keys_file', type=argparse.FileType('r', encoding='UTF-8'))
-    return parser
-
-def _extract_user_configs(user_configs_file, args):
-    config_parser = ConfigParser()
-    config_parser.read(user_configs_file)
-    section = 'Config'
-    args.lastfm_user = config_parser[section]['LastFMUser']
-    args.spotify_user = config_parser[section]['SpotifyUser']
-    return args
-
-def _extract_api_keys(api_keys_file, args):
-    config_parser = ConfigParser()
-    config_parser.read(api_keys_file)
-    args.lastfm_api_key = config_parser['LastFM']['API']
-    spotify_section = 'Spotify'
-    args.spotify_client_id_key = config_parser[spotify_section]['CLIENT_ID']
-    args.spotify_client_secret_key = config_parser[spotify_section]['CLIENT_SECRET']
-    return args
+def _parse_args():
+    args_parser = argparse.ArgumentParser(description="Adds new tracks from followed artists to a Spotify playlist")
+    args_parser.add_argument('spotify_user', type=str)
+    args_parser.add_argument('api_keys_file', type=argparse.FileType('r', encoding='UTF-8'))
+    return args_parser.parse_args()
 
 if __name__ == "__main__":
     save_new_releases()
