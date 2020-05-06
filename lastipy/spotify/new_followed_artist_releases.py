@@ -76,8 +76,6 @@ def get_album_tracks(spotify, album):
     while len(curr_response['items']) > 0:
         curr_response = spotify.album_tracks(album['id'], limit=50, offset=len(album_tracks))
         album_tracks += curr_response['items']
-    all_tracks += album_tracks
-    return all_tracks
-
+    return album_tracks
 
 
