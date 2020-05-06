@@ -36,11 +36,12 @@ def save_new_releases():
     if len(new_tracks) > 0:
         # Only process further if we actually fetched any new tracks; otherwise there's no point
 
-        # Filter out new tracks that are already saved in the library        
+        # Filter out new tracks that are already saved in the library
         saved_tracks = library.get_saved_tracks(username=args.spotify_user, spotify=spotify)
+        logging.info("Filtering out already saved tracks from new tracks")
         tracks_to_save = [new_track for new_track in new_tracks 
                             if not any(new_track == saved_track for saved_track in saved_tracks)]
-        
+
         library.add_tracks_to_library(spotify, tracks_to_save)
     else:
         logging.info("No new tracks to add!")
