@@ -24,7 +24,7 @@ Run the following to save all new releases (as of today) from the user's followe
 ```
 save_new_releases spotify_user api_keys_file
 ```
-.See scripts/example.keys for an an example API keys file.
+See scripts/example.keys for an an example API keys file.
 <h2>Improvements</h2>
 
 * Make a webapp where users can enter their information and have the playlists generated automatically
