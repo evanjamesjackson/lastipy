@@ -36,7 +36,6 @@ languageServer.*/**
 !uitests/features/languageServer/**
 !uitests/lastipy/languageServer/**
 !uitests/code/**/languageServer/**
-bin/**
 obj/**
 .pytest_cache
 tmp/**
