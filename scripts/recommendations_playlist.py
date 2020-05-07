@@ -38,7 +38,7 @@ def build_recommendations_playlist(spotify,
     library_playlist_tracks = library.get_tracks_in_playlists(spotify)
 
     tracks_for_playlist = []
-    while len(tracks_for_playlist) < args.playlist_size:
+    while len(tracks_for_playlist) < args.playlist_size and len(recommendations) > 0:
         recommendation = choice(recommendations, p=_calculate_rating_weights(recommendations))
         recommendations.remove(recommendation)
 
