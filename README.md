@@ -17,14 +17,14 @@ To create a playlist of recommendations generated from the user's "top tracks" i
 ```
 recommendations_playlist user-configuration-file api-keys-file 
 ```
-See bin/example.recommendations.config for an example user configuration file and bin/example.keys for an example API keys file.<br/>
+See scripts/example.recommendations.config for an example user configuration file and scripts/example.keys for an example API keys file.<br/>
 <h3>Save new releases from followed artists to library</h3>
 Run the following to save all new releases (as of today) from the user's followed artists in Spotify (since Spotify refuses to give a comprehensive list of such things): 
 
 ```
 save_new_releases spotify_user api_keys_file
 ```
-.See bin/example.keys for an an example API keys file.
+.See scripts/example.keys for an an example API keys file.
 <h2>Improvements</h2>
 
 * Make a webapp where users can enter their information and have the playlists generated automatically
