@@ -1,7 +1,6 @@
 from lastipy.spotify.spotify_track import SpotifyTrack
 
 #TODO test
-
 def parse_tracks(json_tracks):
     return [_parse_track(json_track) for json_track in json_tracks]
 

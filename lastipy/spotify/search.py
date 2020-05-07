@@ -6,7 +6,7 @@ import json
 
 
 #TODO test
-def search_for_tracks(spotify, username, query):
+def search_for_tracks(spotify, query):
     """Returns a list of tracks for the given query"""
 
     json_response = spotify.search(q=query)

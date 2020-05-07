@@ -4,27 +4,29 @@ from datetime import datetime
 import logging
 
 
+#TODO test
 def fetch_new_releases(spotify, as_of_date=datetime.today().date()):
     """Fetches new tracks (as of the given date) released by the current Spotify user's followed artists"""
 
-    followed_artist_ids = get_followed_artists(spotify)
+    followed_artist_ids = _get_followed_artists(spotify)
 
     all_albums = []
     for artist_id in followed_artist_ids:
-        artist_albums = get_releases(spotify, artist_id)
+        artist_albums = _get_releases(spotify, artist_id)
         all_albums += artist_albums
 
-    new_albums = filter_new_releases(all_albums, as_of_date)
+    new_albums = _filter_new_releases(all_albums, as_of_date)
 
     all_tracks = []
     for album in new_albums:
-        all_tracks += get_album_tracks(spotify, album)
+        all_tracks += _get_album_tracks(spotify, album)
 
     new_tracks = parse_tracks(all_tracks)
     logging.info("Fetched new tracks " + str(new_tracks))
     return new_tracks
 
-def get_followed_artists(spotify):
+
+def _get_followed_artists(spotify):
     followed_artists = []
 
     curr_response = spotify.current_user_followed_artists(limit=50)
@@ -40,7 +42,8 @@ def get_followed_artists(spotify):
     followed_artist_ids = list(set(followed_artists))
     return followed_artist_ids
 
-def filter_new_releases(all_albums, as_of_date):
+
+def _filter_new_releases(all_albums, as_of_date):
     new_albums = []
     for album in all_albums:
         if album['release_date_precision'] == 'day':
@@ -55,7 +58,8 @@ def filter_new_releases(all_albums, as_of_date):
                 new_albums.append(album)
     return new_albums
 
-def get_releases(spotify, artist_id):
+
+def _get_releases(spotify, artist_id):
     # Albums
     curr_response = spotify.artist_albums(artist_id, album_type='album', limit=50)
     artist_albums = curr_response['items']
@@ -70,12 +74,11 @@ def get_releases(spotify, artist_id):
         artist_singles += curr_response['items']
     return artist_albums + artist_singles
 
-def get_album_tracks(spotify, album):
+
+def _get_album_tracks(spotify, album):
     curr_response = spotify.album_tracks(album['id'], limit=50)
     album_tracks = curr_response['items']
     while len(curr_response['items']) > 0:
         curr_response = spotify.album_tracks(album['id'], limit=50, offset=len(album_tracks))
         album_tracks += curr_response['items']
     return album_tracks
-
-

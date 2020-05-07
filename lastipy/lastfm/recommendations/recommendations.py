@@ -5,7 +5,7 @@ from lastipy.lastfm.recommendations.similar_tracks import fetch_similar_tracks
 from lastipy.lastfm.library import period
 from lastipy.track import Track
 from lastipy.lastfm.library.recent_tracks import fetch_recent_tracks
-from lastipy.recommendations.rating_calculator import calculate_ratings
+from lastipy.lastfm.recommendations.rating_calculator import calculate_ratings
 
 
 def fetch_recommendations(

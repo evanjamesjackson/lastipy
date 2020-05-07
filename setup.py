@@ -8,7 +8,7 @@ setup(name='lastipy',
       author_email='evanjamesjackson@gmail.com',
       packages=find_packages(),
       entry_points={'console_scripts': [
-          'recommendations_playlist = lastipy.recommendations.recommendations_playlist:build_recommendations_playlist',
-          'save_new_releases = lastipy.new_releases.save_new_releases:save_new_releases'
+          'recommendations_playlist = bin/recommendations_playlist.__main__:main',
+          'save_new_releases = bin/save_new_releases.__main__:main'
       ]},
       install_requires=['numpy', 'requests', 'spotipy', 'pytest'])

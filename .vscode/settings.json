@@ -11,7 +11,7 @@
     "python.testing.nosetestsEnabled": false,
     "python.testing.unittestEnabled": true,
     "python.jediEnabled": true,
+    "python.venvPath": "venv",
     "python.linting.pylintEnabled": true,
-    "python.linting.enabled": true,
-    "python.venvPath": "venv"
+    "python.linting.enabled": true
 }
