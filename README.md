@@ -1,6 +1,8 @@
 
-<h1>Lastipy Recommender</h1>
-Creates Spotify playlists based on your listening habits by pulling from sources like Last.fm.
+<h1>Lastipy</h1>
+<b>Lastipy</b> is a Python library combining the APIs of Spotify and Last.fm, with scripts for things like creating customized recommendation playlists, automatically saving new releases, etc. 
+<h2>Prerequisites</h2>
+You will need API keys for Last.fm: https://www.last.fm/api/ and for Spotify: https://developer.spotify.com/documentation/web-api/<br/>
 <h2>Installation</h2>
 Clone the project, navigate to the project directory then use pip to install (will automatically pick up setup.py):
 
@@ -8,16 +10,21 @@ Clone the project, navigate to the project directory then use pip to install (wi
 pip install .
 ```
 <h2>Usage</h2>
-Run from a command-line like so:
+The first time any of the scripts are run, the Spotify user will need to give authorization to the application in order to be able to read/modify their playlists/library. Once prompted, open the given URL in a browser, log into Spotify, then copy the URL to which you are redirected and paste it into the console. This will only need to be done the first time, since spotipy will cache the authorization.  
+<h3>Creating a recommendations playlist</h3>
+To create a playlist of recommendations generated from the user's "top tracks" in Last.fm, run:
 
 ```
-python lastipy user-configuration-file api-keys-file 
+recommendations_playlist user-configuration-file api-keys-file 
 ```
-See example.config for an example user configuration file.<br/>
-You will also need a file containing API keys for Last.fm: https://www.last.fm/api/<br/>
-And for Spotify: https://developer.spotify.com/documentation/web-api/<br/>
-See example.keys for the correct layout.<br/><br/>
-The first time the app is run, the Spotify user will need to give authorization to the application in order to add tracks to a playlist. Once prompted, open the given URL in a browser, log into Spotify, then copy the URL to which you are redirected and paste it into the console. This will only need to be done the first time, since spotipy will cache the authorization.  
+See bin/example.recommendations.config for an example user configuration file and bin/example.keys for an example API keys file.<br/>
+<h3>Save new releases from followed artists to library</h3>
+Run the following to save all new releases (as of today) from the user's followed artists in Spotify (since Spotify refuses to give a comprehensive list of such things): 
+
+```
+save_new_releases spotify_user api_keys_file
+```
+.See bin/example.keys for an an example API keys file.
 <h2>Improvements</h2>
 
 * Make a webapp where users can enter their information and have the playlists generated automatically
