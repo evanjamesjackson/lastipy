@@ -8,9 +8,9 @@
             "name": "Recommendations playlist",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/recommendations_playlist.py",
+            "program": "${workspaceFolder}/scripts/recommendations_playlist.py",
             "args": [
-                "${workspaceFolder}/bin/example.recommendations.config",
+                "${workspaceFolder}/scripts/example.recommendations.config",
                 "${workspaceFolder}/../lastipy_config/.keys"
             ],
             "console": "integratedTerminal"
@@ -19,7 +19,7 @@
             "name": "New releases playlist",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/bin/save_new_releases.py",
+            "program": "${workspaceFolder}/scripts/save_new_releases.py",
             "args": [
                 "sonofjack3",
                 "${workspaceFolder}/../lastipy_config/.keys"
