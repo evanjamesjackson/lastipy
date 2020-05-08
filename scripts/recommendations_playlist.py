@@ -20,19 +20,19 @@ from lastipy.util.parse_api_keys import ApiKeysParser
 from lastipy.spotify import library, search, playlist
 
 
-def build_recommendations_playlist(spotify, 
-                                   lastfm_user, 
-                                   lastfm_api_key, 
-                                   recommendation_period, 
-                                   max_recommendations_per_top_track, 
-                                   blacklisted_artists, 
-                                   prefer_unheard_artists):
-    recommendations = fetch_recommendations(user=lastfm_user,
-                                            api_key=lastfm_api_key,
-                                            recommendation_period=recommendation_period,
-                                            max_similar_tracks_per_top_track=max_recommendations_per_top_track,
-                                            blacklisted_artists=blacklisted_artists,
-                                            prefer_unheard_artists=prefer_unheard_artists)
+def build_recommendations_playlist():
+    """Adds recommendations to the given Spotify user's playlist based on the given Last.fm user's recommendations"""
+
+    setup_logging('recommendations.log')
+    args = _extract_args()
+    spotify = Spotify(auth=token.get_token(args.spotify_user, args.spotify_client_id_key, args.spotify_client_secret_key))
+
+    recommendations = fetch_recommendations(user=args.lastfm_user,
+                                            api_key=args.lastfm_api_key,
+                                            recommendation_period=args.recommendation_period,
+                                            max_similar_tracks_per_top_track=args.max_recommendations_per_top_track,
+                                            blacklisted_artists=args.blacklisted_artists,
+                                            prefer_unheard_artists=args.prefer_unheard_artists)
     
     library_saved_tracks = library.get_saved_tracks(spotify)
     library_playlist_tracks = library.get_tracks_in_playlists(spotify)
@@ -59,18 +59,6 @@ def build_recommendations_playlist(spotify,
     playlist.replace_tracks_in_playlist(spotify, args.playlist_name, tracks_for_playlist)
 
     logging.info("Done!")
-
-
-def _calculate_rating_weights(recommendations):
-    total_ratings = 0
-    for recommendation in recommendations:
-        total_ratings += recommendation.recommendation_rating
-
-    rating_weights = []
-    for recommendation in recommendations:
-        rating_weights.append(recommendation.recommendation_rating / total_ratings)
-    return rating_weights
-
 
 def _extract_args():
     args_parser = _setup_args_parser()
@@ -114,14 +102,15 @@ def _extract_api_keys(args):
     return args
 
 
+def _calculate_rating_weights(recommendations):
+    total_ratings = 0
+    for recommendation in recommendations:
+        total_ratings += recommendation.recommendation_rating
+
+    rating_weights = []
+    for recommendation in recommendations:
+        rating_weights.append(recommendation.recommendation_rating / total_ratings)
+    return rating_weights
+
 if __name__ == "__main__":
-    args = _extract_args()
-    setup_logging('recommendations.log')
-    spotify = Spotify(auth=token.get_token(args.spotify_user, args.spotify_client_id_key, args.spotify_client_secret_key))
-    build_recommendations_playlist(spotify, 
-                                   args.lastfm_user, 
-                                   args.lastfm_api_key, 
-                                   args.recommendation_period, 
-                                   args.max_recommendations_per_top_track, 
-                                   args.blacklisted_artists, 
-                                   args.prefer_unheard_artists)
+    build_recommendations_playlist()

@@ -22,10 +22,14 @@ from datetime import datetime
 from lastipy.util.parse_api_keys import ApiKeysParser
 
 
-def save_new_releases(spotify):
-    """Saves new releases (as of the current date) from the specified Spotify user's followed artists to their library"""
+def save_new_tracks():
+    """Saves new tracks (as of the current date) from the specified Spotify user's followed artists to their library"""
 
-    new_tracks = new_releases.fetch_new_releases(spotify)
+    setup_logging("new_releases.log")
+    args = _extract_args()
+    spotify = Spotify(auth=token.get_token(args.spotify_user, args.spotify_client_id_key, args.spotify_client_secret_key))
+
+    new_tracks = new_releases.fetch_new_tracks(spotify)
 
     if len(new_tracks) > 0:
         # Only process further if we actually fetched any new tracks; otherwise there's no point
@@ -63,6 +67,4 @@ def _parse_args():
     return args_parser.parse_args()
 
 if __name__ == "__main__":
-    args = _extract_args()
-    setup_logging('new_releases.log')
-    save_new_releases(Spotify(auth=token.get_token(args.spotify_user, args.spotify_client_id_key, args.spotify_client_secret_key)))
+    save_new_tracks()

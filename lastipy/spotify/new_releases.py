@@ -5,7 +5,7 @@ import logging
 
 
 #TODO test
-def fetch_new_releases(spotify, as_of_date=datetime.today().date()):
+def fetch_new_tracks(spotify, as_of_date=datetime.today().date()):
     """Fetches new tracks (as of the given date) released by the current Spotify user's followed artists"""
 
     followed_artist_ids = _get_followed_artists(spotify)
