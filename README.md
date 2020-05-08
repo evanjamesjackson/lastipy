@@ -19,10 +19,10 @@ recommendations_playlist user-configuration-file api-keys-file
 ```
 See scripts/example.recommendations.config for an example user configuration file and scripts/example.keys for an example API keys file.<br/>
 <h3>Save new releases from followed artists to library</h3>
-To save new releases from the user's followed artists (as of the current date) to their library, run: 
+To save new tracks released by the user's followed artists (as of the current date) to their library ("Liked Songs"), run: 
 
 ```
-save_new_releases spotify_user api_keys_file
+save_new_tracks spotify_user api_keys_file
 ```
 See scripts/example.keys for an an example API keys file.
 <h2>Improvements</h2>
