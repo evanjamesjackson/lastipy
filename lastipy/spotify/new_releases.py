@@ -2,6 +2,7 @@ import spotipy
 from lastipy.spotify.parse_spotify_tracks import parse_tracks
 from datetime import datetime
 import logging
+from lastipy.track import Track
 
 
 #TODO test
@@ -22,6 +23,8 @@ def fetch_new_tracks(spotify, as_of_date=datetime.today().date()):
         all_tracks += _get_album_tracks(spotify, album)
 
     new_tracks = parse_tracks(all_tracks)
+    
+    new_tracks = _remove_duplicates(new_tracks)
     logging.info("Fetched new tracks " + str(new_tracks))
     return new_tracks
 
@@ -82,3 +85,18 @@ def _get_album_tracks(spotify, album):
         curr_response = spotify.album_tracks(album['id'], limit=50, offset=len(album_tracks))
         album_tracks += curr_response['items']
     return album_tracks
+
+
+def _remove_duplicates(tracks):
+    """Removes duplicate tracks (ie: tracks that have identical name and artist; see Track.are_equivalent)"""
+    logging.debug("New tracks before removing duplicates: " + str(tracks))
+    tracks_without_duplicates = []
+    # We remove duplicates with a list comprehension rather than the traditional hack of using a set, since that
+    # requires the object to be hashable; plus we only want to compare the track name/artist of each track, not
+    # any of the other fields (eg: Spotify ID) which might in fact differ
+    [tracks_without_duplicates.append(track_x) 
+        for track_x in tracks 
+        if not any(Track.are_equivalent(track_x, track_y) 
+                   for track_y in tracks_without_duplicates)]
+    logging.debug("New tracks after removing duplicates: " + str(tracks_without_duplicates))
+    return tracks_without_duplicates
