@@ -1,7 +1,7 @@
 import logging, requests
 from lastipy.lastfm.library import period
 from lastipy.lastfm.parse_lastfm_tracks import parse_track_name, parse_artist
-from lastipy.lastfm.library.top_track import TopTrack
+from lastipy.lastfm.library.scrobbled_track import ScrobbledTrack
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=user.gettoptracks'
 
@@ -16,7 +16,7 @@ def fetch_top_tracks(user, api_key, a_period=period.OVERALL):
     while keep_fetching:
         json_response = _send_request(_build_json_payload(user, api_key, a_period, page))
         json_tracks = json_response['toptracks']['track']
-        top_tracks = [TopTrack(parse_track_name(json_track), parse_artist(json_track), int(json_track['playcount']))
+        top_tracks = [ScrobbledTrack(parse_track_name(json_track), parse_artist(json_track), int(json_track['playcount']))
                       for json_track in json_tracks]
         
         # Filter out tracks with a playcount of 1, since those shouldn't be considered "top"
