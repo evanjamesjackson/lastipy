@@ -38,7 +38,8 @@ def fetch_recent_tracks(user, api_key):
                                 " after " + str(retries) + " retries. Giving up and moving on...")
                 break
 
-    logging.info(f"Fetched " + str(len(all_recent_tracks)) + " recent tracks: " + str(all_recent_tracks))
+    logging.info("Fetched " + str(len(all_recent_tracks)) + " recent tracks")
+    logging.debug("Fetched tracks: " + str(all_recent_tracks))
     return all_recent_tracks
 
 def _send_request(json_payload):

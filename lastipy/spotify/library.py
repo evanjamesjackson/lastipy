@@ -20,23 +20,28 @@ def get_saved_tracks(spotify):
         else:
             keep_fetching = False
 
-    logging.info("Fetched tracks: " + str(saved_tracks))
+    logging.info("Fetched " + str(len(saved_tracks)) + " tracks")
+    logging.debug("Fetched tracks: " + str(saved_tracks))
 
     return saved_tracks
 
 
 def add_tracks_to_library(spotify, tracks):
-    logging.info("Adding " + str(tracks) + " to " + spotify.current_user()['id'] + "'s library")
+    logging.info("Adding " + str(len(tracks)) + " to " + spotify.current_user()['id'] + "'s library")
+    logging.debug("Adding tracks: " + str(tracks))
     track_chunks = _chunk(tracks, MAX_ITEMS_PER_REQUEST) 
     for chunk in track_chunks:
         spotify.current_user_saved_tracks_add([track.spotify_id for track in chunk])
+    logging.info("Finished adding tracks")
 
 
 def remove_tracks_from_library(spotify, tracks):
-    logging.info("Removing " + str(tracks) + " from " + spotify.current_user()['id'] + "'s library")
+    logging.info("Removing " + str(len(tracks)) + " from " + spotify.current_user()['id'] + "'s library")
+    logging.debug("Removing tracks: " + str(tracks))
     track_chunks = _chunk(tracks, MAX_ITEMS_PER_REQUEST)
     for chunk in track_chunks:
         spotify.current_user_saved_tracks_delete([track.spotify_id for track in chunk])
+    logging.info("FInished removing tracks")
 
 
 def _chunk(lst, chunk_size):

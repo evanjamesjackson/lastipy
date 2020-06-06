@@ -17,7 +17,8 @@ def fetch_similar_tracks(api_key, track, limit):
         # how similar a track is to another
         similar_tracks = [RecommendedTrack(parse_track_name(json_track), parse_artist(json_track), float(json_track['match'])) 
                           for json_track in json_tracks]
-        logging.info(f"Fetched " + str(len(similar_tracks)) + " similar tracks: " + str(similar_tracks))
+        logging.info("Fetched " + str(len(similar_tracks)) + " similar tracks")
+        logging.debug("Fetched tracks: " + str(similar_tracks))
         return similar_tracks
     elif 'errors' in json_response:
         raise Exception("Error occurred while fetching similar tracks " + json_response['errors'])

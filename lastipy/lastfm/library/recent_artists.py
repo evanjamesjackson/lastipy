@@ -21,7 +21,8 @@ def fetch_recent_artists(user, api_key):
         total_pages = int(json_response['artists']['@attr']['totalPages'])
         page = page + 1
 
-    logging.info("Fetched recent artists " + str(artists))
+    logging.info("Fetched " + str(len(artists)) + " artists")
+    logging.debug("Fetched artists: " + str(artists))
 
     return artists
 

@@ -10,12 +10,15 @@ def calculate_ratings(user, api_key, top_tracks_to_recommendations, prefer_unhea
     """Returns a copy of the list of recommendations in the given map, with ratings set based on recommendation
     'strength', which can be used to determine its chances of showing up in the final playlist"""
 
+    logging.info("Calculating recommendation ratings...")
+
     # Create a copy of the given map and modify it instead
     top_tracks_to_recommendations_copy = copy.deepcopy(top_tracks_to_recommendations)
 
     _adjust_ratings_based_on_playcounts(top_tracks_to_recommendations_copy)
 
-    if prefer_unheard_artists: _adjust_ratings_based_on_recent_artists(top_tracks_to_recommendations_copy, user, api_key)
+    if prefer_unheard_artists: 
+        _adjust_ratings_based_on_recent_artists(top_tracks_to_recommendations_copy, user, api_key)
 
     return _extract_tracks_from_map(top_tracks_to_recommendations_copy)
 
@@ -39,6 +42,7 @@ def _adjust_ratings_based_on_recent_artists(top_tracks_to_recommendations, user,
                     # multiplied by the artist reduction strength factor. The "plus one" is
                     # to account for artist's with a playcount of just 1 - those should reduce the rating too.
                     recommendation.recommendation_rating *= 1 / ((artist.playcount + 1) * ARTIST_REDUCTION_STRENGTH)
+                    logging.debug("Calculated rating for " + str(recommendation) + ": " + str(recommendation.recommendation_rating))
 
 def _extract_tracks_from_map(top_tracks_to_recommendations):
     all_recommendations = []

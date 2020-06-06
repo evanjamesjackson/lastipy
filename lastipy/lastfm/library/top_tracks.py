@@ -29,7 +29,8 @@ def fetch_top_tracks(user, api_key, a_period=period.OVERALL):
         if not top_tracks:
             keep_fetching = False
 
-    logging.info(f"Fetched " + str(len(all_top_tracks)) + " top tracks: " + str(all_top_tracks))
+    logging.info("Fetched " + str(len(all_top_tracks)) + " top tracks")
+    logging.debug("Fetched tracks: " + str(all_top_tracks))
     return all_top_tracks
 
 def _send_request(json_payload):

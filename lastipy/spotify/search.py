@@ -15,5 +15,6 @@ def search_for_tracks(spotify, query):
     converted_tracks = []
     if json_response['tracks']:
         converted_tracks = parse_tracks(json_response['tracks']['items'])
-    logging.info("Track results for query " + query + ": " + str(converted_tracks))
+    logging.info("Fetched " + str(len(converted_tracks)) + " tracks for query " + query)
+    logging.debug("Fetched tracks: " + str(converted_tracks))
     return converted_tracks

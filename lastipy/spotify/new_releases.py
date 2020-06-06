@@ -9,6 +9,8 @@ from lastipy.track import Track
 def fetch_new_tracks(spotify, as_of_date=datetime.today().date()):
     """Fetches new tracks (as of the given date) released by the current Spotify user's followed artists"""
 
+    logging.info("Fetching new tracks for " + spotify.current_user()['id'] + " as of " + str(as_of_date))
+
     followed_artist_ids = _get_followed_artists(spotify)
 
     all_albums = []
