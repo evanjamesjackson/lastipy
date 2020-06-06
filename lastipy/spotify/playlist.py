@@ -72,6 +72,8 @@ def add_tracks_to_playlist(spotify, playlist_name, tracks):
             spotify.user_playlist_add_tracks(user=spotify.current_user()['id'],
                                              playlist_id=playlist_id,
                                              tracks=[track.spotify_id for track in chunk])
+        else:
+            logging.info("Chunk is empty, not adding any tracks")
 
 
 def remove_tracks_from_playlist(spotify, playlist_name, tracks):
@@ -90,6 +92,8 @@ def remove_tracks_from_playlist(spotify, playlist_name, tracks):
             spotify.user_playlist_remove_all_occurrences_of_tracks(user=spotify.current_user()['id'],
                                                                    playlist_id=playlist_id,
                                                                    tracks=[track.spotify_id for track in chunk])
+        else:
+            logging.info("Chunk is empty, not removing any tracks")
 
 
 def _chunk(lst, chunk_size):
