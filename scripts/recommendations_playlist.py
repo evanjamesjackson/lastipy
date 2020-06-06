@@ -35,7 +35,7 @@ def build_recommendations_playlist():
                                             prefer_unheard_artists=args.prefer_unheard_artists)
     
     library_saved_tracks = library.get_saved_tracks(spotify)
-    library_playlist_tracks = library.get_tracks_in_playlists(spotify)
+    library_playlist_tracks = playlist.get_tracks_in_playlists(spotify)
 
     tracks_for_playlist = []
     while len(tracks_for_playlist) < args.playlist_size and len(recommendations) > 0:

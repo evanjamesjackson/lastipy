@@ -1,4 +1,23 @@
 import logging
+from lastipy.spotify.parse_spotify_tracks import parse_tracks
+
+MAX_ITEMS_PER_REQUEST = 100
+
+
+def get_tracks_in_playlists(spotify):
+    """Returns all tracks in the currently-logged-in user's playlists"""
+
+    logging.info("Fetching all tracks in " + spotify.current_user()['id'] + "'s playlists")
+
+    playlists = spotify.current_user_playlists()['items']
+
+    tracks = []
+    for playlist in playlists:
+        tracks = tracks + get_tracks_in_playlist(spotify, playlist_id=playlist['id'])
+
+    logging.info("Fetched tracks " + str(tracks))
+
+    return tracks
 
 
 #TODO test
@@ -6,11 +25,10 @@ def replace_tracks_in_playlist(spotify, playlist_name, tracks):
     """Replaces all tracks in the currently-logged-in user's given playlist 
         with the given tracks. If the playlist does not exist, creates it first."""
 
-    playlist_id = _fetch_playlist(spotify, playlist_name)
+    playlist_id = _get_playlist(spotify, playlist_name)
     
     if playlist_id is None:
-        logging.info("Creating playlist " + playlist_name)
-        playlist_id = spotify.user_playlist_create(user=spotify.current_user()['id'], name=playlist_name)['id']
+        playlist_id = _create_playlist(spotify, playlist_name)
 
     logging.info("Adding " + str(len(tracks)) + " tracks to " + spotify.current_user()['id'] + "'s playlist " + playlist_name + ": " + str(tracks))
 
@@ -19,11 +37,73 @@ def replace_tracks_in_playlist(spotify, playlist_name, tracks):
                                          tracks=[track.spotify_id for track in tracks])
 
 
-def _fetch_playlist(spotify, playlist_name):
+def get_tracks_in_playlist(spotify, playlist_name=None, playlist_id=None):
+    """Returns all tracks in the given user's given playlist"""
+
+    if playlist_id is None:
+      playlist_id = _get_playlist(spotify, playlist_name)
+
+    tracks_in_playlist = []
+
+    keep_fetching = True
+    while keep_fetching:
+        json_response = spotify.playlist_tracks(playlist_id=playlist_id,
+                                                offset=len(tracks_in_playlist))
+        if json_response['items']:
+            tracks_in_playlist = tracks_in_playlist + parse_tracks(json_response['items'])
+        else:
+            keep_fetching = False
+
+    return tracks_in_playlist
+
+
+def add_tracks_to_playlist(spotify, playlist_name, tracks):
+    playlist_id = _get_playlist(spotify, playlist_name)
+
+    if playlist_id is None:
+        playlist_id = _create_playlist(spotify, playlist_name)
+
+    tracks_chunked = _chunk(tracks, MAX_ITEMS_PER_REQUEST)
+    for chunk in tracks_chunked:
+        # Remove any tracks that don't have a Spotify ID
+        chunk = [track for track in chunk if track.spotify_id is not None]
+        if len(chunk) > 0:
+            logging.info("Adding " + str(len(tracks)) + " tracks to " + spotify.current_user()['id'] + "'s playlist " + playlist_name + ": " + str(tracks))
+            spotify.user_playlist_add_tracks(user=spotify.current_user()['id'],
+                                             playlist_id=playlist_id,
+                                             tracks=[track.spotify_id for track in chunk])
+
+
+def remove_tracks_from_playlist(spotify, playlist_name, tracks):
+    playlist_id = _get_playlist(spotify, playlist_name)
+
+    if playlist_id is None:
+        playlist_id = _create_playlist(spotify, playlist_name)
+
+    
+    tracks_chunked = _chunk(tracks, MAX_ITEMS_PER_REQUEST)
+    for chunk in tracks_chunked:
+        # Remove any tracks that don't have a Spotify ID
+        chunk = [track for track in chunk if track.spotify_id is not None]
+        if len(chunk) > 0:
+            logging.info("Removing " + str(len(tracks)) + " tracks from " + spotify.current_user()['id'] + "'s playlist " + playlist_name + ": " + str(tracks))
+            spotify.user_playlist_remove_all_occurrences_of_tracks(user=spotify.current_user()['id'],
+                                                                   playlist_id=playlist_id,
+                                                                   tracks=[track.spotify_id for track in chunk])
+
+
+def _chunk(lst, chunk_size):
+    return [lst[i:i + chunk_size] for i in range(0, len(lst), chunk_size)] 
+
+
+def _create_playlist(spotify, playlist_name):
+    logging.info("Creating playlist " + playlist_name)
+    return spotify.user_playlist_create(user=spotify.current_user()['id'], name=playlist_name)['id']
+
+def _get_playlist(spotify, playlist_name):
     playlists = spotify.current_user_playlists()
     playlists = [playlist for playlist in playlists['items'] if playlist['name'] == playlist_name]
     if playlists:
         return playlists[0]['id']
     else:
         return None
-

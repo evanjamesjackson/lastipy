@@ -25,6 +25,17 @@
                 "${workspaceFolder}/../lastipy_config/.keys"
             ],
             "console": "integratedTerminal" 
+        },
+        {
+            "name": "Organize favorites",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/scripts/organize_favorites.py",
+            "args": [
+                "${workspaceFolder}/scripts/example.organize.favorites.config",
+                "${workspaceFolder}/../lastipy_config/.keys"
+            ],
+            "console": "integratedTerminal" 
         }
     ]
 }
