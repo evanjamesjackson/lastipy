@@ -1,8 +1,10 @@
 import logging, requests
 from lastipy.lastfm.library.scrobbled_artist import ScrobbledArtist
+from requests import RequestException
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=library.getartists'
 MAX_RESULTS_PER_PAGE = 200
+MAX_RETRIES = 10
 
 
 #TODO test
@@ -14,12 +16,19 @@ def fetch_recent_artists(user, api_key):
     page = 1
     total_pages = 1
     while page <= total_pages:
-        json_response = _send_request(_build_json_payload(user, api_key, page))
-        logging.debug("Response: " + str(json_response))
-        for artist in json_response['artists']['artist']:
-            artists.append(ScrobbledArtist(artist_name=artist['name'], playcount=int(artist['playcount'])))
-        total_pages = int(json_response['artists']['@attr']['totalPages'])
-        page = page + 1
+        retries = 0
+        while retries < MAX_RETRIES:
+            try:
+                json_response = _send_request(_build_json_payload(user, api_key, page))
+                logging.debug("Response: " + str(json_response))
+                for artist in json_response['artists']['artist']:
+                    artists.append(ScrobbledArtist(artist_name=artist['name'], playcount=int(artist['playcount'])))
+                total_pages = int(json_response['artists']['@attr']['totalPages'])
+                break
+            except RequestException:
+                logging.warn("Failed to fetch recent artists page " + str(page) + ". Retries left: " + MAX_RETRIES - retries)
+                retries += 1
+        page += 1
 
     logging.info("Fetched " + str(len(artists)) + " artists")
     logging.debug("Fetched artists: " + str(artists))
