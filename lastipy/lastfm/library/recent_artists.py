@@ -26,7 +26,7 @@ def fetch_recent_artists(user, api_key):
                 total_pages = int(json_response['artists']['@attr']['totalPages'])
                 break
             except RequestException:
-                logging.warn("Failed to fetch recent artists page " + str(page) + ". Retries left: " + MAX_RETRIES - retries)
+                logging.warn("Failed to fetch recent artists page " + str(page) + ". Retries left: " + str(MAX_RETRIES - retries))
                 retries += 1
         page += 1
 
