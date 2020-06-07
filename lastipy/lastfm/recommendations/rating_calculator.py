@@ -10,8 +10,6 @@ def calculate_ratings(user, api_key, top_tracks_to_recommendations, prefer_unhea
     """Returns a copy of the list of recommendations in the given map, with ratings set based on recommendation
     'strength', which can be used to determine its chances of showing up in the final playlist"""
 
-    logging.info("Calculating recommendation ratings...")
-
     # Create a copy of the given map and modify it instead
     top_tracks_to_recommendations_copy = copy.deepcopy(top_tracks_to_recommendations)
 

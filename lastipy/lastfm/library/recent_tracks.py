@@ -13,7 +13,7 @@ MAX_RETRIES = 10
 def fetch_recent_tracks(user, api_key):
     """Fetches recent tracks for the given user"""
 
-    logging.info("Fetching recent tracks for " + user + "...")
+    logging.info("Fetching recent tracks for " + user)
     all_recent_tracks = []
     page = 1
     total_pages = 1

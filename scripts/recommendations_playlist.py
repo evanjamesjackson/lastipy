@@ -37,6 +37,7 @@ def build_recommendations_playlist():
     library_saved_tracks = library.get_saved_tracks(spotify)
     library_playlist_tracks = playlist.get_tracks_in_playlists(spotify)
 
+    logging.info("Searching for recommendations in Spotify")
     tracks_for_playlist = []
     while len(tracks_for_playlist) < args.playlist_size and len(recommendations) > 0:
         recommendation = choice(recommendations, p=_calculate_rating_weights(recommendations))

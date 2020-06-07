@@ -20,7 +20,7 @@ def get_saved_tracks(spotify):
         else:
             keep_fetching = False
 
-    logging.info("Fetched " + str(len(saved_tracks)) + " tracks")
+    logging.info("Fetched " + str(len(saved_tracks)) + " saved tracks")
     logging.debug("Fetched tracks: " + str(saved_tracks))
 
     return saved_tracks

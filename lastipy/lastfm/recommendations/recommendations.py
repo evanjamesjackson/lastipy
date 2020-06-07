@@ -18,7 +18,7 @@ def fetch_recommendations(
     """Fetches recommendations for the given user by fetching their top tracks, then getting tracks similar
     to them, and filtering out the user's recent tracks and blacklisted artists"""
 
-    logging.info("Fetching top recommendations for " + user)
+    logging.info("Fetching recommendations for " + user)
 
     top_tracks = fetch_top_tracks(user=user, api_key=api_key, a_period=recommendation_period)
 
@@ -54,7 +54,7 @@ def fetch_recommendations(
     return recommendations
 
 def _filter_out_blacklisted_artists(blacklisted_artists, recommendations):
-    logging.info("Filtering out blacklisted artists (" + str(blacklisted_artists) + ")...")
+    logging.info("Filtering out blacklisted artists (" + str(blacklisted_artists) + ")")
     recommendations = [recommendation for recommendation in recommendations
                         if not any(recommendation.artist.lower() == blacklisted_artist.lower()
                                     for blacklisted_artist in blacklisted_artists)]
@@ -62,7 +62,7 @@ def _filter_out_blacklisted_artists(blacklisted_artists, recommendations):
 
 def _filter_out_recent_tracks(user, api_key, recommendations):
     recent_tracks = fetch_recent_tracks(user, api_key)
-    logging.info("Filtering out recent tracks from recommendations...")
+    logging.info("Filtering out recent tracks from recommendations")
     recommendations = [recommendation for recommendation in recommendations
                         if not any(Track.are_equivalent(recommendation, recent_track)
                                     for recent_track in recent_tracks)]

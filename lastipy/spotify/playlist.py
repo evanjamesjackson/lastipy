@@ -15,7 +15,7 @@ def get_tracks_in_playlists(spotify):
     for playlist in playlists:
         tracks = tracks + get_tracks_in_playlist(spotify, playlist_id=playlist['id'])
 
-    logging.info("Fetched " + str(len(tracks)) + " tracks")
+    logging.info("Fetched " + str(len(tracks)) + " tracks in " + str(len(playlists)) + " playlists")
     logging.debug("Fetched tracks: " + str(tracks))
 
     return tracks
@@ -25,7 +25,7 @@ def replace_tracks_in_playlist(spotify, playlist_name, tracks):
     """Replaces all tracks in the currently-logged-in user's given playlist 
         with the given tracks. If the playlist does not exist, creates it first."""
 
-    logging.info("Replacing all tracks in " + spotify.current_user()['id'] + "'s playlist " + playlist_name)
+    logging.info("Replacing " + str(len(tracks)) + " tracks in " + spotify.current_user()['id'] + "'s playlist " + playlist_name)
     logging.debug("Replacing with tracks: " + str(tracks))
 
     playlist_id = _get_playlist(spotify, playlist_name)

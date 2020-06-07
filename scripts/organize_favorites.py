@@ -40,7 +40,7 @@ def organize_favorites():
     args = _extract_args()
     spotify = Spotify(auth=token.get_token(args.spotify_user, args.spotify_client_id_key, args.spotify_client_secret_key))
 
-    logging.info("Organizing " + args.spotify_user + "'s favorites...")
+    logging.info("Organizing " + args.spotify_user + "'s favorites")
 
     saved_tracks = library.get_saved_tracks(spotify)
     saved_tracks_to_move = []
