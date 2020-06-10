@@ -27,9 +27,9 @@ from lastipy.spotify import library, search, playlist
 from lastipy.lastfm.library import track_info
 
 #TODO parameterize these?
-library_playcount_limit = 5
+library_playcount_limit = 3
 playlist_a = 'New Favorites'
-playlist_a_playcount_limit = 10
+playlist_a_playcount_limit = 7
 playlist_b = 'Old Favorites'
 
 
