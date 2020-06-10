@@ -27,7 +27,7 @@ def fetch_new_tracks(spotify, as_of_date=datetime.today().date()):
     new_tracks = parse_tracks(all_tracks)
     
     new_tracks = _remove_duplicates(new_tracks)
-    logging.info("Fetched new tracks " + str(new_tracks))
+    logging.info("Fetched " + str(len(new_tracks)) + " new tracks " + str(new_tracks))
     return new_tracks
 
 
