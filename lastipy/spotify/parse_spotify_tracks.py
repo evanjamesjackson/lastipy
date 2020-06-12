@@ -1,4 +1,5 @@
 from lastipy.spotify.spotify_track import SpotifyTrack
+from lastipy.spotify.playlist_track import PlaylistTrack
 
 #TODO test
 def parse_tracks(json_tracks):
@@ -6,6 +7,9 @@ def parse_tracks(json_tracks):
 
 
 def _parse_track(json_track):
+    if 'added_at' in json_track:
+        added_at = json_track['added_at']
+
     if 'track' in json_track:
         # Some endpoints do this, others don't
         json_track = json_track['track']
@@ -13,4 +17,9 @@ def _parse_track(json_track):
     name = json_track['name']
     # Just getting the first artist, even if there's multiple
     artist = json_track['artists'][0]['name']
-    return SpotifyTrack(track_name=name, artist=artist, spotify_id=track_id)
+
+    # TODO kinda crappy
+    if added_at is not None:
+        return SpotifyTrack(track_name=name, artist=artist, spotify_id=track_id)
+    else:
+        return PlaylistTrack(track_name=name, artist=artist, spotify_id=track_id, added_at=added_at)

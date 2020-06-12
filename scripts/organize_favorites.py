@@ -16,7 +16,7 @@ from lastipy.lastfm.recommendations.recommendations import fetch_recommendations
 from lastipy.lastfm.library.recent_tracks import fetch_recent_tracks
 from lastipy.lastfm.library.recent_artists import fetch_recent_artists
 from lastipy.lastfm.library import period
-from lastipy.track import Track
+from lastipy.track import Tracks
 from numpy.random import choice
 from spotipy import Spotify
 from lastipy.spotify import token
@@ -29,7 +29,6 @@ from lastipy.lastfm.library import track_info
 #TODO parameterize these?
 library_playcount_limit = 3
 playlist_a = 'New Favorites'
-playlist_a_playcount_limit = 7
 playlist_b = 'Old Favorites'
 
 
@@ -59,13 +58,8 @@ def organize_favorites():
     tracks_in_playlist = playlist.get_tracks_in_playlist(spotify, playlist_name=playlist_a)
     playlist_tracks_to_move = []
     for playlist_track in tracks_in_playlist:
-        try:
-            playcount = track_info.fetch_playcount(playlist_track, args.lastfm_user, args.lastfm_api_key)
-            if playcount >= playlist_a_playcount_limit:
-                playlist_tracks_to_move.append(playlist_track)
-        except:
-            logging.warn("Couldn't get playcount for track " + str(playlist_track))
-    
+        #TODO if track has been in playlist for more than 4 months, remove it
+
     logging.info("Moving " + str(len(playlist_tracks_to_move)) + " tracks from " + playlist_a + " to " + playlist_b)
     playlist.remove_tracks_from_playlist(spotify, playlist_a, playlist_tracks_to_move)
     playlist.add_tracks_to_playlist(spotify, playlist_b, playlist_tracks_to_move)
