@@ -41,7 +41,7 @@ def remove_tracks_from_library(spotify, tracks):
     track_chunks = _chunk(tracks, MAX_ITEMS_PER_REQUEST)
     for chunk in track_chunks:
         spotify.current_user_saved_tracks_delete([track.spotify_id for track in chunk])
-    logging.info("FInished removing tracks")
+    logging.info("Finished removing tracks")
 
 
 def _chunk(lst, chunk_size):
