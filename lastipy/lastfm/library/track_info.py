@@ -16,7 +16,7 @@ def fetch_playcount(track, user, api_key):
         except RequestException:
             # This endpoint throws error 500 sometimes, so retry it a few times if it does
             if retries < MAX_RETRIES:
-                logging.warn("Failed to fetch playcount. Retrying...")
+                logging.warn("Failed to fetch playcount for track " + track + ". Retrying...")
                 retries += 1
             else:
                 raise Exception("Failed to fetch playcount after " + retries + " retries")
