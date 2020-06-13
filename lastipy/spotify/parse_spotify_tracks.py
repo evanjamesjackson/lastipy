@@ -19,7 +19,7 @@ def _parse_track(json_track):
     artist = json_track['artists'][0]['name']
 
     # TODO kinda crappy
-    if added_at is not None:
+    if added_at is None:
         return SpotifyTrack(track_name=name, artist=artist, spotify_id=track_id)
     else:
         return PlaylistTrack(track_name=name, artist=artist, spotify_id=track_id, added_at=added_at)
