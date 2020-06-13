@@ -7,6 +7,7 @@ def parse_tracks(json_tracks):
 
 
 def _parse_track(json_track):
+    added_at = None
     if 'added_at' in json_track:
         added_at = json_track['added_at']
 

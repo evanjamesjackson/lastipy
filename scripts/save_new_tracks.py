@@ -47,7 +47,7 @@ def _filter_out_already_saved_tracks(spotify, new_tracks):
     saved_tracks = library.get_saved_tracks(spotify)
     logging.info("Filtering out already saved tracks from new tracks")
     tracks_to_save = [new_track for new_track in new_tracks 
-                        if not any(new_track == saved_track for saved_track in saved_tracks)]
+                        if not any(Track.are_equivalent(new_track, saved_track) for saved_track in saved_tracks)]
     return tracks_to_save
 
 def _extract_args():
