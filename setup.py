@@ -12,4 +12,4 @@ setup(name='lastipy',
           'save_new_tracks = scripts.save_new_tracks:save_new_tracks',
           'organize_favorites = scripts.organize_favorites:organize_favorites'
       ]},
-      install_requires=['numpy', 'requests', 'spotipy', 'pytest'])
+      install_requires=['numpy', 'requests', 'spotipy', 'pytest', 'iso8601', 'python-dateutil'])
