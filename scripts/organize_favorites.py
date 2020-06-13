@@ -16,7 +16,7 @@ from lastipy.lastfm.recommendations.recommendations import fetch_recommendations
 from lastipy.lastfm.library.recent_tracks import fetch_recent_tracks
 from lastipy.lastfm.library.recent_artists import fetch_recent_artists
 from lastipy.lastfm.library import period
-from lastipy.track import Tracks
+from lastipy.track import Track
 from numpy.random import choice
 from spotipy import Spotify
 from lastipy.spotify import token
@@ -25,46 +25,73 @@ import logging
 from lastipy.util.parse_api_keys import ApiKeysParser
 from lastipy.spotify import library, search, playlist
 from lastipy.lastfm.library import track_info
+from datetime import datetime, timezone
+from dateutil.relativedelta import relativedelta
+import iso8601
 
 #TODO parameterize these?
-library_playcount_limit = 3
-playlist_a = 'New Favorites'
-playlist_b = 'Old Favorites'
+LIBRARY_PLAYCOUNT_LIMIT = 3
+NEW_FAVORITES_PLAYLIST = 'New Favorites'
+OLD_FAVORITES_PLAYLIST = 'Old Favorites'
+NEGLECTED_PLAYLIST = 'Neglected'
 
 
 def organize_favorites():
-    """Organizes a user's Spotify library by placing more-listened-to tracks in other playlists"""
+    """Organizes a user's Spotify library. Saved tracks with more than 3 plays are moved to a "New Favorites" playlist. Tracks
+       in the "New Favorites" playlist are moved to an "Old Favorites" playlist after 6 months (if they still only have 3
+       plays at that point, they're completely removed from the library)."""
 
     setup_logging('organize_favorites.log')
     args = _extract_args()
     spotify = Spotify(auth=token.get_token(args.spotify_user, args.spotify_client_id_key, args.spotify_client_secret_key))
 
     logging.info("Organizing " + args.spotify_user + "'s favorites")
-
-    saved_tracks = library.get_saved_tracks(spotify)
-    saved_tracks_to_move = []
-    for saved_track in saved_tracks:
-        try:
-            playcount = track_info.fetch_playcount(saved_track, args.lastfm_user, args.lastfm_api_key)
-            if playcount >= library_playcount_limit:
-                saved_tracks_to_move.append(saved_track)
-        except:
-            logging.warn("Couldn't get playcount for track " + str(saved_track))
-
-    logging.info("Moving " + str(len(saved_tracks_to_move)) + " tracks from library to " + playlist_a)
-    library.remove_tracks_from_library(spotify, saved_tracks_to_move)
-    playlist.add_tracks_to_playlist(spotify, playlist_a, saved_tracks_to_move)
-
-    tracks_in_playlist = playlist.get_tracks_in_playlist(spotify, playlist_name=playlist_a)
-    playlist_tracks_to_move = []
-    for playlist_track in tracks_in_playlist:
-        #TODO if track has been in playlist for more than 4 months, remove it
-
-    logging.info("Moving " + str(len(playlist_tracks_to_move)) + " tracks from " + playlist_a + " to " + playlist_b)
-    playlist.remove_tracks_from_playlist(spotify, playlist_a, playlist_tracks_to_move)
-    playlist.add_tracks_to_playlist(spotify, playlist_b, playlist_tracks_to_move)
-
+    move_saved_tracks(spotify, args)
+    move_new_favorites(spotify, args)
     logging.info("Done!")
+
+
+def move_new_favorites(spotify, args):
+    new_favorites_tracks = playlist.get_tracks_in_playlist(spotify, playlist_name=NEW_FAVORITES_PLAYLIST)
+    tracks_to_move = []
+    neglected_tracks = []
+    for track in new_favorites_tracks:
+        added_at = iso8601.parse_date(track.added_at)
+        six_months_after_added_at = added_at + relativedelta(months=+6)
+        if datetime.now(timezone.utc) >= six_months_after_added_at:
+            try:
+                playcount = track_info.fetch_playcount(track, args.lastfm_user, args.lastfm_api_key)
+                if playcount <= LIBRARY_PLAYCOUNT_LIMIT:
+                    
+                    neglected_tracks.append(track)
+                else:
+                    tracks_to_move.append(track)
+            except:
+                logging.warn("Couldn't get playcount for track " + str(track))
+       
+
+    logging.info("Moving " + str(len(tracks_to_move)) + " tracks from " + NEW_FAVORITES_PLAYLIST + " to " + OLD_FAVORITES_PLAYLIST)
+    playlist.remove_tracks_from_playlist(spotify, NEW_FAVORITES_PLAYLIST, tracks_to_move)
+    playlist.add_tracks_to_playlist(spotify, OLD_FAVORITES_PLAYLIST, tracks_to_move)
+
+    logging.info("Moving " + str(len(neglected_tracks)) + " neglected tracks to " + NEGLECTED_PLAYLIST)
+    playlist.remove_tracks_from_playlist(spotify, NEW_FAVORITES_PLAYLIST, neglected_tracks)
+    playlist.add_tracks_to_playlist(spotify, NEGLECTED_PLAYLIST, neglected_tracks)
+
+def move_saved_tracks(spotify, args):
+    saved_tracks = library.get_saved_tracks(spotify)
+    tracks_to_move = []
+    for track in saved_tracks:
+        try:
+            playcount = track_info.fetch_playcount(track, args.lastfm_user, args.lastfm_api_key)
+            if playcount >= LIBRARY_PLAYCOUNT_LIMIT:
+                tracks_to_move.append(track)
+        except:
+            logging.warn("Couldn't get playcount for track " + str(track))
+
+    logging.info("Moving " + str(len(tracks_to_move)) + " tracks from library to " + NEW_FAVORITES_PLAYLIST)
+    library.remove_tracks_from_library(spotify, tracks_to_move)
+    playlist.add_tracks_to_playlist(spotify, NEW_FAVORITES_PLAYLIST, tracks_to_move)
 
 
 def _extract_args():
