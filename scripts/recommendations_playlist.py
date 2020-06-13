@@ -50,9 +50,9 @@ def build_recommendations_playlist():
 
         if first_result is not None \
            and Track.are_equivalent(first_result, recommendation) \
-           and first_result not in tracks_for_playlist \
-           and first_result not in library_playlist_tracks \
-           and first_result not in library_saved_tracks \
+           and not any(Track.are_equivalent(first_result, track) for track in tracks_for_playlist) \
+           and not any(Track.are_equivalent(first_result, playlist_track) for playlist_track in library_playlist_tracks) \
+           and not any(Track.are_equivalent(first_result, saved_track) for saved_track in library_saved_tracks) \
            and not any(first_result.artist == item.artist for item in tracks_for_playlist):
             logging.debug("Adding " + str(first_result))
             tracks_for_playlist.append(first_result)
