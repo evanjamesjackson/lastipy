@@ -29,8 +29,6 @@ from datetime import datetime, timezone
 from dateutil.relativedelta import relativedelta
 import iso8601
 
-#TODO parameterize these?
-LIBRARY_PLAYCOUNT_LIMIT = 3
 NEW_FAVORITES_PLAYLIST = 'New Favorites'
 OLD_FAVORITES_PLAYLIST = 'Old Favorites'
 NEGLECTED_PLAYLIST = 'Neglected'
@@ -57,12 +55,11 @@ def move_new_favorites(spotify, args):
     neglected_tracks = []
     for track in new_favorites_tracks:
         added_at = iso8601.parse_date(track.added_at)
-        six_months_after_added_at = added_at + relativedelta(months=+6)
-        if datetime.now(timezone.utc) >= six_months_after_added_at:
+        new_favorites_time_limit = added_at + relativedelta(days=int(args.new_favorites_time_limit))
+        if datetime.now(timezone.utc) >= new_favorites_time_limit:
             try:
                 playcount = track_info.fetch_playcount(track, args.lastfm_user, args.lastfm_api_key)
-                if playcount <= LIBRARY_PLAYCOUNT_LIMIT:
-                    
+                if playcount <= int(args.new_favorites_playcount_limit):
                     neglected_tracks.append(track)
                 else:
                     tracks_to_move.append(track)
@@ -84,7 +81,7 @@ def move_saved_tracks(spotify, args):
     for track in saved_tracks:
         try:
             playcount = track_info.fetch_playcount(track, args.lastfm_user, args.lastfm_api_key)
-            if playcount >= LIBRARY_PLAYCOUNT_LIMIT:
+            if playcount >= int(args.saved_songs_playcount_limit):
                 tracks_to_move.append(track)
         except:
             logging.warn("Couldn't get playcount for track " + str(track))
@@ -115,6 +112,9 @@ def _extract_user_configs(args):
     section = 'Config'
     args.lastfm_user = config_parser[section]['LastFMUser']
     args.spotify_user = config_parser[section]['SpotifyUser']
+    args.saved_songs_playcount_limit = config_parser[section]['SavedSongsPlaycountLimit']
+    args.new_favorites_time_limit = config_parser[section]['NewFavoritesTimeLimit']
+    args.new_favorites_playcount_limit = config_parser[section]['NewFavoritesPlaycountLimit']
     return args
 
 
