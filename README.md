@@ -22,8 +22,10 @@ See scripts/example.recommendations.config for an example user configuration fil
 To save new tracks released by the user's followed artists (as of the current date) to their library ("Liked Songs"), run: 
 
 ```
-save_new_tracks spotify_user api_keys_file
+save_new_tracks spotify_user api_keys_file --ignore-remixes
 ```
+<b>Note</b> that the --ignore-remixes flag is optional.
+<br />
 See scripts/example.keys for an an example API keys file.
 <h2>Improvements</h2>
 
