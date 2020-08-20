@@ -13,5 +13,6 @@
     "python.jediEnabled": true,
     "python.venvPath": "venv",
     "python.linting.pylintEnabled": true,
-    "python.linting.enabled": true
+    "python.linting.enabled": true,
+    "python.languageServer": "Jedi"
 }
