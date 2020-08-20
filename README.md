@@ -27,7 +27,3 @@ save_new_tracks spotify_user api_keys_file --ignore-remixes
 <b>Note</b> that the --ignore-remixes flag is optional.
 <br />
 See scripts/example.keys for an an example API keys file.
-<h2>Improvements</h2>
-
-* Make a webapp where users can enter their information and have the playlists generated automatically
-* Automatically organize liked songs after X playcounts
