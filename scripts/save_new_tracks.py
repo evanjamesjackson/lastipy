@@ -29,12 +29,11 @@ def save_new_tracks():
     args = _extract_args()
     spotify = Spotify(auth=token.get_token(args.spotify_user, args.spotify_client_id_key, args.spotify_client_secret_key))
 
-    new_tracks = new_releases.fetch_new_tracks(spotify)
+    new_tracks = new_releases.fetch_new_tracks(spotify, args.ignore_remixes)
 
     if len(new_tracks) > 0:
-        # Only process further if we actually fetched any new tracks; otherwise there's no point
+        # Only process further if we actually fetched any new tracks
 
-        # Filter out new tracks that are already saved in the library
         tracks_to_save = _filter_out_already_saved_tracks(spotify, new_tracks)
 
         library.add_tracks_to_library(spotify, tracks_to_save)
@@ -45,7 +44,7 @@ def save_new_tracks():
 
 def _filter_out_already_saved_tracks(spotify, new_tracks):
     saved_tracks = library.get_saved_tracks(spotify)
-    logging.info("Filtering out already saved tracks from new tracks")
+    logging.info("Filtering out already saved tracks...")
     tracks_to_save = [new_track for new_track in new_tracks 
                         if not any(Track.are_equivalent(new_track, saved_track) for saved_track in saved_tracks)]
     return tracks_to_save
@@ -61,9 +60,10 @@ def _extract_args():
     return args
 
 def _parse_args():
-    args_parser = argparse.ArgumentParser(description="Adds new tracks from followed artists to a Spotify playlist")
+    args_parser = argparse.ArgumentParser(description="Adds new tracks from the given user's followed artists to their saved/liked tracks")
     args_parser.add_argument('spotify_user', type=str)
     args_parser.add_argument('api_keys_file', type=argparse.FileType('r', encoding='UTF-8'))
+    args_parser.add_argument('--ignore-remixes', dest='ignore_remixes', action='store_true', default=False)
     return args_parser.parse_args()
 
 if __name__ == "__main__":

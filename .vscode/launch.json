@@ -22,7 +22,8 @@
             "program": "${workspaceFolder}/scripts/save_new_tracks.py",
             "args": [
                 "sonofjack3",
-                "${workspaceFolder}/../lastipy_config/.keys"
+                "${workspaceFolder}/../lastipy_config/.keys",
+                "--ignore-remixes"
             ],
             "console": "integratedTerminal" 
         },

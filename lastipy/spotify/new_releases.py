@@ -6,7 +6,7 @@ from lastipy.track import Track
 
 
 #TODO test
-def fetch_new_tracks(spotify, as_of_date=datetime.today().date()):
+def fetch_new_tracks(spotify, ignore_remixes=False, as_of_date=datetime.today().date()):
     """Fetches new tracks (as of the given date) released by the current Spotify user's followed artists"""
 
     logging.info("Fetching new tracks for " + spotify.current_user()['id'] + " as of " + str(as_of_date))
@@ -27,6 +27,11 @@ def fetch_new_tracks(spotify, as_of_date=datetime.today().date()):
     new_tracks = parse_tracks(all_tracks)
     
     new_tracks = _remove_duplicates(new_tracks)
+
+    if ignore_remixes:
+        logging.info("Filtering out those pesky remixes...")
+        new_tracks = [track for track in new_tracks if "remix" not in track.track_name.lower()]
+
     logging.info("Fetched " + str(len(new_tracks)) + " new tracks " + str(new_tracks))
     return new_tracks
 
