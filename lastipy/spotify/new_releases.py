@@ -57,15 +57,10 @@ def _filter_new_releases(all_albums, as_of_date):
     new_albums = []
     for album in all_albums:
         if album['release_date_precision'] == 'day':
-            if datetime.strptime(album['release_date'], "%Y-%m-%d").date() >= as_of_date:
+            if datetime.strptime(album['release_date'], "%Y-%m-%d").date() == as_of_date:
                 new_albums.append(album)
-        elif album['release_date_precision'] == 'month':
-            release_date = datetime.strptime(album['release_date'], "%Y-%m")
-            if release_date.year > as_of_date.year or (release_date.year == as_of_date.year and release_date.month >= as_of_date.month):
-                   new_albums.append(album)
-        elif album['release_date_precision'] == 'year':
-            if datetime.strptime(album['release_date'], '%Y').year >= as_of_date.year:
-                new_albums.append(album)
+        else:
+            logging.warn("Album release date precision is not 'day' so ignoring (album: " + str(album) + ")")
     return new_albums
 
 
