@@ -33,21 +33,11 @@ def save_new_tracks():
 
     if len(new_tracks) > 0:
         # Only process further if we actually fetched any new tracks
-
-        tracks_to_save = _filter_out_already_saved_tracks(spotify, new_tracks)
-
-        library.add_tracks_to_library(spotify, tracks_to_save)
+        library.add_tracks_to_library(spotify, new_tracks)
     else:
         logging.info("No new tracks to add!")
 
     logging.info("Done!")
-
-def _filter_out_already_saved_tracks(spotify, new_tracks):
-    saved_tracks = library.get_saved_tracks(spotify)
-    logging.info("Filtering out already saved tracks...")
-    tracks_to_save = [new_track for new_track in new_tracks 
-                        if not any(Track.are_equivalent(new_track, saved_track) for saved_track in saved_tracks)]
-    return tracks_to_save
 
 def _extract_args():
     args = _parse_args()

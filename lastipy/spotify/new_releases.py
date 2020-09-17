@@ -1,12 +1,14 @@
 import spotipy
 from lastipy.spotify.parse_spotify_tracks import parse_tracks
+from lastipy.spotify.library import get_saved_tracks
+from lastipy.spotify.playlist import get_tracks_in_playlists
 from datetime import datetime
 import logging
 from lastipy.track import Track
 
 
 #TODO test
-def fetch_new_tracks(spotify, ignore_remixes=False, as_of_date=datetime.today().date()):
+def fetch_new_tracks(spotify, ignore_remixes=False, ignore_songs_in_library=True, as_of_date=datetime.today().date()):
     """Fetches new tracks (as of the given date) released by the current Spotify user's followed artists"""
 
     logging.info("Fetching new tracks for " + spotify.current_user()['id'] + " as of " + str(as_of_date))
@@ -31,6 +33,15 @@ def fetch_new_tracks(spotify, ignore_remixes=False, as_of_date=datetime.today().
     if ignore_remixes:
         logging.info("Filtering out those pesky remixes...")
         new_tracks = [track for track in new_tracks if "remix" not in track.track_name.lower()]
+
+    if ignore_songs_in_library:
+        logging.info("Filtering out tracks that are already in the user's saved tracks and playlists...")
+        saved_tracks = get_saved_tracks(spotify)
+        tracks_in_playlists = get_tracks_in_playlists(spotify)
+        new_tracks = [new_track for new_track in new_tracks 
+                        if not any(Track.are_equivalent(new_track, saved_track) for saved_track in saved_tracks)]
+        new_tracks = [new_track for new_track in new_tracks
+                        if not any(Track.are_equivalent(new_track, playlist_track) for playlist_track in tracks_in_playlists)]
 
     logging.info("Fetched " + str(len(new_tracks)) + " new tracks " + str(new_tracks))
     return new_tracks
