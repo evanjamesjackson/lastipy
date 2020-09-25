@@ -2,7 +2,7 @@
 <h1>Lastipy</h1>
 <b>Lastipy</b> is a Python library combining the APIs of Spotify and Last.fm, with scripts for things like creating customized recommendation playlists, automatically saving new releases, etc. 
 <h2>Prerequisites</h2>
-You will need API keys for Last.fm: https://www.last.fm/api/ and for Spotify: https://developer.spotify.com/documentation/web-api/<br/>
+You will need API keys for Last.fm: https://www.last.fm/api/ and for Spotify: https://developer.spotify.com/documentation/web-api/<br/>.
 <h2>Installation</h2>
 Clone the project, navigate to the project directory then use pip to install (will automatically pick up setup.py):
 
