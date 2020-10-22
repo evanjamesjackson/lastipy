@@ -45,10 +45,6 @@ def fetch_recommendations(
 
     recommendations = _filter_out_blacklisted_artists(blacklisted_artists, recommendations)
 
-    # Filter out duplicates
-    # TODO maybe duplicates should mean a greater chance of getting that recommendation in the playlist?
-    recommendations = list(set(recommendations))
-
     logging.info("Fetched " + str(len(recommendations)) + " recommendations")
     logging.debug("Fetched tracks: " + str(recommendations))
     return recommendations
