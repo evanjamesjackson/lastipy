@@ -18,7 +18,7 @@ def fetch_recommendations(
     """Fetches recommendations for the given user by fetching their top tracks, then getting tracks similar
     to them, and filtering out the user's recent tracks and blacklisted artists"""
 
-    logging.info("Fetching recommendations for " + user)
+    logging.info("Fetching top track recommendations for " + user)
 
     top_tracks = fetch_top_tracks(user=user, api_key=api_key, a_period=recommendation_period)
 
