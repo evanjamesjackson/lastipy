@@ -22,8 +22,8 @@ from datetime import datetime
 from lastipy.util.parse_api_keys import ApiKeysParser
 
 
-def save_new_tracks():
-    """Saves new tracks (as of the current date) from the specified Spotify user's followed artists to their library"""
+def save_new_releases():
+    """Saves new releases (as of the current date) from the specified Spotify user's followed artists to their library"""
 
     setup_logging("new_releases.log")
     args = _extract_args()
@@ -41,20 +41,29 @@ def save_new_tracks():
 
 def _extract_args():
     args = _parse_args()
+    _extract_api_keys(args)
+    _extract_user_configs(args)
+    return args
 
-    # Parse API keys file
+def _extract_api_keys(args):
     keys_parser = ApiKeysParser(args.api_keys_file)
     args.spotify_client_id_key = keys_parser.spotify_client_id_key
     args.spotify_client_secret_key = keys_parser.spotify_client_secret_key
-    
+
+def _extract_user_configs(args):
+    config_parser = ConfigParser()
+    config_parser.read(args.user_configs_file.name)
+    section = 'Config'
+    args.spotify_user = config_parser[section]['SpotifyUser']
+    args.ignore_remixes = config_parser[section]['IgnoreRemixes']
     return args
 
 def _parse_args():
     args_parser = argparse.ArgumentParser(description="Adds new tracks from the given user's followed artists to their saved/liked tracks")
     args_parser.add_argument('spotify_user', type=str)
+    args_parser.add_argument('user_configs_file', type=argparse.FileType('r', encoding='UTF-8'))
     args_parser.add_argument('api_keys_file', type=argparse.FileType('r', encoding='UTF-8'))
-    args_parser.add_argument('--ignore-remixes', dest='ignore_remixes', action='store_true', default=False)
     return args_parser.parse_args()
 
 if __name__ == "__main__":
-    save_new_tracks()
+    save_new_releases()
