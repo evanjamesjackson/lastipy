@@ -60,7 +60,6 @@ def _extract_user_configs(args):
 
 def _parse_args():
     args_parser = argparse.ArgumentParser(description="Adds new tracks from the given user's followed artists to their saved/liked tracks")
-    args_parser.add_argument('spotify_user', type=str)
     args_parser.add_argument('user_configs_file', type=argparse.FileType('r', encoding='UTF-8'))
     args_parser.add_argument('api_keys_file', type=argparse.FileType('r', encoding='UTF-8'))
     return args_parser.parse_args()
