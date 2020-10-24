@@ -19,11 +19,11 @@
             "name": "New releases playlist",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/scripts/save_new_tracks.py",
+            "program": "${workspaceFolder}/scripts/save_new_releases.py",
             "args": [
                 "sonofjack3",
-                "${workspaceFolder}/../lastipy_config/.keys",
-                "--ignore-remixes"
+                "${workspaceFolder}/scripts/example.new.releases.config",
+                "${workspaceFolder}/../lastipy_config/.keys"
             ],
             "console": "integratedTerminal" 
         },
