@@ -17,57 +17,39 @@ pipeline {
         stage('Run tests') {
             steps {
                 echo 'Running tests...'
+                sh 'python -m pytest test/'
             }
         }
 
         stage('Increment version number') {
             steps {
+                // TODO only on master
                 echo 'Incrementing version number...'
+                sh 'python -m pip install bump2version==1.0.0'
+                sh 'bump2version patch'
+                // TODO push to git
+                // TODO tagging?
             }
         }
 
         stage('Deploy artifacts') {
             steps {
+                // TODO only on master
                 echo 'Deploying artifacts...'
+                sh 'python -m pip install setuptools'
+                sh 'python -m pip install twine'
+                sh 'python setup.py sdist bdist_wheel'
+                // sh 'python -m twine upload dist/* -u $pypi_username -p $pypi_password'
             }
         }
+
+        stage('Deactivate virtual environment') {
+            steps {
+                echo 'Deactivating virtual environment...'
+                sh 'Deactivate'
+            }
+        }
+
+        // TODO post-build: post to GitHub, send an email
     }
 }
-
-// #!/bin/bash
-
-// # Exit on error
-// set -e
-
-// echo Creating virtual environment...
-// python3 -m venv venv
-// source venv/bin/activate
-
-// echo
-
-// echo Installing lastipy...
-// pip install wheel
-// pip install .
-
-// echo
-
-// echo Running tests...
-// python -m pytest test/
-
-// echo
-
-// echo Incrementing version number...
-// python -m pip install bump2version==1.0.0
-// bump2version patch
-
-// echo
-
-// echo Deploying to pypi...
-// python -m pip install setuptools
-// python -m pip install twine
-// python setup.py sdist bdist_wheel
-// python -m twine upload dist/* -u $pypi_username -p $pypi_password
-
-// deactivate
-
-// Post-build: post status to GitHub, email status
