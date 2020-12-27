@@ -40,7 +40,7 @@ pipeline {
                     '''
                 echo 'Pushing version number change to SCM...'
                 sh '''
-                    git push --follow-tags
+                    git push origin --tags
                     '''
             }
         }
@@ -61,5 +61,11 @@ pipeline {
         }
 
         // TODO post-build: post to GitHub, send an email
+    }
+
+    post {
+        always {
+            deleteDir()
+        }
     }
 }
