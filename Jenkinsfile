@@ -17,7 +17,7 @@ pipeline {
         stage('Run tests') {
             steps {
                 echo 'Running tests...'
-                sh 'python -m pytest test/'
+                sh 'python3 -m pytest test/'
             }
         }
 
@@ -25,7 +25,7 @@ pipeline {
             steps {
                 // TODO only on master
                 echo 'Incrementing version number...'
-                sh 'python -m pip install bump2version==1.0.0'
+                sh 'python3 -m pip install bump2version==1.0.0'
                 sh 'bump2version patch'
                 // TODO push to git
                 // TODO tagging?
@@ -36,9 +36,9 @@ pipeline {
             steps {
                 // TODO only on master
                 echo 'Deploying artifacts...'
-                sh 'python -m pip install setuptools'
-                sh 'python -m pip install twine'
-                sh 'python setup.py sdist bdist_wheel'
+                sh 'python3 -m pip install setuptools'
+                sh 'python3 -m pip install twine'
+                sh 'python3 setup.py sdist bdist_wheel'
                 // sh 'python -m twine upload dist/* -u $pypi_username -p $pypi_password'
             }
         }
