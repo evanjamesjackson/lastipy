@@ -40,7 +40,7 @@ pipeline {
                     '''
                 echo 'Pushing version number change to SCM...'
                 sh '''
-                    git push
+                    git push --follow-tags
                     '''
             }
         }
