@@ -4,51 +4,56 @@ pipeline {
     stages {
         stage('Install') {
             steps {
-                echo 'Creating virtual environment...'
-                sh 'python3 -m venv venv'
-                sh 'source venv/bin/activate'
-
                 echo 'Installing lastipy...'
-                sh 'pip install wheel'
-                sh 'pip install .'
-
-                sh 'deactivate'
+                sh '''
+                    python3 -m venv venv
+                    source venv/bin/activate
+                    pip install wheel
+                    pip install .
+                    deactivate
+                    '''
             }
         }
 
         stage('Run tests') {
             steps {
+                // TODO show test results in Jenkins?
                 echo 'Running tests...'
-                sh 'source venv/bin/activate'
-                sh 'pytest test/'
-                // TODO show test results in a nice way?
-                sh 'deactivate'
+                sh '''
+                    source venv/bin/activate
+                    pytest test/
+                    deactivate
+                    '''
             }
         }
 
         stage('Increment version number') {
             steps {
                 // TODO only on master
-                echo 'Incrementing version number...'
-                sh 'source venv/bin/activate'
-                sh 'pip install bump2version==1.0.0'
-                sh 'bump2version patch'
                 // TODO push to git
                 // TODO tagging?
-                sh 'deactivate'
+                echo 'Incrementing version number...'
+                sh '''
+                    source venv/bin/activate
+                    pip install bump2version==1.0.0
+                    bump2version patch
+                    deactivate
+                    '''
             }
         }
 
         stage('Deploy artifacts') {
+            // TODO only on master
+            // sh 'python -m twine upload dist/* -u $pypi_username -p $pypi_password'
             steps {
-                // TODO only on master
                 echo 'Deploying artifacts...'
-                sh 'source venv/bin/activate'
-                sh 'python3 -m pip install setuptools'
-                sh 'python3 -m pip install twine'
-                sh 'python3 setup.py sdist bdist_wheel'
-                // sh 'python -m twine upload dist/* -u $pypi_username -p $pypi_password'
-                sh 'deactivate'
+                sh '''
+                    source venv/bin/activate
+                    pip install setuptools
+                    pip install twine
+                    python setup.py sdist bdist_wheel
+                    deactivate
+                    '''
             }
         }
 
