@@ -30,7 +30,6 @@ pipeline {
         stage('Increment version number') {
             steps {
                 // TODO only on master
-                // TODO push to git
                 // TODO tagging?
                 echo 'Incrementing version number...'
                 sh '''
@@ -38,6 +37,10 @@ pipeline {
                     pip install bump2version==1.0.0
                     bump2version patch
                     deactivate
+                    '''
+                echo 'Pushing version number change to SCM...'
+                sh '''
+                    git push
                     '''
             }
         }
