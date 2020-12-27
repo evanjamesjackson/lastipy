@@ -9,8 +9,8 @@ pipeline {
                 sh 'source venv/bin/activate'
 
                 echo 'Installing lastipy...'
-                sh 'pip install wheel'
-                sh 'pip install .'
+                sh 'pip3 install wheel'
+                sh 'pip3 install .'
             }
         }
 
