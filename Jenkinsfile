@@ -30,7 +30,6 @@ pipeline {
         stage('Increment version number') {
             steps {
                 // TODO only on master
-                // TODO tagging?
                 echo 'Incrementing version number...'
                 sh '''
                     source venv/bin/activate
