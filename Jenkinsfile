@@ -18,6 +18,7 @@ pipeline {
             steps {
                 echo 'Running tests...'
                 sh 'python3 -m pytest test/'
+                // TODO show test results in a nice way?
             }
         }
 
