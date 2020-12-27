@@ -5,12 +5,12 @@ pipeline {
         stage('Install') {
             steps {
                 echo 'Creating virtual environment...'
-                sh 'python3 -m venv venv'
-                sh 'source venv/bin/activate'
+                bash 'python3 -m venv venv'
+                bash 'source venv/bin/activate'
 
                 echo 'Installing lastipy...'
-                sh 'pip install wheel'
-                sh 'pip install .'
+                bash 'pip install wheel'
+                bash 'pip install .'
             }
         }
 
