@@ -26,8 +26,8 @@ pipeline {
             steps {
                 // TODO only on master
                 echo 'Incrementing version number...'
-                sh 'pip3 install bump2version==1.0.0'
-                sh 'python3 -m bump2version patch'
+                sh 'python3 -m pip install bump2version==1.0.0'
+                sh 'bump2version patch'
                 // TODO push to git
                 // TODO tagging?
             }
