@@ -39,6 +39,7 @@ pipeline {
                     '''
                 echo 'Pushing version number change to SCM...'
                 sh '''
+                    git remote set-url origin git@github.com:evanjamesjackson/lastipy.git 
                     git push origin --tags
                     '''
             }
