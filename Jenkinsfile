@@ -63,3 +63,5 @@ pipeline {
 // python -m twine upload dist/* -u $pypi_username -p $pypi_password
 
 // deactivate
+
+// Post-build: post status to GitHub, email status
