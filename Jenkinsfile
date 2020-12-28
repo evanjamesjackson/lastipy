@@ -38,7 +38,7 @@ pipeline {
                 echo 'Running tests...'
                 sh '''
                     source venv/bin/activate
-                    pytest --junitxml ${env.TEST_RESULTS_FILE} test/
+                    pytest --junitxml ${TEST_RESULTS_FILE} test/
                     deactivate
                     '''
             }
@@ -72,7 +72,7 @@ pipeline {
                     pip install setuptools
                     pip install twine
                     python setup.py sdist bdist_wheel
-                    twine upload dist/* -u __token__ -p ${env.PYPI_API_KEY}
+                    twine upload dist/* -u __token__ -p ${PYPI_API_KEY}
                     deactivate
                     '''
             }
