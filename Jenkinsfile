@@ -84,7 +84,7 @@ pipeline {
 
     post {
         always {
-            junit ${env.TEST_RESULTS_FILE}
+            junit "${env.TEST_RESULTS_FILE}"
             deleteDir()
         }
         success {
