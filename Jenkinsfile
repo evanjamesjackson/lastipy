@@ -28,8 +28,10 @@ pipeline {
         }
 
         stage('Increment version number') {
+            when {
+                branch 'master'
+            }
             steps {
-                // TODO only on master
                 echo 'Incrementing version number...'
                 sh '''
                     source venv/bin/activate
@@ -47,7 +49,6 @@ pipeline {
 
         stage('Deploy artifacts') {
             // TODO only on master
-            // sh 'python -m twine upload dist/* -u $pypi_username -p $pypi_password'
             steps {
                 echo 'Deploying artifacts...'
                 sh '''
@@ -55,6 +56,7 @@ pipeline {
                     pip install setuptools
                     pip install twine
                     python setup.py sdist bdist_wheel
+                    twine upload dist/* -u $pypi_username -p $pypi_password'
                     deactivate
                     '''
             }
