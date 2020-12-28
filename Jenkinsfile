@@ -37,10 +37,6 @@ pipeline {
             steps {
                 echo 'Running tests...'
                 sh '''
-                    echo TEST test results file is ${TEST_RESULTS_FILE}
-                    '''
-                sh 'echo TEST branch name is ${BRANCH_NAME}'
-                sh '''
                     source venv/bin/activate
                     pytest --junitxml ${TEST_RESULTS_FILE} test/
                     deactivate
