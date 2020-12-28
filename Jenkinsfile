@@ -39,6 +39,7 @@ pipeline {
                 sh '''
                     echo TEST test results file is ${TEST_RESULTS_FILE}
                     '''
+                sh 'echo TEST branch name is ${BRANCH_NAME}'
                 sh '''
                     source venv/bin/activate
                     pytest --junitxml ${TEST_RESULTS_FILE} test/
@@ -60,7 +61,6 @@ pipeline {
                     deactivate
                     '''
                 echo 'Pushing version number change to SCM...'
-                sh 'echo TEST branch name is ${BRANCH_NAME}'
                 sh 'git push git@github.com:evanjamesjackson/lastipy.git HEAD:${BRANCH_NAME} --follow-tags'
             }
         }
