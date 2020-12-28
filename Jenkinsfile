@@ -84,11 +84,11 @@ pipeline {
             deleteDir()
         }
         success {
-            junit "${env.TEST_RESULTS_FILE}"
+            junit ${TEST_RESULTS_FILE}
             setGitHubCommitStatus("Build succeeded", "SUCCESS")
         }
         failure {
-            junit "${env.TEST_RESULTS_FILE}"
+            junit ${TEST_RESULTS_FILE}
             setGitHubCommitStatus("Build failed", "FAILURE")
         }
     }
