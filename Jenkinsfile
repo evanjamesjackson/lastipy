@@ -44,10 +44,9 @@ pipeline {
                     deactivate
                     '''
                 echo 'Pushing version number change to SCM...'
-                sh '''
-                    git remote set-url origin git@github.com:evanjamesjackson/lastipy.git 
-                    git push origin --follow-tags
-                    '''
+                sh """
+                    git push git@github.com:evanjamesjackson/lastipy.git HEAD:$env.BRANCH_NAME --follow-tags
+                    """
             }
         }
 
