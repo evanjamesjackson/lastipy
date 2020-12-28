@@ -84,6 +84,7 @@ pipeline {
 
     post {
         always {
+            junit 'results.xml'
             deleteDir()
         }
         success {
