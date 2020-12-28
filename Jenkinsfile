@@ -55,14 +55,15 @@ pipeline {
             // TODO only on master
             steps {
                 echo 'Deploying artifacts...'
-                sh '''
+                // Double-quotes necessary in order for the Jenkins variables to be interpreted properly
+                sh """
                     source venv/bin/activate
                     pip install setuptools
                     pip install twine
                     python setup.py sdist bdist_wheel
                     twine upload dist/* -u $env.PYPI_CREDENTIALS_USR -p $env.PYPI_CREDENTIALS_PSW
                     deactivate
-                    '''
+                    """
             }
         }
 
