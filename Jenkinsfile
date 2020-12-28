@@ -32,9 +32,9 @@ pipeline {
         }
 
         stage('Increment version number') {
-            when {
-                branch 'master'
-            }
+            // when {
+            //     branch 'master'
+            // }
             steps {
                 echo 'Incrementing version number...'
                 sh '''
@@ -46,13 +46,15 @@ pipeline {
                 echo 'Pushing version number change to SCM...'
                 sh '''
                     git remote set-url origin git@github.com:evanjamesjackson/lastipy.git 
-                    git push origin --tags
+                    git push origin --follow-tags
                     '''
             }
         }
 
         stage('Deploy artifacts') {
-            // TODO only on master
+            when {
+                branch 'master'
+            }
             steps {
                 echo 'Deploying artifacts...'
                 // Double-quotes necessary in order for the Jenkins variables to be interpreted properly
