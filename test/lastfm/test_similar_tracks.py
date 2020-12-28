@@ -21,7 +21,7 @@ class SimilarTracksFetcherTest(unittest.TestCase):
             json_track = {
                 'name': track.track_name,
                 'artist': {
-                    'name': track.artist
+                    'name': 'TEST'
                 },
                 'match': track.recommendation_rating
             }
