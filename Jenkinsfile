@@ -89,15 +89,15 @@ pipeline {
             deleteDir()
         }
         success {
-            setBuildStatus("Build succeeded", "SUCCESS")
+            setGitHubCommitStatus("Build succeeded", "SUCCESS")
         }
         failure {
-            setBuildStatus("Build failed", "FAILURE")
+            setGitHubCommitStatus("Build failed", "FAILURE")
         }
     }
 }
 
-void setBuildStatus(String message, String state) {
+void setGitHubCommitStatus(String message, String state) {
   step([
       $class: "GitHubCommitStatusSetter",
       reposSource: [$class: "ManuallyEnteredRepositorySource", url: env.GIT_URL],
