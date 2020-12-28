@@ -81,13 +81,14 @@ pipeline {
 
     post {
         always {
-            junit "${env.TEST_RESULTS_FILE}"
             deleteDir()
         }
         success {
+            junit "${env.TEST_RESULTS_FILE}"
             setGitHubCommitStatus("Build succeeded", "SUCCESS")
         }
         failure {
+            junit "${env.TEST_RESULTS_FILE}"
             setGitHubCommitStatus("Build failed", "FAILURE")
         }
     }
