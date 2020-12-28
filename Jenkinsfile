@@ -9,8 +9,9 @@ pipeline {
         stage('Initialize') {
             steps {
                 script {
-                    echo "Last commit was made by ${env.GIT_COMMITTER_NAME}"
-                    if (env.GIT_COMMITTER_NAME.toLowerCase().contains('jenkins')) {
+                    def gitCommitAuthor = sh(script: 'git log -1 --pretty=format:\'%an\'', returnStdout: true)
+                    echo "Last commit was made by ${gitCommitAuthor}"
+                    if (gitCommitAuthor.toLowerCase().contains('jenkins')) {
                         currentBuild.result = 'ABORTED'
                         error('Last commit was made by Jenkins itself, therefore aborting the build to prevent an endless loop')
                     }
