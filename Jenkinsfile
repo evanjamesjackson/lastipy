@@ -57,7 +57,7 @@ pipeline {
                     deactivate
                     '''
                 echo 'Pushing version number change to SCM...'
-                sh 'git push git@github.com:evanjamesjackson/lastipy.git HEAD:${env.BRANCH_NAME} --follow-tags'
+                sh 'git push git@github.com:evanjamesjackson/lastipy.git HEAD:$env.BRANCH_NAME --follow-tags'
             }
         }
 
@@ -72,7 +72,7 @@ pipeline {
                     pip install setuptools
                     pip install twine
                     python setup.py sdist bdist_wheel
-                    twine upload dist/* -u __token__ -p ${PYPI_API_KEY}
+                    twine upload dist/* -u __token__ -p $env.PYPI_API_KEY
                     deactivate
                     '''
             }
