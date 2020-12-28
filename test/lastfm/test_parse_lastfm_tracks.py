@@ -7,7 +7,7 @@ class ParseTracksTest(unittest.TestCase):
         track_name = "Stayin' Alive"
         artist = "Bee Gees"
         to_parse = {
-            'name': 'Test',
+            'name': 'track_name',
             'artist': {
                 'name': artist
             },
