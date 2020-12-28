@@ -36,11 +36,11 @@ pipeline {
         stage('Run tests') {
             steps {
                 echo 'Running tests...'
-                sh """
+                sh '''
                     source venv/bin/activate
                     pytest --junitxml ${TEST_RESULTS_FILE} test/
                     deactivate
-                    """
+                    '''
             }
         }
 
@@ -57,9 +57,7 @@ pipeline {
                     deactivate
                     '''
                 echo 'Pushing version number change to SCM...'
-                sh """
-                    git push git@github.com:evanjamesjackson/lastipy.git HEAD:$env.BRANCH_NAME --follow-tags
-                    """
+                sh 'git push git@github.com:evanjamesjackson/lastipy.git HEAD:${BRANCH_NAME} --follow-tags'
             }
         }
 
@@ -69,15 +67,14 @@ pipeline {
             }
             steps {
                 echo 'Deploying artifacts...'
-                // Double-quotes necessary in order for the Jenkins variables to be interpreted properly
-                sh """
+                sh '''
                     source venv/bin/activate
                     pip install setuptools
                     pip install twine
                     python setup.py sdist bdist_wheel
-                    twine upload dist/* -u __token__ -p $env.PYPI_API_KEY
+                    twine upload dist/* -u __token__ -p ${PYPI_API_KEY}
                     deactivate
-                    """
+                    '''
             }
         }
     }
