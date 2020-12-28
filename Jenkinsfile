@@ -8,9 +8,11 @@ pipeline {
     stages {
         stage('Initialize') {
             steps {
-                if (env.GIT_COMMITTER_NAME.toLowerCase().contains('jenkins')) {
-                    currentBuild.result = 'ABORTED'
-                    error('Last commit was made by Jenkins itself, therefore aborting the build to prevent an endless loop')
+                script {
+                    if (env.GIT_COMMITTER_NAME.toLowerCase().contains('jenkins')) {
+                        currentBuild.result = 'ABORTED'
+                        error('Last commit was made by Jenkins itself, therefore aborting the build to prevent an endless loop')
+                    }
                 }
             }
         }
