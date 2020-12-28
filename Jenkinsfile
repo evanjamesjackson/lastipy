@@ -84,14 +84,18 @@ pipeline {
             deleteDir()
         }
         success {
-            junit '${TEST_RESULTS_FILE}'
+            displayTestResults()
             setGitHubCommitStatus("Build succeeded", "SUCCESS")
         }
         failure {
-            junit '${TEST_RESULTS_FILE}'
+            displayTestResults()
             setGitHubCommitStatus("Build failed", "FAILURE")
         }
     }
+}
+
+void displayTestResults() {
+    junit "${TEST_RESULTS_FILE}"
 }
 
 void setGitHubCommitStatus(String message, String state) {
