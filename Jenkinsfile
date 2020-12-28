@@ -37,6 +37,9 @@ pipeline {
             steps {
                 echo 'Running tests...'
                 sh '''
+                    echo TEST test results file is ${TEST_RESULTS_FILE}
+                    '''
+                sh '''
                     source venv/bin/activate
                     pytest --junitxml ${TEST_RESULTS_FILE} test/
                     deactivate
@@ -57,7 +60,8 @@ pipeline {
                     deactivate
                     '''
                 echo 'Pushing version number change to SCM...'
-                sh 'git push git@github.com:evanjamesjackson/lastipy.git HEAD:$env.BRANCH_NAME --follow-tags'
+                sh 'echo TEST branch name is ${BRANCH_NAME}'
+                sh 'git push git@github.com:evanjamesjackson/lastipy.git HEAD:${BRANCH_NAME} --follow-tags'
             }
         }
 
@@ -72,7 +76,7 @@ pipeline {
                     pip install setuptools
                     pip install twine
                     python setup.py sdist bdist_wheel
-                    twine upload dist/* -u __token__ -p $env.PYPI_API_KEY
+                    twine upload dist/* -u __token__ -p ${PYPI_API_KEY}
                     deactivate
                     '''
             }
