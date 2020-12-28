@@ -60,7 +60,7 @@ pipeline {
                     pip install setuptools
                     pip install twine
                     python setup.py sdist bdist_wheel
-                    twine upload dist/* -u ${env.PYPI_CREDENTIALS_USR} -p ${env.PYPI_CREDENTIALS_PSW}
+                    twine upload dist/* -u $env.PYPI_CREDENTIALS_USR -p $env.PYPI_CREDENTIALS_PSW
                     deactivate
                     '''
             }
