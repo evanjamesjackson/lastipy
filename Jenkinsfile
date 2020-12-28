@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         PYPI_API_KEY = credentials('PyPi')
+        TEST_RESULTS_FILE = 'results.xml'
     }
 
     stages {
@@ -34,13 +35,12 @@ pipeline {
 
         stage('Run tests') {
             steps {
-                // TODO show test results in Jenkins?
                 echo 'Running tests...'
-                sh '''
+                sh """
                     source venv/bin/activate
-                    pytest --junitxml results.xml test/
+                    pytest --junitxml ${TEST_RESULTS_FILE} test/
                     deactivate
-                    '''
+                    """
             }
         }
 
@@ -84,7 +84,7 @@ pipeline {
 
     post {
         always {
-            junit 'results.xml'
+            junit '${env.TEST_RESULTS_FILE}'
             deleteDir()
         }
         success {
