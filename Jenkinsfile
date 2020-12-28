@@ -38,7 +38,7 @@ pipeline {
                 echo 'Running tests...'
                 sh '''
                     source venv/bin/activate
-                    pytest test/
+                    pytest --junitxml results.xml test/
                     deactivate
                     '''
             }
@@ -80,8 +80,6 @@ pipeline {
                     """
             }
         }
-
-        // TODO post-build: post to GitHub, send an email
     }
 
     post {
