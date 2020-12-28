@@ -45,9 +45,9 @@ pipeline {
         }
 
         stage('Increment version number') {
-            // when {
-            //     branch 'master'
-            // }
+            when {
+                branch 'master'
+            }
             steps {
                 echo 'Incrementing version number...'
                 sh '''
