@@ -90,11 +90,19 @@ pipeline {
         }
         success {
             setGitHubCommitStatus("Build succeeded", "SUCCESS")
+            sendStatusEmail()
         }
         failure {
             setGitHubCommitStatus("Build failed", "FAILURE")
+            sendStatusEmail()
         }
     }
+}
+
+void sendStatusEmail() {
+    emailext body: "${currentBuild.currentResult}: Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}\n More info at: ${env.BUILD_URL}",
+             recipientProviders: [[$class: 'DevelopersRecipientProvider'], [$class: 'RequesterRecipientProvider']],
+             subject: "Jenkins Build ${currentBuild.currentResult}: Job ${env.JOB_NAME}"
 }
 
 void setGitHubCommitStatus(String message, String state) {
