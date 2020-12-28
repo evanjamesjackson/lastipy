@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        PYPI_CREDENTIALS = credentials('PyPi')
+    }
+
     stages {
         stage('Install') {
             steps {
@@ -56,7 +60,7 @@ pipeline {
                     pip install setuptools
                     pip install twine
                     python setup.py sdist bdist_wheel
-                    twine upload dist/* -u $pypi_username -p $pypi_password'
+                    twine upload dist/* -u ${env.PYPI_CREDENTIALS_USR} -p ${env.PYPI_CREDENTIALS_PSW}
                     deactivate
                     '''
             }
