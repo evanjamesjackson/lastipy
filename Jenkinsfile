@@ -95,7 +95,7 @@ pipeline {
 }
 
 void displayTestResults() {
-    junit '${TEST_RESULTS_FILE}'
+    junit TEST_RESULTS_FILE
 }
 
 void setGitHubCommitStatus(String message, String state) {
