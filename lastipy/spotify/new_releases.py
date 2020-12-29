@@ -77,8 +77,8 @@ def _fetch_followed_artists(spotify):
 def _filter_new_albums(all_albums, as_of_date):
     new_albums = []
     for album in all_albums:
-        if album['release_date_precision'] == 'day':
-            if datetime.strptime(album['release_date'], "%Y-%m-%d").date() == as_of_date:
+        if album.release_date_precision == 'day':
+            if datetime.strptime(album.release_date, "%Y-%m-%d").date() == as_of_date:
                 new_albums.append(album)
         else:
             logging.warn("Album release date precision is not 'day' so ignoring (album: " + str(album) + ")")
@@ -86,30 +86,33 @@ def _filter_new_albums(all_albums, as_of_date):
 
 
 def _fetch_artist_albums(spotify, album_types, artist_id):
+    # TODO definitely need to extract something here...
     albums = []
-    if album.SINGLE_ALBUM_TYPE in album_types:
+    if album.ALBUM_ALBUM_TYPE in album_types:
         curr_response = spotify.artist_albums(artist_id, album_type='album', limit=50)
-        albums = curr_response['items']
+        albums = _convert_albums(curr_response, 'album')
         while len(curr_response['items']) > 0:
             curr_response = spotify.artist_albums(artist_id, album_type='album', limit=50, offset=len(albums))
-            albums += curr_response['items']
+            albums += _convert_albums(curr_response, 'album')
     
     singles = []
-    if album.ALBUM_ALBUM_TYPE in album_types:
+    if album.SINGLE_ALBUM_TYPE in album_types:
         curr_response = spotify.artist_albums(artist_id, album_type='single', limit=50)
-        singles = curr_response['items']
+        singles = _convert_albums(curr_response, 'single')
         while len(curr_response['items']) > 0:
            curr_response = spotify.artist_albums(artist_id, album_type='single', limit=50, offset=len(singles))
-           singles += curr_response['items']
+           singles += _convert_albums(curr_response, 'single')
     
     return albums + singles
 
+def _convert_albums(json_album_response, album_type):
+    return [album.SpotifyAlbum(album_type=album_type, spotify_id=item['id'], release_date_precision=item['release_date_precision'], release_date=item['release_date']) for item in json_album_response['items']]
 
 def _fetch_album_tracks(spotify, album):
-    curr_response = spotify.album_tracks(album['id'], limit=50)
+    curr_response = spotify.album_tracks(album.spotify_id, limit=50)
     album_tracks = curr_response['items']
     while len(curr_response['items']) > 0:
-        curr_response = spotify.album_tracks(album['id'], limit=50, offset=len(album_tracks))
+        curr_response = spotify.album_tracks(album.spotify_id, limit=50, offset=len(album_tracks))
         album_tracks += curr_response['items']
     return album_tracks
 

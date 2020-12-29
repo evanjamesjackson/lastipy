@@ -10,9 +10,9 @@ class AddAlbumsToLibraryTest(unittest.TestCase):
         spotify.current_user = unittest.mock.MagicMock({'id': 'testUser'})
         spotify.current_user_saved_albums_add = unittest.mock.MagicMock()    
         dummy_albums = [
-            SpotifyAlbum('single', '123'),
-            SpotifyAlbum('album', '456'),
-            SpotifyAlbum('single', '789')
+            self._build_dummy_album('123'),
+            self._build_dummy_album('456'),
+            self._build_dummy_album('789')
         ]
         add_albums_to_library(spotify, dummy_albums)
         spotify.current_user_saved_albums_add.assert_called_with(['123', '456', '789'])
@@ -25,14 +25,20 @@ class AddAlbumsToLibraryTest(unittest.TestCase):
        
         dummy_albums = []
         for _ in range(150):
-            dummy_albums.append(SpotifyAlbum('single', '123'))
+            dummy_albums.append(self._build_dummy_album('123'))
         
         expected_chunks = []
         for _ in range(3):
             chunk = []
             for _ in range(50):
-                chunk.append(SpotifyAlbum('single', '123'))
+                chunk.append('123')
             expected_chunks.append(chunk)
 
+        add_albums_to_library(spotify, dummy_albums)
+
         for i in range(3):
-            add_albums_to_library(spotify, expected_chunks[i])
+            spotify.current_user_saved_albums_add.assert_called_with(expected_chunks[i])
+
+
+    def _build_dummy_album(self, spotify_id):
+        return SpotifyAlbum(spotify_id=spotify_id, album_type='album', release_date_precision='day', release_date='2000-01-01')
