@@ -37,7 +37,7 @@ pipeline {
                 echo 'Running tests...'
                 sh '''
                     source venv/bin/activate
-                    pytest --junitxml test_results.xml test/
+                    pytest --junitxml test-results.xml test/
                     deactivate
                     '''
             }
