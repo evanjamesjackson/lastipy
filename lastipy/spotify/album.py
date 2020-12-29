@@ -5,7 +5,7 @@ class SpotifyAlbum():
         self.album_type = album_type
         self.spotify_id = spotify_id
         self.release_date_precision = release_date_precision
-        self.release_date = release_date_precision
+        self.release_date = release_date
     
     def __eq__(self, other):
         return isinstance(other, SpotifyAlbum) \
