@@ -13,21 +13,13 @@ def fetch_new_tracks(spotify, ignore_remixes=False, ignore_songs_in_library=True
 
     logging.info("Fetching new tracks for " + spotify.current_user()['id'] + " as of " + str(as_of_date))
 
-    followed_artist_ids = _get_followed_artists(spotify)
-
-    all_albums = []
-    for artist_id in followed_artist_ids:
-        artist_albums = _get_releases(spotify, artist_id)
-        all_albums += artist_albums
-
-    new_albums = _filter_new_releases(all_albums, as_of_date)
+    new_releases = _fetch_new_releases(spotify, as_of_date)
 
     all_tracks = []
-    for album in new_albums:
-        all_tracks += _get_album_tracks(spotify, album)
+    for release in new_releases:
+        all_tracks += _fetch_release_tracks(spotify, release)
 
     new_tracks = parse_tracks(all_tracks)
-    
     new_tracks = _remove_duplicates(new_tracks)
 
     if ignore_remixes:
@@ -46,8 +38,19 @@ def fetch_new_tracks(spotify, ignore_remixes=False, ignore_songs_in_library=True
     logging.info("Fetched " + str(len(new_tracks)) + " new tracks " + str(new_tracks))
     return new_tracks
 
+def _fetch_new_releases(spotify, as_of_date):
+    followed_artist_ids = _fetch_followed_artists(spotify)
 
-def _get_followed_artists(spotify):
+    all_releases = []
+    for artist_id in followed_artist_ids:
+        artist_releases = _fetch_artist_releases(spotify, artist_id)
+        all_releases += artist_releases
+
+    new_releases = _filter_new_releases(all_releases, as_of_date)
+    return new_releases
+
+
+def _fetch_followed_artists(spotify):
     followed_artists = []
 
     curr_response = spotify.current_user_followed_artists(limit=50)
@@ -75,7 +78,7 @@ def _filter_new_releases(all_albums, as_of_date):
     return new_albums
 
 
-def _get_releases(spotify, artist_id):
+def _fetch_artist_releases(spotify, artist_id):
     # Albums
     curr_response = spotify.artist_albums(artist_id, album_type='album', limit=50)
     artist_albums = curr_response['items']
@@ -91,7 +94,7 @@ def _get_releases(spotify, artist_id):
     return artist_albums + artist_singles
 
 
-def _get_album_tracks(spotify, album):
+def _fetch_release_tracks(spotify, album):
     curr_response = spotify.album_tracks(album['id'], limit=50)
     album_tracks = curr_response['items']
     while len(curr_response['items']) > 0:
