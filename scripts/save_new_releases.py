@@ -66,9 +66,9 @@ def _extract_user_configs(args):
     config_parser = ConfigParser()
     config_parser.read(args.user_configs_file.name)
     section = 'Config'
-    args.spotify_user = config_parser[section]['SpotifyUser']
-    args.ignore_remixes = config_parser[section]['IgnoreRemixes']
-    args.save_albums_to_liked_songs = config_parser[section]['SaveAlbumsToLikedSongs']
+    args.spotify_user = config_parser.get(section, 'SpotifyUser')
+    args.ignore_remixes = config_parser.getboolean(section, 'IgnoreRemixes')
+    args.save_albums_to_liked_songs = config_parser.getboolean(section, 'SaveAlbumsToLikedSongs')
     return args
 
 def _parse_args():
