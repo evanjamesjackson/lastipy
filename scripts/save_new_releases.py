@@ -20,6 +20,7 @@ import logging
 from lastipy.spotify import new_releases
 from datetime import datetime
 from lastipy.util.parse_api_keys import ApiKeysParser
+from lastipy.spotify import album
 
 
 def save_new_releases():
@@ -29,15 +30,26 @@ def save_new_releases():
     args = _extract_args()
     spotify = Spotify(auth=token.get_token(args.spotify_user, args.spotify_client_id_key, args.spotify_client_secret_key))
 
-    new_tracks = new_releases.fetch_new_tracks(spotify, args.ignore_remixes)
-
-    if len(new_tracks) > 0:
-        # Only process further if we actually fetched any new tracks
-        library.add_tracks_to_library(spotify, new_tracks)
+    if args.save_albums_to_liked_songs:
+        new_tracks = new_releases.fetch_new_tracks(spotify, ignore_remixes=args.ignore_remixes, album_types=[album.SINGLE_ALBUM_TYPE, album.ALBUM_ALBUM_TYPE])
+        _save_tracks(new_tracks, spotify)
     else:
-        logging.info("No new tracks to add!")
+        new_tracks = new_releases.fetch_new_tracks(spotify, ignore_remixes=args.ignore_remixes, album_types=[album.SINGLE_ALBUM_TYPE])
+        _save_tracks(new_tracks, spotify)
+
+        new_albums = new_releases.fetch_new_albums(spotify, album_types=[album.ALBUM_ALBUM_TYPE])
+        if len(new_albums) > 0:
+            library.add_albums_to_library(spotify, new_albums)
+        else:
+            logging.info("No new albums to add!")
 
     logging.info("Done!")
+
+def _save_tracks(tracks, spotify):
+    if len(tracks) > 0:
+        library.add_tracks_to_library(spotify, tracks)
+    else:
+        logging.info("No tracks to add!")
 
 def _extract_args():
     args = _parse_args()
@@ -54,8 +66,9 @@ def _extract_user_configs(args):
     config_parser = ConfigParser()
     config_parser.read(args.user_configs_file.name)
     section = 'Config'
-    args.spotify_user = config_parser[section]['SpotifyUser']
-    args.ignore_remixes = config_parser[section]['IgnoreRemixes']
+    args.spotify_user = config_parser.get(section, 'SpotifyUser')
+    args.ignore_remixes = config_parser.getboolean(section, 'IgnoreRemixes')
+    args.save_albums_to_liked_songs = config_parser.getboolean(section, 'SaveAlbumsToLikedSongs')
     return args
 
 def _parse_args():
