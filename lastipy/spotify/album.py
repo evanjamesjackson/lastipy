@@ -5,6 +5,11 @@ class SpotifyAlbum():
         self.album_type = album_type
         self.spotify_id = spotify_id
     
+    def __eq__(self, other):
+        return isinstance(other, SpotifyAlbum) \
+            and self.album_type == other.album_type \
+            and self.spotify_id == other.spotify_id
+    
     def __repr__(self):
         return str(self.__dict__)
 
