@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         PYPI_API_KEY = credentials('PyPi')
-        TEST_RESULTS_FILE = 'results.xml'
     }
 
     stages {
@@ -38,7 +37,7 @@ pipeline {
                 echo 'Running tests...'
                 sh '''
                     source venv/bin/activate
-                    pytest --junitxml ${TEST_RESULTS_FILE} test/
+                    pytest --junitxml test_results.xml test/
                     deactivate
                     '''
             }
@@ -95,7 +94,7 @@ pipeline {
 }
 
 void displayTestResults() {
-    junit "env.TEST_RESULTS_FILE"
+    junit "test-results.xml"
 }
 
 void setGitHubCommitStatus(String message, String state) {
