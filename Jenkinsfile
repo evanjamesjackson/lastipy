@@ -95,8 +95,7 @@ pipeline {
 }
 
 void displayTestResults() {
-    echo env.TEST_RESULTS_FILE
-    junit env.TEST_RESULTS_FILE
+    junit "env.TEST_RESULTS_FILE"
 }
 
 void setGitHubCommitStatus(String message, String state) {
