@@ -32,9 +32,9 @@ NEGLECTED_PLAYLIST = 'Neglected'
 
 
 def organize_favorites():
-    """Organizes a user's Spotify library. Saved tracks with more than 3 plays are moved to a "New Favorites" playlist. Tracks
-       in the "New Favorites" playlist are moved to an "Old Favorites" playlist after 6 months (if they still only have 3
-       plays at that point, they're completely removed from the library)."""
+    """Organizes a user's Spotify library. Saved tracks with more than args.saved_song_playount_limit plays are moved to a "New Favorites" playlist. 
+       Tracks in the "New Favorites" playlist are moved to an "Old Favorites" playlist after args.new_favorites_time_limit days, unless they have less than
+       or equal to args.new_favorites_playcount_limit plays, in which case they're instead moved to a "Neglected" playlist."""
 
     setup_logging('organize_favorites.log')
     args = _extract_args()
