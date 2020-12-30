@@ -7,7 +7,6 @@ MAX_RESULTS_PER_PAGE = 200
 MAX_RETRIES = 10
 
 
-#TODO test
 def fetch_recent_artists(user, api_key):
     """Fetches recent artists for the given user"""
 
