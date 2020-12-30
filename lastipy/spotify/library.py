@@ -5,7 +5,7 @@ import logging
 
 MAX_ITEMS_PER_REQUEST = 50
 
-
+#TODO test
 def get_saved_tracks(spotify):
     """Returns the currently-logged-in users's saved tracks"""
 
@@ -26,6 +26,7 @@ def get_saved_tracks(spotify):
     return saved_tracks
 
 
+#TODO test
 def add_tracks_to_library(spotify, tracks):
     logging.info("Adding " + str(len(tracks)) + " to " + spotify.current_user()['id'] + "'s library")
     logging.debug("Adding tracks: " + str(tracks))
@@ -34,6 +35,8 @@ def add_tracks_to_library(spotify, tracks):
         spotify.current_user_saved_tracks_add([track.spotify_id for track in chunk])
     logging.info("Finished adding tracks")
 
+
+#TODO test
 def add_albums_to_library(spotify, albums):
     logging.info("Adding " + str(len(albums)) + " to " + spotify.current_user()['id'] + "'s library")
     logging.debug("Adding albums: " + str(albums))
@@ -43,6 +46,7 @@ def add_albums_to_library(spotify, albums):
     logging.info("Finished adding albums")
 
 
+#TODO test
 def remove_tracks_from_library(spotify, tracks):
     logging.info("Removing " + str(len(tracks)) + " from " + spotify.current_user()['id'] + "'s library")
     logging.debug("Removing tracks: " + str(tracks))
@@ -52,5 +56,6 @@ def remove_tracks_from_library(spotify, tracks):
     logging.info("Finished removing tracks")
 
 
+#TODO test
 def _chunk(lst, chunk_size):
     return [lst[i:i + chunk_size] for i in range(0, len(lst), chunk_size)] 
