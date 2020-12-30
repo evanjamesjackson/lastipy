@@ -3,6 +3,7 @@ from unittest.mock import patch
 from lastipy.lastfm.library import recent_artists
 from lastipy.lastfm.library.scrobbled_artist import ScrobbledArtist
 from unittest.mock import Mock
+from requests import HTTPError
 
 
 class RecentArtistsTest(unittest.TestCase):
@@ -57,6 +58,26 @@ class RecentArtistsTest(unittest.TestCase):
         mock_responses[1].json.return_value = self._build_artist_json_response('The Beatles', '10', '3')
         mock_responses[2].ok = True
         mock_responses[2].json.return_value = self._build_artist_json_response('Cream', '15', '3')
+        mock_requests_get.side_effect = mock_responses
+
+        fetched_artists = recent_artists.fetch_recent_artists(user=self.dummy_user, api_key=self.dummy_api_key)
+
+        self.assertCountEqual(fetched_artists, expected_artists)
+
+    @patch('requests.get')
+    def test_fetch_with_success_after_retries(self, mock_requests_get):
+        expected_artists = [
+            ScrobbledArtist(artist_name='Bee Gees', playcount=5),
+            ScrobbledArtist(artist_name='Cream', playcount=15)
+        ]
+
+        mock_responses = [Mock(), Mock(), Mock()]
+        mock_responses[0].ok = True
+        mock_responses[0].json.return_value = self._build_artist_json_response('Bee Gees', '5', '2')
+        mock_responses[1].ok = False
+        mock_responses[1].raise_for_status.side_effect = HTTPError(Mock(status=500), 'Error')
+        mock_responses[2].ok = True
+        mock_responses[2].json.return_value = self._build_artist_json_response('Cream', '15', '2')
         mock_requests_get.side_effect = mock_responses
 
         fetched_artists = recent_artists.fetch_recent_artists(user=self.dummy_user, api_key=self.dummy_api_key)
