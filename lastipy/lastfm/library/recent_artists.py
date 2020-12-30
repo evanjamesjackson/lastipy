@@ -9,7 +9,7 @@ MAX_RETRIES = 10
 
 #TODO test
 def fetch_recent_artists(user, api_key):
-    """Fetches tracks similar to the given track"""
+    """Fetches recent artists for the given user"""
 
     logging.info("Fetching recent artists for user " + user)
     artists = []

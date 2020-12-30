@@ -34,6 +34,14 @@ def add_tracks_to_library(spotify, tracks):
         spotify.current_user_saved_tracks_add([track.spotify_id for track in chunk])
     logging.info("Finished adding tracks")
 
+def add_albums_to_library(spotify, albums):
+    logging.info("Adding " + str(len(albums)) + " to " + spotify.current_user()['id'] + "'s library")
+    logging.debug("Adding albums: " + str(albums))
+    album_chunks = _chunk(albums, MAX_ITEMS_PER_REQUEST) 
+    for chunk in album_chunks:
+        spotify.current_user_saved_albums_add([album.spotify_id for album in chunk])
+    logging.info("Finished adding albums")
+
 
 def remove_tracks_from_library(spotify, tracks):
     logging.info("Removing " + str(len(tracks)) + " from " + spotify.current_user()['id'] + "'s library")
