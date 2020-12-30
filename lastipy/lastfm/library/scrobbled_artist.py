@@ -7,7 +7,9 @@ class ScrobbledArtist:
         self.playcount = playcount
 
     def __eq__(self, other):
-        return self.artist_name == other.artist_name and self.playcount == other.playcount
+        return isinstance(other, ScrobbledArtist) \
+                and self.artist_name == other.artist_name \
+                and self.playcount == other.playcount
 
     def __repr__(self):
         return str(self.__dict__)
