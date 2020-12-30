@@ -1,11 +1,8 @@
+#!/usr/bin/env python3.7
+
 from lastipy.spotify import library
 from spotipy import Spotify
 from lastipy.spotify import token
-
-
-
-#!/usr/bin/env python3.7
-
 from configparser import ConfigParser
 import argparse
 import os
