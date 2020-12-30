@@ -20,6 +20,7 @@ from lastipy.util.parse_api_keys import ApiKeysParser
 from lastipy.spotify import library, search, playlist
 
 
+#TODO test
 def build_recommendations_playlist():
     """Adds recommendations to the given Spotify user's playlist based on the given Last.fm user's recommendations"""
 

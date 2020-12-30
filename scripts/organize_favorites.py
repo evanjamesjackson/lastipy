@@ -31,6 +31,7 @@ OLD_FAVORITES_PLAYLIST = 'Old Favorites'
 NEGLECTED_PLAYLIST = 'Neglected'
 
 
+#TODO test
 def organize_favorites():
     """Organizes a user's Spotify library. Saved tracks with more than args.saved_song_playount_limit plays are moved to a "New Favorites" playlist. 
        Tracks in the "New Favorites" playlist are moved to an "Old Favorites" playlist after args.new_favorites_time_limit days, unless they have less than
@@ -62,7 +63,6 @@ def move_new_favorites(spotify, args):
                     tracks_to_move.append(track)
             except:
                 logging.warn("Couldn't get playcount for track " + str(track))
-       
 
     logging.info("Moving " + str(len(tracks_to_move)) + " tracks from " + NEW_FAVORITES_PLAYLIST + " to " + OLD_FAVORITES_PLAYLIST)
     playlist.remove_tracks_from_playlist(spotify, NEW_FAVORITES_PLAYLIST, tracks_to_move)

@@ -23,6 +23,7 @@ from lastipy.util.parse_api_keys import ApiKeysParser
 from lastipy.spotify import album
 
 
+#TODO test
 def save_new_releases():
     """Saves new releases (as of the current date) from the specified Spotify user's followed artists to their library"""
 
