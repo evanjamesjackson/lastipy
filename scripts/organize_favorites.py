@@ -26,6 +26,7 @@ from datetime import datetime, timezone
 from dateutil.relativedelta import relativedelta
 import iso8601
 
+#TODO paramterize these?
 NEW_FAVORITES_PLAYLIST = 'New Favorites'
 OLD_FAVORITES_PLAYLIST = 'Old Favorites'
 NEGLECTED_PLAYLIST = 'Neglected'
