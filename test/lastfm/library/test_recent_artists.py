@@ -83,6 +83,24 @@ class RecentArtistsTest(unittest.TestCase):
         fetched_artists = recent_artists.fetch_recent_artists(user=self.dummy_user, api_key=self.dummy_api_key)
 
         self.assertCountEqual(fetched_artists, expected_artists)
+    
+    @patch('requests.get')
+    def test_fetch_fails_after_retries(self, mock_requests_get):
+        mock_responses = []
+        for _ in range(10):
+            mock_response = Mock()
+            mock_response.ok = False
+            mock_response.raise_for_status.side_effect = HTTPError(Mock(status=500), 'Error')
+            mock_responses.append(mock_response)
+
+        # Add another mock response, but the code will exit after the retry limit is reached and this won't actually get fetched
+        mock_response = Mock()
+        mock_response.ok = False
+        mock_response.json.return_value = self._build_artist_json_response('Cream', '15', '1')
+
+        fetched_artists = recent_artists.fetch_recent_artists(user=self.dummy_user, api_key=self.dummy_api_key)
+
+        self.assertEqual(fetched_artists, [])
 
     def _build_artist_json_response(self, artist_name, playcount, total_pages):
         return { 'artists': { 'artist': [ { 'name': artist_name, 'playcount': playcount } ], '@attr': { 'totalPages': total_pages } } }
