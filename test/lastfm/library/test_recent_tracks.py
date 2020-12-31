@@ -88,43 +88,23 @@ class RecentArtistsTest(unittest.TestCase):
 
         self.assertCountEqual(fetched_tracks, expected_tracks)
 
-    # @patch('requests.get')
-    # def test_fetch_with_success_after_retries(self, mock_requests_get):
-    #     expected_artists = [
-    #         ScrobbledArtist(artist_name='Bee Gees', playcount=5),
-    #         ScrobbledArtist(artist_name='Cream', playcount=15)
-    #     ]
+    @patch('requests.get')
+    def test_fetch_fails_after_retries(self, mock_requests_get):
+        mock_responses = []
+        for _ in range(10):
+            mock_response = Mock()
+            mock_response.ok = False
+            mock_response.raise_for_status.side_effect = HTTPError(Mock(status=500), 'Error')
+            mock_responses.append(mock_response)
 
-    #     mock_responses = [Mock(), Mock(), Mock()]
-    #     mock_responses[0].ok = True
-    #     mock_responses[0].json.return_value = self._build_artist_json_response('Bee Gees', '5', '2')
-    #     mock_responses[1].ok = False
-    #     mock_responses[1].raise_for_status.side_effect = HTTPError(Mock(status=500), 'Error')
-    #     mock_responses[2].ok = True
-    #     mock_responses[2].json.return_value = self._build_artist_json_response('Cream', '15', '2')
-    #     mock_requests_get.side_effect = mock_responses
+        # Add another mock response, but the code will exit after the retry limit is reached and this won't actually get fetched
+        mock_response = Mock()
+        mock_response.ok = False
+        mock_response.json.return_value = self._build_track_json_response('Penny Lane', 'The Beatles', '1')
 
-    #     fetched_artists = recent_artists.fetch_recent_artists(user=self.dummy_user, api_key=self.dummy_api_key)
+        fetched_tracks = recent_tracks.fetch_recent_tracks(user=self.dummy_user, api_key=self.dummy_api_key)
 
-    #     self.assertCountEqual(fetched_artists, expected_artists)
-    
-    # @patch('requests.get')
-    # def test_fetch_fails_after_retries(self, mock_requests_get):
-    #     mock_responses = []
-    #     for _ in range(10):
-    #         mock_response = Mock()
-    #         mock_response.ok = False
-    #         mock_response.raise_for_status.side_effect = HTTPError(Mock(status=500), 'Error')
-    #         mock_responses.append(mock_response)
-
-    #     # Add another mock response, but the code will exit after the retry limit is reached and this won't actually get fetched
-    #     mock_response = Mock()
-    #     mock_response.ok = False
-    #     mock_response.json.return_value = self._build_artist_json_response('Cream', '15', '1')
-
-    #     fetched_artists = recent_artists.fetch_recent_artists(user=self.dummy_user, api_key=self.dummy_api_key)
-
-    #     self.assertEqual(fetched_artists, [])
+        self.assertEqual(fetched_tracks, [])
 
     def _build_track_json_response(self, name, artist_name, total_pages):
         return { 
