@@ -14,7 +14,7 @@ def fetch_top_tracks(user, api_key, a_period=period.OVERALL):
                  user + " over period " + a_period)
 
     paginated_json_responses = fetch(URL, user, api_key, 'toptracks', [
-                                     {'key': 'period', 'value': period}])
+                                     {'key': 'period', 'value': a_period}])
 
     top_tracks = []
     for json_response in paginated_json_responses:
