@@ -47,6 +47,7 @@ class RecentArtistsTest(unittest.TestCase):
 
         self.assertCountEqual(fetched_tracks, expected_tracks)
 
+
     @patch('requests.get')
     def test_fetch_multiple_pages(self, mock_requests_get):
         expected_tracks = [
@@ -67,7 +68,8 @@ class RecentArtistsTest(unittest.TestCase):
         fetched_tracks = recent_tracks.fetch_recent_tracks(user=self.dummy_user, api_key=self.dummy_api_key)
 
         self.assertCountEqual(fetched_tracks, expected_tracks)
-    
+
+
     @patch('requests.get')
     def test_fetch_with_success_after_retries(self, mock_requests_get):
         expected_tracks = [
@@ -88,6 +90,7 @@ class RecentArtistsTest(unittest.TestCase):
 
         self.assertCountEqual(fetched_tracks, expected_tracks)
 
+
     @patch('requests.get')
     def test_fetch_fails_after_retries(self, mock_requests_get):
         mock_responses = []
@@ -105,6 +108,7 @@ class RecentArtistsTest(unittest.TestCase):
         fetched_tracks = recent_tracks.fetch_recent_tracks(user=self.dummy_user, api_key=self.dummy_api_key)
 
         self.assertEqual(fetched_tracks, [])
+
 
     def _build_track_json_response(self, name, artist_name, total_pages):
         return { 
