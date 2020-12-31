@@ -47,26 +47,26 @@ class RecentArtistsTest(unittest.TestCase):
 
         self.assertCountEqual(fetched_tracks, expected_tracks)
 
-    # @patch('requests.get')
-    # def test_fetch_multiple_pages(self, mock_requests_get):
-    #     expected_artists = [
-    #         ScrobbledArtist(artist_name='Bee Gees', playcount=5),
-    #         ScrobbledArtist(artist_name='The Beatles', playcount=10),
-    #         ScrobbledArtist(artist_name='Cream', playcount=15)
-    #     ]
+    @patch('requests.get')
+    def test_fetch_multiple_pages(self, mock_requests_get):
+        expected_tracks = [
+            Track(track_name='Stayin Alive', artist='Bee Gees'),
+            Track(track_name='Penny Lane', artist='The Beatles'),
+            Track(track_name='Badge', artist='Cream')
+        ]
 
-    #     mock_responses = [Mock(), Mock(), Mock()]
-    #     mock_responses[0].ok = True
-    #     mock_responses[0].json.return_value = self._build_artist_json_response('Bee Gees', '5', '3')
-    #     mock_responses[1].ok = True
-    #     mock_responses[1].json.return_value = self._build_artist_json_response('The Beatles', '10', '3')
-    #     mock_responses[2].ok = True
-    #     mock_responses[2].json.return_value = self._build_artist_json_response('Cream', '15', '3')
-    #     mock_requests_get.side_effect = mock_responses
+        mock_responses = [Mock(), Mock(), Mock()]
+        mock_responses[0].ok = True
+        mock_responses[0].json.return_value = self._build_track_json_response('Stayin Alive', 'Bee Gees', '3')
+        mock_responses[1].ok = True
+        mock_responses[1].json.return_value = self._build_track_json_response('Penny Lane', 'The Beatles', '3')
+        mock_responses[2].ok = True
+        mock_responses[2].json.return_value = self._build_track_json_response('Badge', 'Cream', '3')
+        mock_requests_get.side_effect = mock_responses
 
-    #     fetched_artists = recent_artists.fetch_recent_artists(user=self.dummy_user, api_key=self.dummy_api_key)
+        fetched_tracks = recent_tracks.fetch_recent_tracks(user=self.dummy_user, api_key=self.dummy_api_key)
 
-    #     self.assertCountEqual(fetched_artists, expected_artists)
+        self.assertCountEqual(fetched_tracks, expected_tracks)
 
     # @patch('requests.get')
     # def test_fetch_with_success_after_retries(self, mock_requests_get):
@@ -106,5 +106,19 @@ class RecentArtistsTest(unittest.TestCase):
 
     #     self.assertEqual(fetched_artists, [])
 
-    # def _build_artist_json_response(self, artist_name, playcount, total_pages):
-    #     return { 'artists': { 'artist': [ { 'name': artist_name, 'playcount': playcount } ], '@attr': { 'totalPages': total_pages } } }
+    def _build_track_json_response(self, name, artist_name, total_pages):
+        return { 
+            'recenttracks': { 
+                'track': [ 
+                    { 
+                        'name': name, 
+                        'artist': { 
+                            'name': artist_name 
+                        } 
+                    }
+                ], 
+                '@attr': { 
+                    'totalPages': total_pages 
+                } 
+            } 
+        }
