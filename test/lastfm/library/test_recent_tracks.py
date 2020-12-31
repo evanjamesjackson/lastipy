@@ -67,6 +67,26 @@ class RecentArtistsTest(unittest.TestCase):
         fetched_tracks = recent_tracks.fetch_recent_tracks(user=self.dummy_user, api_key=self.dummy_api_key)
 
         self.assertCountEqual(fetched_tracks, expected_tracks)
+    
+    @patch('requests.get')
+    def test_fetch_with_success_after_retries(self, mock_requests_get):
+        expected_tracks = [
+            Track(track_name='Stayin Alive', artist='Bee Gees'),
+            Track(track_name='Penny Lane', artist='The Beatles'),
+        ]
+
+        mock_responses = [Mock(), Mock(), Mock()]
+        mock_responses[0].ok = True
+        mock_responses[0].json.return_value = self._build_track_json_response('Stayin Alive', 'Bee Gees', '2')
+        mock_responses[1].ok = False
+        mock_responses[1].raise_for_status.side_effect = HTTPError(Mock(status=500), 'Error')
+        mock_responses[2].ok = True
+        mock_responses[2].json.return_value = self._build_track_json_response('Penny Lane', 'The Beatles', '2')
+        mock_requests_get.side_effect = mock_responses
+
+        fetched_tracks = recent_tracks.fetch_recent_tracks(user=self.dummy_user, api_key=self.dummy_api_key)
+
+        self.assertCountEqual(fetched_tracks, expected_tracks)
 
     # @patch('requests.get')
     # def test_fetch_with_success_after_retries(self, mock_requests_get):
