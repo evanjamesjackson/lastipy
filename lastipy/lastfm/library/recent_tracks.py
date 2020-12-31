@@ -9,7 +9,6 @@ MAX_RESULTS_PER_PAGE = 200
 MAX_RETRIES = 10
 
 
-#TODO test
 def fetch_recent_tracks(user, api_key):
     """Fetches recent tracks for the given user"""
 
