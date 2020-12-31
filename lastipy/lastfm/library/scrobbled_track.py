@@ -1,6 +1,7 @@
 from lastipy.track import Track
 
 class ScrobbledTrack(Track):
+    #TODO rename to TopTrack
     """Represents a track that a user has scrobbled, with an associated playcount"""
 
     def __init__(self, track_name, artist, playcount):
