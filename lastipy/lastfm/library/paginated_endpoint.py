@@ -6,6 +6,7 @@ MAX_RESULTS_PER_PAGE = 200
 MAX_RETRIES = 10
 
 
+# TODO RENAME
 def fetch(url, user, api_key, json_array_key, extra_request_params=None):
     """Fetches and returns an array of JSON responses from the given URL. Many of Last.fm's endpoints behave the same way by dividing
     results into "pages" of response objects. The only real difference between these endpoints is the type of response object returned,
