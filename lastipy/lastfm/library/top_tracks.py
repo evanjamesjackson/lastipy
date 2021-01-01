@@ -2,7 +2,7 @@ import logging
 from lastipy.lastfm.library import period
 from lastipy.lastfm.parse_lastfm_tracks import parse_track_name, parse_artist
 from lastipy.lastfm.library.scrobbled_track import ScrobbledTrack
-from lastipy.lastfm.library.paginated_endpoint import fetch
+from lastipy.lastfm.library.paginated_endpoint import fetch_paginated_response
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=user.gettoptracks'
 
@@ -13,8 +13,8 @@ def fetch_top_tracks(user, api_key, a_period=period.OVERALL):
     logging.info("Fetching top tracks for user " +
                  user + " over period " + a_period)
 
-    paginated_json_responses = fetch(URL, user, api_key, 'toptracks', [
-                                     {'key': 'period', 'value': a_period}])
+    paginated_json_responses = fetch_paginated_response(URL, user, api_key, 'toptracks', [
+        {'key': 'period', 'value': a_period}])
 
     top_tracks = []
     for json_response in paginated_json_responses:

@@ -1,7 +1,7 @@
 import logging
 import requests
 from lastipy.lastfm.library.scrobbled_artist import ScrobbledArtist
-from lastipy.lastfm.library.paginated_endpoint import fetch
+from lastipy.lastfm.library.paginated_endpoint import fetch_paginated_response
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=library.getartists'
 
@@ -11,7 +11,8 @@ def fetch_recent_artists(user, api_key):
 
     logging.info("Fetching recent artists for user " + user)
 
-    paginated_json_responses = fetch(URL, user, api_key, 'artists')
+    paginated_json_responses = fetch_paginated_response(
+        URL, user, api_key, 'artists')
 
     artists = []
     for json_response in paginated_json_responses:

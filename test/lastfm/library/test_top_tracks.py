@@ -12,7 +12,7 @@ class TopTracksFetcherTest(unittest.TestCase):
     dummy_user = 'dummyUser'
     dummy_api_key = '123456789'
 
-    @patch('lastipy.lastfm.library.top_tracks.fetch')
+    @patch('lastipy.lastfm.library.top_tracks.fetch_paginated_response')
     def test_one_page_of_results(self, mock_paginated_endpoint_fetch):
         expected_track_1 = ScrobbledTrack(
             track_name="Stayin Alive", artist="Bee Gees", playcount=2)
@@ -56,7 +56,7 @@ class TopTracksFetcherTest(unittest.TestCase):
         self.assertCountEqual(
             fetched_tracks, [expected_track_1, expected_track_2])
 
-    @patch('lastipy.lastfm.library.top_tracks.fetch')
+    @patch('lastipy.lastfm.library.top_tracks.fetch_paginated_response')
     def test_songs_with_one_playcount_ignored(self, mock_paginated_endpoint_fetch):
         json_response_page = {
             'toptracks': {

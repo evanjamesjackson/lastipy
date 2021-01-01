@@ -11,7 +11,7 @@ class RecentArtistsTest(unittest.TestCase):
     dummy_user = 'dummyUser'
     dummy_api_key = '123456789'
 
-    @patch('lastipy.lastfm.library.recent_artists.fetch')
+    @patch('lastipy.lastfm.library.recent_artists.fetch_paginated_response')
     def test_fetch(self, mock_paginated_endpoint_fetch):
         expected_artists = [
             ScrobbledArtist(artist_name='The Beatles', playcount=10),

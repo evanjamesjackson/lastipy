@@ -3,7 +3,7 @@ from unittest.mock import patch
 from unittest.mock import Mock
 from requests import HTTPError
 from lastipy.track import Track
-from lastipy.lastfm.library.paginated_endpoint import fetch
+from lastipy.lastfm.library.paginated_endpoint import fetch_paginated_response
 
 
 class RecentArtistsTest(unittest.TestCase):
@@ -40,7 +40,7 @@ class RecentArtistsTest(unittest.TestCase):
         mock_response.json.return_value = json_object_page
         mock_requests_get.side_effect = [mock_response]
 
-        fetched_objects = fetch(
+        fetched_objects = fetch_paginated_response(
             self.dummy_url, self.dummy_user, self.dummy_api_key, 'arrayKey')
 
         self.assertCountEqual(fetched_objects, [json_object_page])
@@ -108,7 +108,7 @@ class RecentArtistsTest(unittest.TestCase):
         mock_responses[2].json.return_value = json_object_page_3
         mock_requests_get.side_effect = mock_responses
 
-        fetched_objects = fetch(
+        fetched_objects = fetch_paginated_response(
             self.dummy_url, self.dummy_user, self.dummy_api_key, 'arrayKey')
 
         self.assertCountEqual(
@@ -162,7 +162,7 @@ class RecentArtistsTest(unittest.TestCase):
         mock_responses[2].json.return_value = json_object_page_2
         mock_requests_get.side_effect = mock_responses
 
-        fetched_objects = fetch(
+        fetched_objects = fetch_paginated_response(
             self.dummy_url, self.dummy_user, self.dummy_api_key, 'arrayKey')
 
         self.assertCountEqual(
@@ -186,7 +186,7 @@ class RecentArtistsTest(unittest.TestCase):
 
         mock_requests_get.side_effect = mock_responses
 
-        fetched_objects = fetch(
+        fetched_objects = fetch_paginated_response(
             self.dummy_url, self.dummy_user, self.dummy_api_key, 'arrayKey')
 
         self.assertCountEqual(
@@ -197,7 +197,7 @@ class RecentArtistsTest(unittest.TestCase):
         mock_requests_get.ok = True
         mock_requests_get.json.return_value = []
 
-        fetch(self.dummy_url, self.dummy_user, self.dummy_api_key, 'arrayKey', [
+        fetch_paginated_response(self.dummy_url, self.dummy_user, self.dummy_api_key, 'arrayKey', [
             {'key': 'key1', 'value': 'value1'}, {'key': 'key2', 'value': 'value2'}])
 
         expected_request = {
