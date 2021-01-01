@@ -1,15 +1,15 @@
 from lastipy.track import Track
 
-class ScrobbledTrack(Track):
-    #TODO rename to TopTrack
-    """Represents a track that a user has scrobbled, with an associated playcount"""
+
+class TopScrobbledTrack(Track):
+    """Represents a top track that a user has scrobbled, with an associated playcount"""
 
     def __init__(self, track_name, artist, playcount):
         super().__init__(track_name, artist)
         self.playcount = playcount
 
     def __eq__(self, other):
-        return isinstance(other, ScrobbledTrack) \
+        return isinstance(other, TopScrobbledTrack) \
             and self.track_name == other.track_name \
             and self.artist == other.artist \
             and self.playcount == other.playcount
