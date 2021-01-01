@@ -7,6 +7,8 @@ URL = 'http://ws.audioscrobbler.com/2.0/?method=track.getInfo'
 MAX_RETRIES = 10
 
 
+# TODO rename - track_info kinda vague
+# TODO test
 def fetch_playcount(track, user, api_key):
     retries = 0
     while retries <= MAX_RETRIES:
