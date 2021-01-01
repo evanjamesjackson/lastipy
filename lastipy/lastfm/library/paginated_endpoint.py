@@ -56,7 +56,6 @@ def _build_json_payload(user, api_key, page, extra_request_params=None):
         'page': page
     }
 
-    # TODO test this
     if extra_request_params is not None:
         for param in extra_request_params:
             payload[param['key']] = param['value']

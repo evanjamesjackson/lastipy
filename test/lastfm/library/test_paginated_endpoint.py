@@ -192,19 +192,23 @@ class RecentArtistsTest(unittest.TestCase):
         self.assertCountEqual(
             fetched_objects, [])
 
-    # def _build_track_json_response(self, name, artist_name, total_pages):
-    #     return {
-    #         'recenttracks': {
-    #             'track': [
-    #                 {
-    #                     'name': name,
-    #                     'artist': {
-    #                         'name': artist_name
-    #                     }
-    #                 }
-    #             ],
-    #             '@attr': {
-    #                 'totalPages': total_pages
-    #             }
-    #         }
-    #     }
+    @patch('requests.get')
+    def test_extra_request_params(self, mock_requests_get):
+        mock_requests_get.ok = True
+        mock_requests_get.json.return_value = []
+
+        fetch(self.dummy_url, self.dummy_user, self.dummy_api_key, 'arrayKey', [
+            {'key': 'key1', 'value': 'value1'}, {'key': 'key2', 'value': 'value2'}])
+
+        expected_request = {
+            'user': self.dummy_user,
+            'format': 'json',
+            'api_key': self.dummy_api_key,
+            'limit': 200,
+            'page': 1,
+            'key1': 'value1',
+            'key2': 'value2'
+        }
+
+        mock_requests_get.assert_called_with(
+            self.dummy_url, params=expected_request)
