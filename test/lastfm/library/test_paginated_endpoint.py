@@ -114,29 +114,59 @@ class RecentArtistsTest(unittest.TestCase):
         self.assertCountEqual(
             fetched_objects, [json_object_page_1, json_object_page_2, json_object_page_3])
 
-    # @patch('requests.get')
-    # def test_fetch_with_success_after_retries(self, mock_requests_get):
-    #     expected_tracks = [
-    #         Track(track_name='Stayin Alive', artist='Bee Gees'),
-    #         Track(track_name='Penny Lane', artist='The Beatles'),
-    #     ]
+    @patch('requests.get')
+    def test_fetch_with_success_after_retries(self, mock_requests_get):
+        json_object_page_1 = {
+            'arrayKey': {
+                'array': [
+                    {
+                        'key1': 'Value1',
+                        'key2': 'Value2'
+                    },
+                    {
+                        'key1': 'Value3',
+                        'key2': 'Value4'
+                    }
+                ],
+                '@attr': {
+                    'totalPages': '2'
+                }
+            }
+        }
 
-    #     mock_responses = [Mock(), Mock(), Mock()]
-    #     mock_responses[0].ok = True
-    #     mock_responses[0].json.return_value = self._build_track_json_response(
-    #         'Stayin Alive', 'Bee Gees', '2')
-    #     mock_responses[1].ok = False
-    #     mock_responses[1].raise_for_status.side_effect = HTTPError(
-    #         Mock(status=500), 'Error')
-    #     mock_responses[2].ok = True
-    #     mock_responses[2].json.return_value = self._build_track_json_response(
-    #         'Penny Lane', 'The Beatles', '2')
-    #     mock_requests_get.side_effect = mock_responses
+        json_object_page_2 = {
+            'arrayKey': {
+                'array': [
+                    {
+                        'key1': 'Value5',
+                        'key2': 'Value6'
+                    },
+                    {
+                        'key1': 'Value7',
+                        'key2': 'Value8'
+                    }
+                ],
+                '@attr': {
+                    'totalPages': '2'
+                }
+            }
+        }
 
-    #     fetched_tracks = recent_tracks.fetch_recent_tracks(
-    #         user=self.dummy_user, api_key=self.dummy_api_key)
+        mock_responses = [Mock(), Mock(), Mock()]
+        mock_responses[0].ok = True
+        mock_responses[0].json.return_value = json_object_page_1
+        mock_responses[1].ok = False
+        mock_responses[1].raise_for_status.side_effect = HTTPError(
+            Mock(status=500), 'Error')
+        mock_responses[2].ok = True
+        mock_responses[2].json.return_value = json_object_page_2
+        mock_requests_get.side_effect = mock_responses
 
-    #     self.assertCountEqual(fetched_tracks, expected_tracks)
+        fetched_objects = fetch(
+            self.dummy_url, self.dummy_user, self.dummy_api_key, 'arrayKey')
+
+        self.assertCountEqual(
+            fetched_objects, [json_object_page_1, json_object_page_2])
 
     # @patch('requests.get')
     # def test_fetch_fails_after_retries(self, mock_requests_get):
