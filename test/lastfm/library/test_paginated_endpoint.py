@@ -168,26 +168,29 @@ class RecentArtistsTest(unittest.TestCase):
         self.assertCountEqual(
             fetched_objects, [json_object_page_1, json_object_page_2])
 
-    # @patch('requests.get')
-    # def test_fetch_fails_after_retries(self, mock_requests_get):
-    #     mock_responses = []
-    #     for _ in range(10):
-    #         mock_response = Mock()
-    #         mock_response.ok = False
-    #         mock_response.raise_for_status.side_effect = HTTPError(
-    #             Mock(status=500), 'Error')
-    #         mock_responses.append(mock_response)
+    @patch('requests.get')
+    def test_fetch_fails_after_retries(self, mock_requests_get):
+        mock_responses = []
+        for _ in range(11):
+            mock_response = Mock()
+            mock_response.ok = False
+            mock_response.raise_for_status.side_effect = HTTPError(
+                Mock(status=500), 'Error')
+            mock_responses.append(mock_response)
 
-    #     # Add another mock response, but the code will exit after the retry limit is reached and this won't actually get fetched
-    #     mock_response = Mock()
-    #     mock_response.ok = False
-    #     mock_response.json.return_value = self._build_track_json_response(
-    #         'Penny Lane', 'The Beatles', '1')
+        # Add another mock response, but the code will exit after the retry limit is reached and this won't actually get fetched
+        mock_response = Mock()
+        mock_response.ok = True
+        mock_response.json.return_value = {'test'}
+        mock_responses.append(mock_response)
 
-    #     fetched_tracks = recent_tracks.fetch_recent_tracks(
-    #         user=self.dummy_user, api_key=self.dummy_api_key)
+        mock_requests_get.side_effect = mock_responses
 
-    #     self.assertEqual(fetched_tracks, [])
+        fetched_objects = fetch(
+            self.dummy_url, self.dummy_user, self.dummy_api_key, 'arrayKey')
+
+        self.assertCountEqual(
+            fetched_objects, [])
 
     # def _build_track_json_response(self, name, artist_name, total_pages):
     #     return {
