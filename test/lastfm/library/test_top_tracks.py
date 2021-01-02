@@ -1,7 +1,7 @@
 
 import unittest
 from lastipy.lastfm.library import period
-from lastipy.lastfm.library.scrobbled_track import TopScrobbledTrack
+from lastipy.lastfm.library.scrobbled_track import TopTrack
 from unittest.mock import patch, Mock
 from requests import HTTPError
 from lastipy.lastfm.library.top_tracks import fetch_top_tracks
@@ -14,9 +14,9 @@ class TopTracksFetcherTest(unittest.TestCase):
 
     @patch('lastipy.lastfm.library.top_tracks.fetch_paginated_response')
     def test_one_page_of_results(self, mock_paginated_endpoint_fetch):
-        expected_track_1 = TopScrobbledTrack(
+        expected_track_1 = TopTrack(
             track_name="Stayin Alive", artist="Bee Gees", playcount=2)
-        expected_track_2 = TopScrobbledTrack(
+        expected_track_2 = TopTrack(
             track_name="Badge", artist="Cream", playcount=7
         )
 

@@ -1,6 +1,6 @@
 import logging
 import requests
-from lastipy.lastfm.library.scrobbled_track import TopScrobbledTrack
+from lastipy.lastfm.library.scrobbled_track import TopTrack
 from requests import RequestException
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=track.getInfo'

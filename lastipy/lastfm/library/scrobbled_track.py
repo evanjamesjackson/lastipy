@@ -1,7 +1,7 @@
 from lastipy.track import Track
 
 
-class TopScrobbledTrack(Track):
+class TopTrack(Track):
     """Represents a top track that a user has scrobbled, with an associated playcount"""
 
     def __init__(self, track_name, artist, playcount):
@@ -9,7 +9,7 @@ class TopScrobbledTrack(Track):
         self.playcount = playcount
 
     def __eq__(self, other):
-        return isinstance(other, TopScrobbledTrack) \
+        return isinstance(other, TopTrack) \
             and self.track_name == other.track_name \
             and self.artist == other.artist \
             and self.playcount == other.playcount

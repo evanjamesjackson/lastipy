@@ -1,5 +1,5 @@
 import unittest
-from lastipy.lastfm.library.scrobbled_track import TopScrobbledTrack
+from lastipy.lastfm.library.scrobbled_track import TopTrack
 from lastipy.lastfm.recommendations.recommended_track import RecommendedTrack
 from unittest.mock import patch
 from lastipy.lastfm.recommendations.similar_tracks import fetch_similar_tracks
@@ -10,7 +10,7 @@ class SimilarTracksFetcherTest(unittest.TestCase):
     @patch('requests.get')
     def test_track_has_multiple_similar_tracks(self, mock_requests_get):
         playcount = 5
-        track_to_check = TopScrobbledTrack(
+        track_to_check = TopTrack(
             track_name="Night Fever", artist="Bee Gees", playcount=playcount)
         expected_similar_tracks = [
             RecommendedTrack(track_name="Stayin' Alive",
