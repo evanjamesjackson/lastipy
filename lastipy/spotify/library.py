@@ -9,7 +9,7 @@ MAX_ITEMS_PER_REQUEST = 50
 
 
 def get_saved_tracks(spotify):
-    """Returns the currently-logged-in users's saved tracks"""
+    """Returns the currently-logged-in users's saved tracks (aka "Liked Songs")"""
 
     logging.info("Fetching " + spotify.current_user()
                  ['id'] + "'s saved tracks")
