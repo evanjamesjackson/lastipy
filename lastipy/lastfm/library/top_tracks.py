@@ -1,7 +1,7 @@
 import logging
 from lastipy.lastfm.library import period
 from lastipy.lastfm.parse_lastfm_tracks import parse_track_name, parse_artist
-from lastipy.lastfm.library.scrobbled_track import TopTrack
+from lastipy.lastfm.library.top_track import TopTrack
 from lastipy.lastfm.library.paginated_endpoint import fetch_paginated_response
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=user.gettoptracks'

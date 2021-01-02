@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch
 
 from lastipy.lastfm.recommendations.recommendations import fetch_recommendations
-from lastipy.lastfm.library.scrobbled_track import TopTrack
+from lastipy.lastfm.library.top_track import TopTrack
 from lastipy.lastfm.recommendations.recommended_track import RecommendedTrack
 
 

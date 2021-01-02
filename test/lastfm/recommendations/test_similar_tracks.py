@@ -1,5 +1,5 @@
 import unittest
-from lastipy.lastfm.library.scrobbled_track import TopTrack
+from lastipy.lastfm.library.top_track import TopTrack
 from lastipy.lastfm.recommendations.recommended_track import RecommendedTrack
 from unittest.mock import patch
 from lastipy.lastfm.recommendations.similar_tracks import fetch_similar_tracks

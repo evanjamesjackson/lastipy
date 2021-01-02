@@ -1,7 +1,7 @@
 
 import unittest
 from lastipy.lastfm.library import period
-from lastipy.lastfm.library.scrobbled_track import TopTrack
+from lastipy.lastfm.library.top_track import TopTrack
 from unittest.mock import patch, Mock
 from requests import HTTPError
 from lastipy.lastfm.library.top_tracks import fetch_top_tracks
