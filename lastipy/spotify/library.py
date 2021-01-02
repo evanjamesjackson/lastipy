@@ -65,6 +65,5 @@ def remove_tracks_from_library(spotify, tracks):
     logging.info("Finished removing tracks")
 
 
-# TODO test
 def _chunk(lst, chunk_size):
     return [lst[i:i + chunk_size] for i in range(0, len(lst), chunk_size)]
