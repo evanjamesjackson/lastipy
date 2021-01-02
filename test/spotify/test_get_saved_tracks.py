@@ -6,11 +6,12 @@ from lastipy.spotify.library import get_saved_tracks
 
 class GetSavedTracksTest(unittest.TestCase):
 
-    def test_fetch_single_page(self):
-        mock_spotify = Spotify()
-        mock_spotify.current_user = MagicMock({'id': 'dummyUser'})
+    def setUp(self):
+        self.mock_spotify = Spotify()
+        self.mock_spotify.current_user = MagicMock({'id': 'dummyUser'})
 
-        mock_spotify.current_user_saved_tracks = MagicMock()
+    def test_fetch_single_page(self):
+        self.mock_spotify.current_user_saved_tracks = MagicMock()
         mock_saved_tracks_response = {
             'items': [{
                 'track': {
@@ -24,7 +25,7 @@ class GetSavedTracksTest(unittest.TestCase):
                 }
             }]
         }
-        mock_spotify.current_user_saved_tracks.side_effect = [
+        self.mock_spotify.current_user_saved_tracks.side_effect = [
             mock_saved_tracks_response, {'items': []}]
 
-        get_saved_tracks(mock_spotify)
+        get_saved_tracks(self.mock_spotify)
