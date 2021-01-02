@@ -8,26 +8,24 @@ MAX_RETRIES = 10
 
 
 # TODO rename - track_info kinda vague
-# TODO test
 def fetch_playcount(track, user, api_key):
     retries = 0
     while retries <= MAX_RETRIES:
         try:
             json_response = _send_request(_build_payload(track, user, api_key))
-            break
+            playcount = int(json_response['track']['userplaycount'])
+            logging.debug(user + " has played " + str(track) +
+                          " " + str(playcount) + " times")
+            return playcount
         except RequestException:
             if retries < MAX_RETRIES:
-                logging.warn(
+                logging.warning(
                     "Failed to fetch playcount for track " + str(track) + ". Retrying...")
                 retries += 1
             else:
-                raise Exception(
-                    "Failed to fetch playcount after " + retries + " retries. Giving up an moving on...")
-
-    playcount = int(json_response['track']['userplaycount'])
-    logging.debug(user + " has played " + str(track) +
-                  " " + str(playcount) + " times")
-    return playcount
+                logging.warning("Failed to fetch playcount after " +
+                                str(retries) + " retries. Returning a playcount of 0.")
+                return 0
 
 
 def _send_request(json_payload):

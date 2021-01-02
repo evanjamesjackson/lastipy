@@ -25,6 +25,7 @@ class FetchPlaycountTest(unittest.TestCase):
 
         fetched_playcount = fetch_playcount(track=self.dummy_track, user='dummyUser',
                                             api_key='dummyApiKey')
+
         self.assertEqual(fetched_playcount, 5)
 
     @patch('requests.get')
@@ -46,4 +47,22 @@ class FetchPlaycountTest(unittest.TestCase):
 
         fetched_playcount = fetch_playcount(
             track=self.dummy_track, user='dummyUser', api_key='dummyApiKey')
+
         self.assertEqual(fetched_playcount, 7)
+
+    @patch('requests.get')
+    def test_failure_after_retries(self, mock_requests_get):
+        mock_responses = []
+        for _ in range(11):
+            mock_response = Mock()
+            mock_response.ok = False
+            mock_response.raise_for_status.side_effect = HTTPError(
+                Mock(status=500), "Error")
+            mock_responses.append(mock_response)
+
+        mock_requests_get.side_effect = mock_responses
+
+        fetched_playcount = fetch_playcount(
+            track=self.dummy_track, user="dummyUser", api_key="dummyApiKey")
+
+        self.assertEqual(0, fetched_playcount)
