@@ -24,13 +24,10 @@ def fetch_playcount(track, user, api_key):
                 raise Exception(
                     "Failed to fetch playcount after " + retries + " retries. Giving up an moving on...")
 
-    if 'track' in json_response:
-        playcount = int(json_response['track']['userplaycount'])
-        logging.debug(user + " has played " + str(track) +
-                      " " + str(playcount) + " times")
-        return playcount
-    else:
-        raise Exception(json_response['error'])
+    playcount = int(json_response['track']['userplaycount'])
+    logging.debug(user + " has played " + str(track) +
+                  " " + str(playcount) + " times")
+    return playcount
 
 
 def _send_request(json_payload):
