@@ -65,5 +65,6 @@ def remove_tracks_from_library(spotify, tracks):
     logging.info("Finished removing tracks")
 
 
-def _chunk(lst, chunk_size):
-    return [lst[i:i + chunk_size] for i in range(0, len(lst), chunk_size)]
+def _chunk(list_to_be_chunked, chunk_size):
+    '''Splits the given list into evenly-sized "chunks" and returns a list of lists'''
+    return [list_to_be_chunked[i:i + chunk_size] for i in range(0, len(list_to_be_chunked), chunk_size)]
