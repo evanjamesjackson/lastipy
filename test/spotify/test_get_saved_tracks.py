@@ -36,3 +36,44 @@ class GetSavedTracksTest(unittest.TestCase):
         fetched_saved_tracks = get_saved_tracks(self.mock_spotify)
 
         self.assertCountEqual(fetched_saved_tracks, expected_saved_tracks)
+
+    def test_fetch_multiple_pages(self):
+        expected_saved_tracks = [SpotifyTrack(
+            track_name='Penny Lane', artist='The Beatles', spotify_id='123456789'),
+            SpotifyTrack(track_name='A Day in the Life',
+                         artist='The Beatles', spotify_id='987654321')
+        ]
+
+        self.mock_spotify.current_user_saved_tracks = MagicMock()
+        mock_saved_tracks_response_page_1 = {
+            'items': [{
+                'track': {
+                    'id': '123456789',
+                    'name': 'Penny Lane',
+                    'artists': [
+                        {
+                            'name': 'The Beatles'
+                        }
+                    ]
+                }
+            }]
+        }
+        mock_saved_tracks_response_page_2 = {
+            'items': [{
+                'track': {
+                    'id': '987654321',
+                    'name': 'A Day in the Life',
+                    'artists': [
+                        {
+                            'name': 'The Beatles'
+                        }
+                    ]
+                }
+            }]
+        }
+        self.mock_spotify.current_user_saved_tracks.side_effect = [
+            mock_saved_tracks_response_page_1, mock_saved_tracks_response_page_2, {'items': []}]
+
+        fetched_saved_tracks = get_saved_tracks(self.mock_spotify)
+
+        self.assertCountEqual(fetched_saved_tracks, expected_saved_tracks)

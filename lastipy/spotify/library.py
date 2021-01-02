@@ -5,8 +5,6 @@ import logging
 
 MAX_ITEMS_PER_REQUEST = 50
 
-# TODO test
-
 
 def get_saved_tracks(spotify):
     """Returns the currently-logged-in users's saved tracks (aka "Liked Songs")"""
