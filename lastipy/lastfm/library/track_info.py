@@ -1,6 +1,6 @@
 import logging
 import requests
-from lastipy.lastfm.library.scrobbled_track import TopTrack
+from lastipy.lastfm.library.top_track import TopTrack
 from requests import RequestException
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=track.getInfo'
@@ -16,14 +16,13 @@ def fetch_playcount(track, user, api_key):
             json_response = _send_request(_build_payload(track, user, api_key))
             break
         except RequestException:
-            # This endpoint throws error 500 sometimes, so retry it a few times if it does
             if retries < MAX_RETRIES:
                 logging.warn(
                     "Failed to fetch playcount for track " + track + ". Retrying...")
                 retries += 1
             else:
                 raise Exception(
-                    "Failed to fetch playcount after " + retries + " retries")
+                    "Failed to fetch playcount after " + retries + " retries. Giving up an moving on...")
 
     if 'track' in json_response:
         playcount = int(json_response['track']['userplaycount'])
