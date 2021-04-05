@@ -28,7 +28,6 @@ def get_saved_tracks(spotify):
     return saved_tracks
 
 
-# TODO test
 def add_tracks_to_library(spotify, tracks):
     logging.info("Adding " + str(len(tracks)) + " to " +
                  spotify.current_user()['id'] + "'s library")
