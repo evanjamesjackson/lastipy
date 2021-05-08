@@ -68,7 +68,7 @@ def _filter_out_recent_tracks(user, api_key, recommendations):
 def _fetch_recommendations(recommendation_services, lastfm_api_key, track, max_similar_tracks_per_top_track): 
     recommendations = []
     if 'Last.fm' in recommendation_services: 
-        fetch_similar_tracks(lastfm_api_key, top_track, max_similar_tracks_per_top_track)
+        recommendations.append(fetch_similar_tracks(lastfm_api_key, top_track, max_similar_tracks_per_top_track))
     if 'Spotify' in recommendation_services:
         logging.info("No behavior defined yet")
     return recommendations
