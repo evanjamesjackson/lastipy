@@ -1,4 +1,4 @@
-from lastipy.spotify.spotify_track import SpotifyTrack
+from lastipy.track import Track
 from lastipy.spotify.playlist_track import PlaylistTrack
 
 #TODO test
@@ -21,6 +21,6 @@ def _parse_track(json_track):
 
     # TODO kinda crappy
     if added_at is None:
-        return SpotifyTrack(track_name=name, artist=artist, spotify_id=track_id)
+        return Track(track_name=name, artist=artist, spotify_id=track_id)
     else:
         return PlaylistTrack(track_name=name, artist=artist, spotify_id=track_id, added_at=added_at)

@@ -29,7 +29,8 @@ def build_recommendations_playlist():
     spotify = Spotify(auth=token.get_token(args.spotify_user, args.spotify_client_id_key, args.spotify_client_secret_key))
 
     recommendations = generate_recommendations(user=args.lastfm_user,
-                                            api_key=args.lastfm_api_key,
+                                            lastfm_api_key=args.lastfm_api_key,
+                                            spotify=spotify,
                                             recommendation_services=args.recommendation_services,
                                             recommendation_period=args.recommendation_period,
                                             max_similar_tracks_per_top_track=args.max_recommendations_per_top_track,

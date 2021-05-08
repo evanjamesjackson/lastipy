@@ -58,7 +58,7 @@ class RecommendationsGeneratorTest(unittest.TestCase):
         mock_calculate_ratings.return_value = recommendations
 
         recommendations = generate_recommendations(
-            user="meeee", api_key='', blacklisted_artists=['The Beatles'])
+            user="meeee", lastfm_api_key='', blacklisted_artists=['The Beatles'])
 
         self.assertCountEqual(recommendations, [recommendation_1])
 
@@ -79,6 +79,6 @@ class RecommendationsGeneratorTest(unittest.TestCase):
         mock_calculate_ratings.return_value = recommendations
 
         recommendations = generate_recommendations(
-            user="", api_key='', blacklisted_artists=['ZAYN'])
+            user="", lastfm_api_key='', blacklisted_artists=['ZAYN'])
 
         self.assertEqual(0, len(recommendations))
