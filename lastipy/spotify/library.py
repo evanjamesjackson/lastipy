@@ -7,14 +7,16 @@ MAX_ITEMS_PER_REQUEST = 50
 
 
 def get_saved_tracks(spotify):
-    """Returns the currently-logged-in users's saved tracks"""
+    """Returns the currently-logged-in users's saved tracks (aka "Liked Songs")"""
 
-    logging.info("Fetching " + spotify.current_user()['id'] + "'s saved tracks")
+    logging.info("Fetching " + spotify.current_user()
+                 ['id'] + "'s saved tracks")
 
     saved_tracks = []
     keep_fetching = True
     while keep_fetching:
-        json_response = spotify.current_user_saved_tracks(offset=len(saved_tracks))
+        json_response = spotify.current_user_saved_tracks(
+            offset=len(saved_tracks))
         if json_response['items']:
             saved_tracks = saved_tracks + parse_tracks(json_response['items'])
         else:
@@ -27,30 +29,39 @@ def get_saved_tracks(spotify):
 
 
 def add_tracks_to_library(spotify, tracks):
-    logging.info("Adding " + str(len(tracks)) + " to " + spotify.current_user()['id'] + "'s library")
+    logging.info("Adding " + str(len(tracks)) + " to " +
+                 spotify.current_user()['id'] + "'s library")
     logging.debug("Adding tracks: " + str(tracks))
-    track_chunks = _chunk(tracks, MAX_ITEMS_PER_REQUEST) 
+    track_chunks = _chunk(tracks, MAX_ITEMS_PER_REQUEST)
     for chunk in track_chunks:
-        spotify.current_user_saved_tracks_add([track.spotify_id for track in chunk])
+        spotify.current_user_saved_tracks_add(
+            [track.spotify_id for track in chunk])
     logging.info("Finished adding tracks")
 
+
 def add_albums_to_library(spotify, albums):
-    logging.info("Adding " + str(len(albums)) + " to " + spotify.current_user()['id'] + "'s library")
+    logging.info("Adding " + str(len(albums)) + " to " +
+                 spotify.current_user()['id'] + "'s library")
     logging.debug("Adding albums: " + str(albums))
-    album_chunks = _chunk(albums, MAX_ITEMS_PER_REQUEST) 
+    album_chunks = _chunk(albums, MAX_ITEMS_PER_REQUEST)
     for chunk in album_chunks:
-        spotify.current_user_saved_albums_add([album.spotify_id for album in chunk])
+        spotify.current_user_saved_albums_add(
+            [album.spotify_id for album in chunk])
     logging.info("Finished adding albums")
 
 
+# TODO test
 def remove_tracks_from_library(spotify, tracks):
-    logging.info("Removing " + str(len(tracks)) + " from " + spotify.current_user()['id'] + "'s library")
+    logging.info("Removing " + str(len(tracks)) + " from " +
+                 spotify.current_user()['id'] + "'s library")
     logging.debug("Removing tracks: " + str(tracks))
     track_chunks = _chunk(tracks, MAX_ITEMS_PER_REQUEST)
     for chunk in track_chunks:
-        spotify.current_user_saved_tracks_delete([track.spotify_id for track in chunk])
+        spotify.current_user_saved_tracks_delete(
+            [track.spotify_id for track in chunk])
     logging.info("Finished removing tracks")
 
 
-def _chunk(lst, chunk_size):
-    return [lst[i:i + chunk_size] for i in range(0, len(lst), chunk_size)] 
+def _chunk(list_to_be_chunked, chunk_size):
+    '''Splits the given list into evenly-sized "chunks" and returns a list of lists'''
+    return [list_to_be_chunked[i:i + chunk_size] for i in range(0, len(list_to_be_chunked), chunk_size)]

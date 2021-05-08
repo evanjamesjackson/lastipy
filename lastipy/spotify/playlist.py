@@ -4,6 +4,7 @@ from lastipy.spotify.parse_spotify_tracks import parse_tracks
 MAX_ITEMS_PER_REQUEST = 100
 
 
+#TODO test
 def get_tracks_in_playlists(spotify):
     """Returns all tracks in the currently-logged-in user's playlists"""
 
@@ -21,6 +22,7 @@ def get_tracks_in_playlists(spotify):
     return tracks
 
 
+#TODO test
 def replace_tracks_in_playlist(spotify, playlist_name, tracks):
     """Replaces all tracks in the currently-logged-in user's given playlist 
         with the given tracks. If the playlist does not exist, creates it first."""
@@ -40,6 +42,7 @@ def replace_tracks_in_playlist(spotify, playlist_name, tracks):
     logging.info("Finished replacing tracks")
 
 
+#TODO test
 def get_tracks_in_playlist(spotify, playlist_name=None, playlist_id=None):
     """Returns all tracks in the given user's given playlist"""
 
@@ -68,6 +71,7 @@ def get_tracks_in_playlist(spotify, playlist_name=None, playlist_id=None):
     return tracks_in_playlist
 
 
+#TODO test
 def add_tracks_to_playlist(spotify, playlist_name, tracks):
     playlist_id = _get_playlist(spotify, playlist_name)
 
@@ -91,6 +95,7 @@ def add_tracks_to_playlist(spotify, playlist_name, tracks):
     logging.info("Finished adding tracks")
 
 
+#TODO test
 def remove_tracks_from_playlist(spotify, playlist_name, tracks):
     logging.info("Removing " + str(len(tracks)) + " tracks from " + spotify.current_user()['id'] + "'s playlist " + playlist_name)
     logging.debug("Removing tracks: " + str(tracks))
