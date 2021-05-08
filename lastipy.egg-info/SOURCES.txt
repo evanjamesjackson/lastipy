@@ -34,7 +34,6 @@ lastipy/spotify/playlist.py
 lastipy/spotify/playlist_track.py
 lastipy/spotify/recommendations.py
 lastipy/spotify/search.py
-lastipy/spotify/spotify_track.py
 lastipy/spotify/token.py
 lastipy/util/__init__.py
 lastipy/util/parse_api_keys.py
