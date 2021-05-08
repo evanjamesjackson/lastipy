@@ -1,6 +1,6 @@
 import logging
 import requests
-from lastipy.lastfm.recommendations.recommended_track import RecommendedTrack
+from lastipy.recommendations.recommended_track import RecommendedTrack
 from lastipy.lastfm.parse_lastfm_tracks import parse_track_name, parse_artist
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=track.getsimilar'

@@ -2,7 +2,7 @@ from lastipy.track import Track
 
 
 class RecommendedTrack(Track):
-    """Represents a track recommended from Last.fm"""
+    """Represents a recommended track, with a 'rating' value that can be used to determine it's 'strength'"""
 
     def __init__(self, track_name, artist, recommendation_rating=0):
         super().__init__(track_name, artist)

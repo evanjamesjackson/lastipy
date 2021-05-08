@@ -1,16 +1,17 @@
 import logging
 
 from lastipy.lastfm.library.top_tracks import fetch_top_tracks 
-from lastipy.lastfm.recommendations.similar_tracks import fetch_similar_tracks
+from lastipy.lastfm.similar_tracks import fetch_similar_tracks
 from lastipy.lastfm.library import period
 from lastipy.track import Track
 from lastipy.lastfm.library.recent_tracks import fetch_recent_tracks
-from lastipy.lastfm.recommendations.rating_calculator import calculate_ratings
+from lastipy.recommendations.rating_calculator import calculate_ratings
 
 
 def fetch_recommendations(
           user,
           api_key,
+          recommendation_services='Last.fm',
           recommendation_period=period.OVERALL,
           max_similar_tracks_per_top_track=100,
           blacklisted_artists=[],
