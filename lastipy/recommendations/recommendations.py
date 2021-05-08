@@ -8,7 +8,7 @@ from lastipy.lastfm.library.recent_tracks import fetch_recent_tracks
 from lastipy.recommendations.rating_calculator import calculate_ratings
 
 
-def fetch_recommendations(
+def generate_recommendations(
           user,
           api_key,
           recommendation_services='Last.fm',
@@ -27,7 +27,7 @@ def fetch_recommendations(
     recommendations = []
     for top_track in top_tracks:
         try:
-            recommendations_for_current_track = fetch_similar_tracks(api_key, top_track, max_similar_tracks_per_top_track)
+            recommendations_for_current_track = _fetch_recommendations(recommendation_services, api_key, top_track, max_similar_tracks_per_top_track) 
             if recommendations_for_current_track:
                 recommendations = recommendations + recommendations_for_current_track
                 top_tracks_to_recommendations[top_track] = recommendations_for_current_track
@@ -63,4 +63,12 @@ def _filter_out_recent_tracks(user, api_key, recommendations):
     recommendations = [recommendation for recommendation in recommendations
                         if not any(Track.are_equivalent(recommendation, recent_track)
                                     for recent_track in recent_tracks)]
+    return recommendations
+
+def _fetch_recommendations(recommendation_services, lastfm_api_key, track, max_similar_tracks_per_top_track): 
+    recommendations = []
+    if 'Last.fm' in recommendation_services: 
+        fetch_similar_tracks(lastfm_api_key, top_track, max_similar_tracks_per_top_track)
+    if 'Spotify' in recommendation_services:
+        logging.info("No behavior defined yet")
     return recommendations
