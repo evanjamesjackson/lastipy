@@ -1,6 +1,6 @@
-from lastipy.spotify.spotify_track import SpotifyTrack
+from lastipy.track import Track
 
-class PlaylistTrack(SpotifyTrack):
+class PlaylistTrack(Track):
     """Represents a Spotify track that exists in a playlist"""
 
     def __init__(self, track_name, artist, spotify_id, added_at):
@@ -10,7 +10,7 @@ class PlaylistTrack(SpotifyTrack):
         self.added_at = added_at
 
     def __eq__(self, other):
-        return isinstance(other, SpotifyTrack) \
+        return isinstance(other, Track) \
             and self.track_name == other.track_name \
             and self.artist == other.artist \
             and self.spotify_id == other.spotify_id \

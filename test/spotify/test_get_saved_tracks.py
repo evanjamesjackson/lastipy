@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import MagicMock
 from spotipy import Spotify
 from lastipy.spotify.library import get_saved_tracks
-from lastipy.spotify.spotify_track import SpotifyTrack
+from lastipy.track import Track
 
 
 class GetSavedTracksTest(unittest.TestCase):
@@ -12,7 +12,7 @@ class GetSavedTracksTest(unittest.TestCase):
         self.mock_spotify.current_user = MagicMock({'id': 'dummyUser'})
 
     def test_fetch_single_page(self):
-        expected_saved_tracks = [SpotifyTrack(
+        expected_saved_tracks = [Track(
             track_name='Penny Lane', artist='The Beatles', spotify_id='123456789')
         ]
 
@@ -38,9 +38,9 @@ class GetSavedTracksTest(unittest.TestCase):
         self.assertCountEqual(fetched_saved_tracks, expected_saved_tracks)
 
     def test_fetch_multiple_pages(self):
-        expected_saved_tracks = [SpotifyTrack(
+        expected_saved_tracks = [Track(
             track_name='Penny Lane', artist='The Beatles', spotify_id='123456789'),
-            SpotifyTrack(track_name='A Day in the Life',
+            Track(track_name='A Day in the Life',
                          artist='The Beatles', spotify_id='987654321')
         ]
 

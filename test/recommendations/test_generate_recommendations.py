@@ -1,17 +1,17 @@
 import unittest
 from unittest.mock import patch
 
-from lastipy.lastfm.recommendations.recommendations import fetch_recommendations
+from lastipy.recommendations.recommendations import generate_recommendations
 from lastipy.lastfm.library.top_track import TopTrack
-from lastipy.lastfm.recommendations.recommended_track import RecommendedTrack
+from lastipy.recommendations.recommended_track import RecommendedTrack
 
 
-class RecommendationsFetcherTest(unittest.TestCase):
+class RecommendationsGeneratorTest(unittest.TestCase):
 
-    @patch('lastipy.lastfm.recommendations.recommendations.fetch_recent_tracks')
-    @patch('lastipy.lastfm.recommendations.recommendations.fetch_top_tracks')
-    @patch('lastipy.lastfm.recommendations.recommendations.fetch_similar_tracks')
-    @patch('lastipy.lastfm.recommendations.recommendations.calculate_ratings')
+    @patch('lastipy.recommendations.recommendations.fetch_recent_tracks')
+    @patch('lastipy.recommendations.recommendations.fetch_top_tracks')
+    @patch('lastipy.recommendations.recommendations.fetch_similar_tracks')
+    @patch('lastipy.recommendations.recommendations.calculate_ratings')
     def test_recent_tracks_are_filtered(self, mock_calculate_ratings, mock_similar_tracks, mock_top_tracks, mock_recent_tracks):
         recent_track_1 = TopTrack(
             track_name="SWALBR", artist="Cream", playcount=1)
@@ -36,13 +36,13 @@ class RecommendationsFetcherTest(unittest.TestCase):
 
         mock_calculate_ratings.return_value = recommendations
 
-        self.assertCountEqual(fetch_recommendations(
-            'test', ''), [new_recommendation])
+        self.assertCountEqual(generate_recommendations(spotify=None,
+            user='test', lastfm_api_key=''), [new_recommendation])
 
-    @patch('lastipy.lastfm.recommendations.recommendations.fetch_recent_tracks')
-    @patch('lastipy.lastfm.recommendations.recommendations.fetch_top_tracks')
-    @patch('lastipy.lastfm.recommendations.recommendations.fetch_similar_tracks')
-    @patch('lastipy.lastfm.recommendations.recommendations.calculate_ratings')
+    @patch('lastipy.recommendations.recommendations.fetch_recent_tracks')
+    @patch('lastipy.recommendations.recommendations.fetch_top_tracks')
+    @patch('lastipy.recommendations.recommendations.fetch_similar_tracks')
+    @patch('lastipy.recommendations.recommendations.calculate_ratings')
     def test_blacklisted_artists_are_filtered(self, mock_calculate_ratings, mock_similar_tracks, mock_top_tracks, mock_recent_tracks):
         mock_recent_tracks.return_value = []
         mock_top_tracks.return_value = [TopTrack(
@@ -57,15 +57,15 @@ class RecommendationsFetcherTest(unittest.TestCase):
 
         mock_calculate_ratings.return_value = recommendations
 
-        recommendations = fetch_recommendations(
-            user="meeee", api_key='', blacklisted_artists=['The Beatles'])
+        recommendations = generate_recommendations(
+            user="meeee", lastfm_api_key='', spotify=None, blacklisted_artists=['The Beatles'])
 
         self.assertCountEqual(recommendations, [recommendation_1])
 
-    @patch('lastipy.lastfm.recommendations.recommendations.fetch_recent_tracks')
-    @patch('lastipy.lastfm.recommendations.recommendations.fetch_top_tracks')
-    @patch('lastipy.lastfm.recommendations.recommendations.fetch_similar_tracks')
-    @patch('lastipy.lastfm.recommendations.recommendations.calculate_ratings')
+    @patch('lastipy.recommendations.recommendations.fetch_recent_tracks')
+    @patch('lastipy.recommendations.recommendations.fetch_top_tracks')
+    @patch('lastipy.recommendations.recommendations.fetch_similar_tracks')
+    @patch('lastipy.recommendations.recommendations.calculate_ratings')
     def test_blacklisted_artists_filtering_should_ignore_case(self, mock_calculate_ratings, mock_similar_tracks, mock_top_tracks, mock_recent_tracks):
         mock_recent_tracks.return_value = []
         mock_top_tracks.return_value = [TopTrack(
@@ -78,7 +78,7 @@ class RecommendationsFetcherTest(unittest.TestCase):
 
         mock_calculate_ratings.return_value = recommendations
 
-        recommendations = fetch_recommendations(
-            user="", api_key='', blacklisted_artists=['ZAYN'])
+        recommendations = generate_recommendations(
+            user="", lastfm_api_key='', spotify=None, blacklisted_artists=['ZAYN'])
 
         self.assertEqual(0, len(recommendations))

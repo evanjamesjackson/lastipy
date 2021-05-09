@@ -5,8 +5,8 @@ import argparse
 import os
 from lastipy import definitions
 from lastipy.lastfm.library.top_tracks import fetch_top_tracks
-from lastipy.lastfm.recommendations.similar_tracks import fetch_similar_tracks
-from lastipy.lastfm.recommendations.recommendations import fetch_recommendations
+from lastipy.lastfm.similar_tracks import fetch_similar_tracks
+from lastipy.recommendations.recommendations import generate_recommendations
 from lastipy.lastfm.library.recent_tracks import fetch_recent_tracks
 from lastipy.lastfm.library.recent_artists import fetch_recent_artists
 from lastipy.lastfm.library import period
@@ -28,8 +28,10 @@ def build_recommendations_playlist():
     args = _extract_args()
     spotify = Spotify(auth=token.get_token(args.spotify_user, args.spotify_client_id_key, args.spotify_client_secret_key))
 
-    recommendations = fetch_recommendations(user=args.lastfm_user,
-                                            api_key=args.lastfm_api_key,
+    recommendations = generate_recommendations(user=args.lastfm_user,
+                                            lastfm_api_key=args.lastfm_api_key,
+                                            spotify=spotify,
+                                            recommendation_services=args.recommendation_services,
                                             recommendation_period=args.recommendation_period,
                                             max_similar_tracks_per_top_track=args.max_recommendations_per_top_track,
                                             blacklisted_artists=args.blacklisted_artists,
@@ -83,6 +85,7 @@ def _extract_user_configs(args):
     section = 'Config'
     args.lastfm_user = config_parser[section]['LastFMUser']
     args.spotify_user = config_parser[section]['SpotifyUser']
+    args.recommendation_services = config_parser[section]['RecommendationServices'].split(",")
     args.recommendation_period = config_parser[section]['RecommendationPeriod']
     args.max_recommendations_per_top_track = int(config_parser[section]['MaxRecommendationsPerTopTrack'])
     args.playlist_size = int(config_parser[section]['PlaylistSize'])

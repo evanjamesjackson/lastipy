@@ -1,6 +1,6 @@
 import logging
 import requests
-from lastipy.lastfm.recommendations.recommended_track import RecommendedTrack
+from lastipy.recommendations.recommended_track import RecommendedTrack
 from lastipy.lastfm.parse_lastfm_tracks import parse_track_name, parse_artist
 
 URL = 'http://ws.audioscrobbler.com/2.0/?method=track.getsimilar'
@@ -17,7 +17,7 @@ def fetch_similar_tracks(api_key, track, limit):
         json_tracks = json_response['similartracks']['track']
         # Initialize the track's recommendation rating to the "match" attribute from Last.fm, which is sort of an index of
         # how similar a track is to another
-        similar_tracks = [RecommendedTrack(parse_track_name(json_track), parse_artist(json_track), float(json_track['match']))
+        similar_tracks = [RecommendedTrack(track_name=parse_track_name(json_track), artist=parse_artist(json_track), recommendation_rating=float(json_track['match']))
                           for json_track in json_tracks]
         logging.info("Fetched " + str(len(similar_tracks)) + " similar tracks")
         logging.debug("Fetched tracks: " + str(similar_tracks))

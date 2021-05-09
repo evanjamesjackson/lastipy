@@ -1,6 +1,6 @@
+iso8601
 numpy
+pytest
+python-dateutil
 requests
 spotipy
-pytest
-iso8601
-python-dateutil

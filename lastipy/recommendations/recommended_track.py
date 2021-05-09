@@ -2,16 +2,17 @@ from lastipy.track import Track
 
 
 class RecommendedTrack(Track):
-    """Represents a track recommended from Last.fm"""
+    """Represents a recommended track, with a 'rating' value that can be used to determine it's 'strength'"""
 
-    def __init__(self, track_name, artist, recommendation_rating=0):
-        super().__init__(track_name, artist)
+    def __init__(self, track_name, artist, spotify_id='', recommendation_rating=0):
+        super().__init__(track_name, artist, spotify_id)
         self.recommendation_rating = recommendation_rating
 
     def __eq__(self, other):
         return isinstance(other, RecommendedTrack) \
             and self.track_name == other.track_name \
             and self.artist == other.artist \
+            and self.spotify_id == other.spotify_id \
             and self.recommendation_rating == other.recommendation_rating
 
     def __hash__(self):

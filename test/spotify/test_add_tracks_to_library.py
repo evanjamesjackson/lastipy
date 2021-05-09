@@ -1,7 +1,7 @@
 import unittest
 from lastipy.spotify.library import add_tracks_to_library
 from spotipy import Spotify
-from lastipy.spotify.spotify_track import SpotifyTrack
+from lastipy.track import Track
 
 
 class AddTracksToLibraryTest(unittest.TestCase):
@@ -42,4 +42,4 @@ class AddTracksToLibraryTest(unittest.TestCase):
                 expected_chunks[i])
 
     def _build_dummy_track(self, spotify_id):
-        return SpotifyTrack(spotify_id=spotify_id, track_name='dummy_track_name', artist='dummy_artist')
+        return Track(spotify_id=spotify_id, track_name='dummy_track_name', artist='dummy_artist')
