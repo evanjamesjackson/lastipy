@@ -2,10 +2,10 @@ import unittest
 from lastipy.lastfm.library.top_track import TopTrack
 from lastipy.recommendations.recommended_track import RecommendedTrack
 from unittest.mock import patch
-from lastipy.lastfm.similar_tracks import fetch_similar_tracks
+from lastipy.lastfm.lastfm_recommendations import fetch_recommendations
 
 
-class SimilarTracksFetcherTest(unittest.TestCase):
+class LastFmRecommendationsTest(unittest.TestCase):
 
     @patch('requests.get')
     def test_track_has_multiple_similar_tracks(self, mock_requests_get):
@@ -38,7 +38,7 @@ class SimilarTracksFetcherTest(unittest.TestCase):
 
         mock_requests_get.return_value.json.return_value = json_response
 
-        fetched_tracks = fetch_similar_tracks('', track_to_check, 2)
+        fetched_tracks = fetch_recommendations('', track_to_check, 2)
         self.assertCountEqual(expected_similar_tracks, fetched_tracks)
         for track in fetched_tracks:
             self.assertEqual(playcount, track.recommendation_rating)

@@ -10,9 +10,9 @@ class RecommendationsGeneratorTest(unittest.TestCase):
 
     @patch('lastipy.recommendations.recommendations.fetch_recent_tracks')
     @patch('lastipy.recommendations.recommendations.fetch_top_tracks')
-    @patch('lastipy.recommendations.recommendations.fetch_similar_tracks')
+    @patch('lastipy.recommendations.recommendations.lastfm_recommendations')
     @patch('lastipy.recommendations.recommendations.calculate_ratings')
-    def test_recent_tracks_are_filtered(self, mock_calculate_ratings, mock_similar_tracks, mock_top_tracks, mock_recent_tracks):
+    def test_recent_tracks_are_filtered(self, mock_calculate_ratings, mock_fetch_recommendations, mock_top_tracks, mock_recent_tracks):
         recent_track_1 = TopTrack(
             track_name="SWALBR", artist="Cream", playcount=1)
         recent_track_2 = TopTrack(
@@ -32,7 +32,7 @@ class RecommendationsGeneratorTest(unittest.TestCase):
             track_name="SWALBR", artist="Cream", recommendation_rating=8)
         recommendations = [
             new_recommendation, already_scrobbled_recommendation_1, already_scrobbled_recommendation_2]
-        mock_similar_tracks.return_value = recommendations
+        mock_fetch_recommendations.fetch_recommendations.return_value = recommendations
 
         mock_calculate_ratings.return_value = recommendations
 
@@ -41,9 +41,9 @@ class RecommendationsGeneratorTest(unittest.TestCase):
 
     @patch('lastipy.recommendations.recommendations.fetch_recent_tracks')
     @patch('lastipy.recommendations.recommendations.fetch_top_tracks')
-    @patch('lastipy.recommendations.recommendations.fetch_similar_tracks')
+    @patch('lastipy.recommendations.recommendations.lastfm_recommendations')
     @patch('lastipy.recommendations.recommendations.calculate_ratings')
-    def test_blacklisted_artists_are_filtered(self, mock_calculate_ratings, mock_similar_tracks, mock_top_tracks, mock_recent_tracks):
+    def test_blacklisted_artists_are_filtered(self, mock_calculate_ratings, mock_fetch_recommendations, mock_top_tracks, mock_recent_tracks):
         mock_recent_tracks.return_value = []
         mock_top_tracks.return_value = [TopTrack(
             track_name='Here Comes the Sun', artist='The Beatles', playcount=5)]
@@ -53,7 +53,7 @@ class RecommendationsGeneratorTest(unittest.TestCase):
         recommendation_2 = RecommendedTrack(
             track_name="Penny Lane", artist="The Beatles", recommendation_rating=1)
         recommendations = [recommendation_1, recommendation_2]
-        mock_similar_tracks.return_value = recommendations
+        mock_fetch_recommendations.fetch_recommendations.return_value = recommendations
 
         mock_calculate_ratings.return_value = recommendations
 
@@ -64,9 +64,9 @@ class RecommendationsGeneratorTest(unittest.TestCase):
 
     @patch('lastipy.recommendations.recommendations.fetch_recent_tracks')
     @patch('lastipy.recommendations.recommendations.fetch_top_tracks')
-    @patch('lastipy.recommendations.recommendations.fetch_similar_tracks')
+    @patch('lastipy.recommendations.recommendations.lastfm_recommendations')
     @patch('lastipy.recommendations.recommendations.calculate_ratings')
-    def test_blacklisted_artists_filtering_should_ignore_case(self, mock_calculate_ratings, mock_similar_tracks, mock_top_tracks, mock_recent_tracks):
+    def test_blacklisted_artists_filtering_should_ignore_case(self, mock_calculate_ratings, mock_fetch_recommendations, mock_top_tracks, mock_recent_tracks):
         mock_recent_tracks.return_value = []
         mock_top_tracks.return_value = [TopTrack(
             track_name='everything i wanted', artist='Billie Eilish', playcount=5)]
@@ -74,7 +74,7 @@ class RecommendationsGeneratorTest(unittest.TestCase):
         recommendation = RecommendedTrack(
             track_name="Bad Music", artist="Zayn", recommendation_rating=1)
         recommendations = [recommendation]
-        mock_similar_tracks.return_value = recommendations
+        mock_fetch_recommendations.fetch_recommendations.return_value = recommendations
 
         mock_calculate_ratings.return_value = recommendations
 
