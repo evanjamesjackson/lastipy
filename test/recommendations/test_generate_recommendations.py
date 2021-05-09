@@ -36,8 +36,8 @@ class RecommendationsGeneratorTest(unittest.TestCase):
 
         mock_calculate_ratings.return_value = recommendations
 
-        self.assertCountEqual(generate_recommendations(
-            'test', ''), [new_recommendation])
+        self.assertCountEqual(generate_recommendations(spotify=None,
+            user='test', lastfm_api_key=''), [new_recommendation])
 
     @patch('lastipy.recommendations.recommendations.fetch_recent_tracks')
     @patch('lastipy.recommendations.recommendations.fetch_top_tracks')
@@ -58,7 +58,7 @@ class RecommendationsGeneratorTest(unittest.TestCase):
         mock_calculate_ratings.return_value = recommendations
 
         recommendations = generate_recommendations(
-            user="meeee", lastfm_api_key='', blacklisted_artists=['The Beatles'])
+            user="meeee", lastfm_api_key='', spotify=None, blacklisted_artists=['The Beatles'])
 
         self.assertCountEqual(recommendations, [recommendation_1])
 
@@ -79,6 +79,6 @@ class RecommendationsGeneratorTest(unittest.TestCase):
         mock_calculate_ratings.return_value = recommendations
 
         recommendations = generate_recommendations(
-            user="", lastfm_api_key='', blacklisted_artists=['ZAYN'])
+            user="", lastfm_api_key='', spotify=None, blacklisted_artists=['ZAYN'])
 
         self.assertEqual(0, len(recommendations))
