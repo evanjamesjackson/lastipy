@@ -46,3 +46,4 @@ uitests/out/**
 !build/
 .config*
 daily_run.sh
+*.egg-info/
