@@ -5,10 +5,7 @@ import argparse
 import os
 from lastipy import definitions
 from lastipy.lastfm.library.top_tracks import fetch_top_tracks
-from lastipy.lastfm.similar_tracks import fetch_similar_tracks
 from lastipy.recommendations.recommendations import generate_recommendations
-from lastipy.lastfm.library.recent_tracks import fetch_recent_tracks
-from lastipy.lastfm.library.recent_artists import fetch_recent_artists
 from lastipy.lastfm.library import period
 from lastipy.track import Track
 from numpy.random import choice
@@ -33,32 +30,37 @@ def build_recommendations_playlist():
                                             spotify=spotify,
                                             recommendation_services=args.recommendation_services,
                                             recommendation_period=args.recommendation_period,
-                                            max_similar_tracks_per_top_track=args.max_recommendations_per_top_track,
+                                            max_recommendations_per_top_track=args.max_recommendations_per_top_track,
                                             blacklisted_artists=args.blacklisted_artists,
                                             prefer_unheard_artists=args.prefer_unheard_artists)
     
     library_saved_tracks = library.get_saved_tracks(spotify)
     library_playlist_tracks = playlist.get_tracks_in_playlists(spotify)
 
-    logging.info("Searching for recommendations in Spotify")
+    logging.info("Generating recommendations playlist...")
     tracks_for_playlist = []
     while len(tracks_for_playlist) < args.playlist_size and len(recommendations) > 0:
+        # Find and remove the recommendation from the list using a random choice, weighted based on the recommendation's rating value
         recommendation = choice(recommendations, p=_calculate_rating_weights(recommendations))
         recommendations.remove(recommendation)
 
-        search_results = search.search_for_tracks(spotify=spotify,
-                                                  query=recommendation.artist + " " + recommendation.track_name)
-        # Always use the first result, which we can assume is the closest match
-        first_result = search_results[0] if search_results else None
+        if recommendation.spotify_id is None:
+            # If we didn't get the recommendation directly from Spotify, we need to look it up there first
+            search_results = search.search_for_tracks(spotify=spotify,
+                                                    query=recommendation.artist + " " + recommendation.track_name)
+            # Always use the first result, which we can assume is the closest match
+            recommendation_in_spotify = search_results[0] if search_results else None
+        else:
+            recommendation_in_spotify = recommendation
 
-        if first_result is not None \
-           and Track.are_equivalent(first_result, recommendation) \
-           and not any(Track.are_equivalent(first_result, track) for track in tracks_for_playlist) \
-           and not any(Track.are_equivalent(first_result, playlist_track) for playlist_track in library_playlist_tracks) \
-           and not any(Track.are_equivalent(first_result, saved_track) for saved_track in library_saved_tracks) \
-           and not any(first_result.artist == item.artist for item in tracks_for_playlist):
-            logging.debug("Adding " + str(first_result))
-            tracks_for_playlist.append(first_result)
+        if recommendation_in_spotify is not None \
+           and Track.are_equivalent(recommendation_in_spotify, recommendation) \
+           and not any(Track.are_equivalent(recommendation_in_spotify, track) for track in tracks_for_playlist) \
+           and not any(Track.are_equivalent(recommendation_in_spotify, playlist_track) for playlist_track in library_playlist_tracks) \
+           and not any(Track.are_equivalent(recommendation_in_spotify, saved_track) for saved_track in library_saved_tracks) \
+           and not any(recommendation_in_spotify.artist == item.artist for item in tracks_for_playlist):
+            logging.debug("Adding " + str(recommendation_in_spotify))
+            tracks_for_playlist.append(recommendation_in_spotify)
 
     playlist.replace_tracks_in_playlist(spotify, args.playlist_name, tracks_for_playlist)
 

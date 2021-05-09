@@ -1,8 +1,8 @@
 import logging
 
 from lastipy.lastfm.library.top_tracks import fetch_top_tracks 
-from lastipy.lastfm.similar_tracks import fetch_similar_tracks
-from lastipy.spotify.recommendations import fetch_recommendations
+from lastipy.lastfm import lastfm_recommendations
+from lastipy.spotify import spotify_recommendations
 from lastipy.lastfm.library import period
 from lastipy.track import Track
 from lastipy.lastfm.library.recent_tracks import fetch_recent_tracks
@@ -15,7 +15,7 @@ def generate_recommendations(
           spotify,
           recommendation_services='Last.fm',
           recommendation_period=period.OVERALL,
-          max_similar_tracks_per_top_track=100,
+          max_recommendations_per_top_track=100,
           blacklisted_artists=[],
           prefer_unheard_artists=True):
     """Fetches recommendations for the given user by fetching their top tracks, then getting tracks similar
@@ -29,7 +29,7 @@ def generate_recommendations(
     recommendations = []
     for top_track in top_tracks:
         try:
-            recommendations_for_current_track = _fetch_recommendations(recommendation_services, lastfm_api_key, spotify, top_track, max_similar_tracks_per_top_track) 
+            recommendations_for_current_track = _fetch_recommendations(recommendation_services, lastfm_api_key, spotify, top_track, max_recommendations_per_top_track) 
             if recommendations_for_current_track:
                 recommendations = recommendations + recommendations_for_current_track
                 top_tracks_to_recommendations[top_track] = recommendations_for_current_track
@@ -48,7 +48,7 @@ def generate_recommendations(
 
     recommendations = _filter_out_blacklisted_artists(blacklisted_artists, recommendations)
 
-    logging.info("Fetched " + str(len(recommendations)) + " recommendations")
+    logging.info("Aftering filtering, fetched " + str(len(recommendations)) + " recommendations")
     logging.debug("Fetched tracks: " + str(recommendations))
     return recommendations
 
@@ -67,10 +67,10 @@ def _filter_out_recent_tracks(user, api_key, recommendations):
                                     for recent_track in recent_tracks)]
     return recommendations
 
-def _fetch_recommendations(recommendation_services, lastfm_api_key, spotify, track, max_recommendations_per_track): 
+def _fetch_recommendations(recommendation_services, lastfm_api_key, spotify, track, limit): 
     recommendations = []
     if 'Last.fm' in recommendation_services: 
-        recommendations += fetch_similar_tracks(lastfm_api_key, track, max_recommendations_per_track)
+        recommendations += lastfm_recommendations.fetch_recommendations(api_key=lastfm_api_key, limit=limit, track=track)
     if 'Spotify' in recommendation_services:
-        recommendations += fetch_recommendations(spotify=spotify, track=track, max_recommendations_per_track=max_recommendations_per_track)
+        recommendations += spotify_recommendations.fetch_recommendations(spotify=spotify, track=track, limit=limit)
     return recommendations

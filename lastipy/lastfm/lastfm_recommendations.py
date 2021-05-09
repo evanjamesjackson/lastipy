@@ -6,12 +6,12 @@ from lastipy.lastfm.parse_lastfm_tracks import parse_track_name, parse_artist
 URL = 'http://ws.audioscrobbler.com/2.0/?method=track.getsimilar'
 
 
-def fetch_similar_tracks(api_key, track, limit):
+def fetch_recommendations(api_key, track, limit):
     """Fetches tracks similar to the given track.
     :param limit: the maximum number of items to fetch"""
 
     logging.info("Fetching up to " + str(limit) +
-                 " tracks similar to " + str(track))
+                 " recommendations based on " + str(track) + " in Last.fm")
     json_response = _send_request(_build_json_payload(api_key, track, limit))
     if 'similartracks' in json_response:
         json_tracks = json_response['similartracks']['track']
