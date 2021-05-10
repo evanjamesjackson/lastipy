@@ -36,7 +36,7 @@ def _adjust_ratings_based_on_recent_artists(top_tracks_to_recommendations, user,
         for recommendation in recommendations:
             for artist in recent_artists:
                 if recommendation.artist.lower() == artist.artist_name.lower():
-                    # Reduce the rating by dividing by the artist's playcount, the thought being that the more listened-to an artist is,
+                    # Reduce the rating by dividing by the artist's playcount; the thought being that the more listened-to an artist is,
                     # the less chance there should be of one of their tracks being recommended
                     recommendation.recommendation_rating /= artist.playcount
                     logging.debug("Calculated rating for " + str(recommendation) + ": " + str(recommendation.recommendation_rating))
