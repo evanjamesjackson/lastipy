@@ -17,13 +17,19 @@ To create a playlist of recommendations generated from the user's "top tracks" i
 ```
 recommendations_playlist user-configuration-file api-keys-file 
 ```
-See scripts/example.recommendations.config for an example user configuration file and scripts/example.keys for an example API keys file.<br/>
+See <b>scripts/example.recommendations.config</b> for an example user configuration file and <b>scripts/example.keys</b> for an example API keys file.<br/>
 <h3>Save new releases from followed artists to library</h3>
 To save new tracks released by the user's followed artists (as of the current date) to their library ("Liked Songs"), run: 
 
 ```
-save_new_tracks spotify_user api_keys_file --ignore-remixes
+save_new_tracks user-configuration-file api-keys-file
 ```
-<b>Note</b> that the --ignore-remixes flag is optional.
-<br />
-See scripts/example.keys for an an example API keys file.
+See <b>scripts/example.new.releases.config</b> for an example user configuration file and <b>scripts/example.keys</b> for an an example API keys file.
+
+<h3>Organize library into playlists</h3>
+To organize a user's library into playlists based on play counts, run:
+
+```
+organize_favorites user-configuration-file api-keys-file
+```
+See <b>scripts/example.organize.favorites.config</b> for an example user configuration file and <b>scripts/example.keys</b> for an an example API keys file.
