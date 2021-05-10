@@ -53,7 +53,7 @@ pipeline {
                 sh '''
                     source venv/bin/activate
                     pip install bump2version==1.0.0
-                    bump2version patch
+                    bump2version minor
                     deactivate
                     '''
                 echo 'Pushing version number change to SCM...'
