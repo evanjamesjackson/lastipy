@@ -17,7 +17,7 @@ def fetch_recommendations(api_key, track, limit):
         json_tracks = json_response['similartracks']['track']
         similar_tracks = [RecommendedTrack(track_name=parse_track_name(json_track), artist=parse_artist(json_track))
                           for json_track in json_tracks]
-        logging.info("Fetched " + str(len(similar_tracks)) + " similar tracks")
+        logging.info("Fetched " + str(len(similar_tracks)) + " track recommendations")
         logging.debug("Fetched tracks: " + str(similar_tracks))
         return similar_tracks
     elif 'errors' in json_response:
