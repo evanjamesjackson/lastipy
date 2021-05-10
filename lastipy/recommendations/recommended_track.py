@@ -4,7 +4,7 @@ from lastipy.track import Track
 class RecommendedTrack(Track):
     """Represents a recommended track, with a 'rating' value that can be used to determine it's 'strength'"""
 
-    def __init__(self, track_name, artist, spotify_id='', recommendation_rating=0):
+    def __init__(self, track_name, artist, spotify_id='', recommendation_rating=1):
         super().__init__(track_name, artist, spotify_id)
         self.recommendation_rating = recommendation_rating
 

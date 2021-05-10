@@ -2,9 +2,6 @@ import copy
 import logging
 from lastipy.lastfm.library.recent_artists import fetch_recent_artists
 
-# Basically represents how strongly to reduce ratings for tracks by listened-to artists
-# TODO make this user configurable? 
-ARTIST_REDUCTION_STRENGTH = 5
 
 def calculate_ratings(user, api_key, top_tracks_to_recommendations, prefer_unheard_artists=True):
     """Returns a copy of the list of recommendations in the given map, with ratings set based on recommendation
@@ -39,10 +36,9 @@ def _adjust_ratings_based_on_recent_artists(top_tracks_to_recommendations, user,
         for recommendation in recommendations:
             for artist in recent_artists:
                 if recommendation.artist.lower() == artist.artist_name.lower():
-                    # Adjusting the rating by the reciprocal of the artist's playcount (plus one)
-                    # multiplied by the artist reduction strength factor. The "plus one" is
-                    # to account for artist's with a playcount of just 1 - those should reduce the rating too.
-                    recommendation.recommendation_rating *= 1 / ((artist.playcount + 1) * ARTIST_REDUCTION_STRENGTH)
+                    # Reduce the rating by dividing by the artist's playcount, the thought being that the more listened-to an artist is,
+                    # the less chance there should be of one of their tracks being recommended
+                    recommendation.recommendation_rating /= artist.playcount
                     logging.debug("Calculated rating for " + str(recommendation) + ": " + str(recommendation.recommendation_rating))
 
 def _extract_tracks_from_map(top_tracks_to_recommendations):

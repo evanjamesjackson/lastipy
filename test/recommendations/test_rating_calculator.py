@@ -88,8 +88,8 @@ class RatingCalculatorTest(unittest.TestCase):
         }
         recommendations = calculate_ratings(
             'test', '', top_tracks_to_recommendations)
-        self.assertEqual(0.1, recommendations[0].recommendation_rating)
-        self.assertEqual(0.1, recommendations[1].recommendation_rating)
+        self.assertEqual(5 / (9), recommendations[0].recommendation_rating)
+        self.assertEqual(5 / (9), recommendations[1].recommendation_rating)
 
     @patch('lastipy.recommendations.rating_calculator.fetch_recent_artists')
     def test_multiple_recommendations_and_multiple_recent_artists(self, mock_recent_artists):
@@ -111,24 +111,9 @@ class RatingCalculatorTest(unittest.TestCase):
         }
         recommendations = calculate_ratings(
             'test', '', top_tracks_to_recommendations)
-        self.assertEqual(0.1, recommendations[0].recommendation_rating)
+        self.assertEqual(5 / 9, recommendations[0].recommendation_rating)
         self.assertEqual(10, recommendations[1].recommendation_rating)
-        self.assertEqual(0.1, recommendations[2].recommendation_rating)
-
-    @patch('lastipy.recommendations.rating_calculator.fetch_recent_artists')
-    def test_recommendations_where_artist_has_one_playcount_should_get_rating_halved(self, mock_recent_artists):
-        mock_recent_artists.return_value = [
-            ScrobbledArtist(artist_name='The Beatles', playcount=1)]
-        top_track = TopTrack(
-            artist='The Beatles', track_name='Penny Lane', playcount=10)
-        recommended_track_1 = RecommendedTrack(
-            artist='The Beatles', track_name='Strawberry Fields Forever', recommendation_rating=1)
-        top_tracks_to_recommendations = {
-            top_track: [recommended_track_1]
-        }
-        recommendations = calculate_ratings(
-            'test', '', top_tracks_to_recommendations)
-        self.assertEqual(1, recommendations[0].recommendation_rating)
+        self.assertEqual(10 / 19, recommendations[2].recommendation_rating)
 
     @patch('lastipy.recommendations.rating_calculator.fetch_recent_artists')
     def test_reducing_based_on_recent_artists_ignores_case(self, mock_recent_artists):
@@ -143,4 +128,4 @@ class RatingCalculatorTest(unittest.TestCase):
         }
         recommendations = calculate_ratings(
             'test', '', top_tracks_to_recommendations)
-        self.assertEqual(0.1, recommendations[0].recommendation_rating)
+        self.assertEqual(2 / 3, recommendations[0].recommendation_rating)

@@ -14,9 +14,9 @@ class LastFmRecommendationsTest(unittest.TestCase):
             track_name="Night Fever", artist="Bee Gees", playcount=playcount)
         expected_similar_tracks = [
             RecommendedTrack(track_name="Stayin' Alive",
-                             artist="Bee Gees", recommendation_rating=playcount),
+                             artist="Bee Gees", recommendation_rating=1),
             RecommendedTrack(track_name="You Should Be Dancing",
-                             artist="Bee Gees", recommendation_rating=playcount)
+                             artist="Bee Gees", recommendation_rating=1)
         ]
 
         json_tracks = []
@@ -40,5 +40,3 @@ class LastFmRecommendationsTest(unittest.TestCase):
 
         fetched_tracks = fetch_recommendations('', track_to_check, 2)
         self.assertCountEqual(expected_similar_tracks, fetched_tracks)
-        for track in fetched_tracks:
-            self.assertEqual(playcount, track.recommendation_rating)

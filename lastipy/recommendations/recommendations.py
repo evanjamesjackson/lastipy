@@ -34,7 +34,7 @@ def generate_recommendations(
                 recommendations = recommendations + recommendations_for_current_track
                 top_tracks_to_recommendations[top_track] = recommendations_for_current_track
         except Exception as e:
-            logging.error(f"Error occurred fetching similar tracks: " + str(e))
+            logging.error(f"An error occurred fetching recommendations for track " + str(top_track) + ": " + str(e))
 
     recommendations = calculate_ratings(user=user,
                                 api_key=lastfm_api_key,
