@@ -11,7 +11,7 @@ pip install .
 ```
 <h2>Usage</h2>
 The first time any of the scripts are run, the Spotify user will need to give authorization to the application in order to be able to read/modify their playlists/library. Once prompted, open the given URL in a browser, log into Spotify, then copy the URL to which you are redirected and paste it into the console. This will only need to be done the first time, since spotipy will cache the authorization.  
-<h3>Creating a recommendations playlist</h3>
+<h3>Create a recommendations playlist</h3>
 To create a playlist of recommendations generated from the user's "top tracks" in Last.fm, run:
 
 ```
