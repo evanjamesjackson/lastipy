@@ -43,20 +43,19 @@ def generate_recommendations(
 
     logging.debug(f"Before filtering, fetched " + str(len(recommendations))
                     + " recommendations: " + str(recommendations))
-
     recommendations = _filter_out_recent_tracks(user, lastfm_api_key, recommendations)
-
     recommendations = _filter_out_blacklisted_artists(blacklisted_artists, recommendations)
-
     logging.info("After filtering, fetched " + str(len(recommendations)) + " recommendations")
+
     logging.debug("Fetched tracks: " + str(recommendations))
     return recommendations
 
-def _filter_out_blacklisted_artists(blacklisted_artists, recommendations):
-    logging.info("Filtering out blacklisted artists (" + str(blacklisted_artists) + ")")
-    recommendations = [recommendation for recommendation in recommendations
-                        if not any(recommendation.artist.lower() == blacklisted_artist.lower()
-                                    for blacklisted_artist in blacklisted_artists)]
+def _fetch_recommendations(recommendation_services, lastfm_api_key, spotify, track, limit): 
+    recommendations = []
+    if 'Last.fm' in recommendation_services: 
+        recommendations += lastfm_recommendations.fetch_recommendations(api_key=lastfm_api_key, limit=limit, track=track)
+    if 'Spotify' in recommendation_services:
+        recommendations += spotify_recommendations.fetch_recommendations(spotify=spotify, track=track, limit=limit)
     return recommendations
 
 def _filter_out_recent_tracks(user, api_key, recommendations):
@@ -67,10 +66,9 @@ def _filter_out_recent_tracks(user, api_key, recommendations):
                                     for recent_track in recent_tracks)]
     return recommendations
 
-def _fetch_recommendations(recommendation_services, lastfm_api_key, spotify, track, limit): 
-    recommendations = []
-    if 'Last.fm' in recommendation_services: 
-        recommendations += lastfm_recommendations.fetch_recommendations(api_key=lastfm_api_key, limit=limit, track=track)
-    if 'Spotify' in recommendation_services:
-        recommendations += spotify_recommendations.fetch_recommendations(spotify=spotify, track=track, limit=limit)
+def _filter_out_blacklisted_artists(blacklisted_artists, recommendations):
+    logging.info("Filtering out blacklisted artists (" + str(blacklisted_artists) + ")")
+    recommendations = [recommendation for recommendation in recommendations
+                        if not any(recommendation.artist.lower() == blacklisted_artist.lower()
+                                    for blacklisted_artist in blacklisted_artists)]
     return recommendations
