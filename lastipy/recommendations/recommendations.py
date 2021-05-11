@@ -48,7 +48,7 @@ def generate_recommendations(
 
     recommendations = _filter_out_blacklisted_artists(blacklisted_artists, recommendations)
 
-    logging.info("Aftering filtering, fetched " + str(len(recommendations)) + " recommendations")
+    logging.info("After filtering, fetched " + str(len(recommendations)) + " recommendations")
     logging.debug("Fetched tracks: " + str(recommendations))
     return recommendations
 
