@@ -61,6 +61,7 @@ def _fetch_recommendations(recommendation_services, lastfm_api_key, spotify, tra
 def _filter_out_recent_tracks(user, api_key, recommendations):
     recent_tracks = fetch_recent_tracks(user, api_key)
     logging.info("Filtering out recent tracks from recommendations")
+    # TODO This is quite slow. Maybe look into using RxPy?
     recommendations = [recommendation for recommendation in recommendations
                         if not any(Track.are_equivalent(recommendation, recent_track)
                                     for recent_track in recent_tracks)]
