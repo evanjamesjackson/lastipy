@@ -26,7 +26,6 @@ def fetch_recent_artists(user, api_key):
 
     logging.info("Fetched " + str(len(artists)) + " artists")
     logging.debug("Fetched artists: " + str(artists))
-
     return artists
 
 def _build_artist(artist):
