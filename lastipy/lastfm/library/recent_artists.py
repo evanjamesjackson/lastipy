@@ -16,11 +16,19 @@ def fetch_recent_artists(user, api_key):
 
     artists = []
     for json_response in paginated_json_responses:
-        for artist in json_response['artists']['artist']:
-            artists.append(ScrobbledArtist(
-                artist_name=artist['name'], playcount=int(artist['playcount'])))
+        # Weirdly, the artist attribute is sometimes a list, and sometimes an object (if there is only one artist in the response)
+        if isinstance(json_response['artists']['artist'], list):
+            for json_artist in json_response['artists']['artist']:
+                artists.append(_build_artist(json_artist))
+        else:
+            json_artist = json_response['artists']['artist']
+            artists.append(_build_artist(json_artist))
 
     logging.info("Fetched " + str(len(artists)) + " artists")
     logging.debug("Fetched artists: " + str(artists))
 
     return artists
+
+def _build_artist(artist):
+    return ScrobbledArtist(
+        artist_name=artist['name'], playcount=int(artist['playcount']))
