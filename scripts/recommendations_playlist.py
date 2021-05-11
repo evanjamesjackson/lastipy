@@ -45,22 +45,19 @@ def build_recommendations_playlist():
         recommendations.remove(recommendation)
 
         if recommendation.spotify_id is None:
-            # If we didn't get the recommendation directly from Spotify, we need to look it up there first
+            # If we didn't get the recommendation directly from Spotify, we need get the ID from there before we can add to the playlist
             search_results = search.search_for_tracks(spotify=spotify,
                                                     query=recommendation.artist + " " + recommendation.track_name)
-            # Always use the first result, which we can assume is the closest match
-            recommendation_in_spotify = search_results[0] if search_results else None
-        else:
-            recommendation_in_spotify = recommendation
+            if search_results and Track.are_equivalent(recommendation, search_results[0]):
+                recommendation.spotify_id = search_results[0].spotify_id 
 
-        if recommendation_in_spotify is not None \
-           and Track.are_equivalent(recommendation_in_spotify, recommendation) \
-           and not any(Track.are_equivalent(recommendation_in_spotify, track) for track in tracks_for_playlist) \
-           and not any(Track.are_equivalent(recommendation_in_spotify, playlist_track) for playlist_track in library_playlist_tracks) \
-           and not any(Track.are_equivalent(recommendation_in_spotify, saved_track) for saved_track in library_saved_tracks) \
-           and not any(recommendation_in_spotify.artist == item.artist for item in tracks_for_playlist):
-            logging.debug("Adding " + str(recommendation_in_spotify))
-            tracks_for_playlist.append(recommendation_in_spotify)
+        if recommendation.spotify_id is not None \
+           and not any(Track.are_equivalent(recommendation, track) for track in tracks_for_playlist) \
+           and not any(Track.are_equivalent(recommendation, playlist_track) for playlist_track in library_playlist_tracks) \
+           and not any(Track.are_equivalent(recommendation, saved_track) for saved_track in library_saved_tracks) \
+           and not any(recommendation.artist == item.artist for item in tracks_for_playlist):
+            logging.info("Adding " + str(recommendation))
+            tracks_for_playlist.append(recommendation)
 
     playlist.replace_tracks_in_playlist(spotify, args.playlist_name, tracks_for_playlist)
 
