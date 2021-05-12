@@ -5,8 +5,6 @@ import argparse
 import os
 from lastipy import definitions
 from lastipy.lastfm.library.top_tracks import fetch_top_tracks
-from lastipy.lastfm.recommendations.similar_tracks import fetch_similar_tracks
-from lastipy.lastfm.recommendations.recommendations import generate_recommendations
 from lastipy.lastfm.library.recent_tracks import fetch_recent_tracks
 from lastipy.lastfm.library.recent_artists import fetch_recent_artists
 from lastipy.lastfm.library import period
