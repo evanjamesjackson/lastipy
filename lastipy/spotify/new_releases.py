@@ -97,28 +97,16 @@ def _filter_new_albums(all_albums, as_of_date):
 
 
 def _fetch_artist_albums(spotify, album_types, artist_id):
-    # TODO definitely need to extract something here...
     albums = []
-    if album.ALBUM_ALBUM_TYPE in album_types:
+    for album_type in album_types:
         curr_response = spotify.artist_albums(
-            artist_id, album_type='album', limit=50)
-        albums = _convert_albums(curr_response, 'album')
+            artist_id, album_type=album_type, limit=50)
+        albums = _convert_albums(curr_response, album_type)
         while len(curr_response['items']) > 0:
             curr_response = spotify.artist_albums(
-                artist_id, album_type='album', limit=50, offset=len(albums))
-            albums += _convert_albums(curr_response, 'album')
-
-    singles = []
-    if album.SINGLE_ALBUM_TYPE in album_types:
-        curr_response = spotify.artist_albums(
-            artist_id, album_type='single', limit=50)
-        singles = _convert_albums(curr_response, 'single')
-        while len(curr_response['items']) > 0:
-            curr_response = spotify.artist_albums(
-                artist_id, album_type='single', limit=50, offset=len(singles))
-            singles += _convert_albums(curr_response, 'single')
-
-    return albums + singles
+                artist_id, album_type=album_type, limit=50, offset=len(albums))
+            albums += _convert_albums(curr_response, album_type)
+    return albums
 
 
 def _convert_albums(json_album_response, album_type):
