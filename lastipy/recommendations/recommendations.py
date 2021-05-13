@@ -9,6 +9,7 @@ from lastipy.recommendations.rating_calculator import calculate_ratings
 from lastipy.spotify import library, search, playlist
 from lastipy.lastfm.library import period
 from numpy.random import choice
+from lastipy.util.filter import filter_out_duplicates, filter_out_tracks_in_second_list
 
 
 def generate_recommendations(
@@ -76,7 +77,7 @@ def generate_recommendations(
     )
     recommendations = _filter_out_saved_tracks(recommendations, spotify)
     recommendations = _filter_out_playlist_tracks(recommendations, spotify)
-    recommendations = _filter_out_duplicates(recommendations)
+    recommendations = filter_out_duplicates(recommendations)
     logging.info(
         "After filtering, fetched " + str(len(recommendations)) + " recommendations"
     )
@@ -101,18 +102,9 @@ def _fetch_recommendations(
 
 
 def _filter_out_recent_tracks(user, api_key, recommendations):
-    recent_tracks = fetch_recent_tracks(user, api_key)
     logging.info("Filtering out recent tracks from recommendations")
-    # TODO This is quite slow. Maybe look into using RxPy?
-    recommendations = [
-        recommendation
-        for recommendation in recommendations
-        if not any(
-            Track.are_equivalent(recommendation, recent_track)
-            for recent_track in recent_tracks
-        )
-    ]
-    return recommendations
+    recent_tracks = fetch_recent_tracks(user, api_key)
+    return filter_out_tracks_in_second_list(recommendations, recent_tracks)
 
 
 def _filter_out_blacklisted_artists(blacklisted_artists, recommendations):
@@ -136,47 +128,11 @@ def _filter_out_blacklisted_artists(blacklisted_artists, recommendations):
 def _filter_out_saved_tracks(recommendations, spotify):
     logging.info("Filtering out saved tracks from recommendations")
     saved_tracks = library.get_saved_tracks(spotify)
-    recommendations = [
-        recommendation
-        for recommendation in recommendations
-        if not any(
-            Track.are_equivalent(recommendation, saved_track)
-            for saved_track in saved_tracks
-        )
-    ]
-    return recommendations
+    return filter_out_tracks_in_second_list(recommendations, saved_tracks)
 
 
 # TODO test
 def _filter_out_playlist_tracks(recommendations, spotify):
-    logging.info("Filtering out tracks in the user's playlists")
+    logging.info("Filtering out tracks in the user's playlists from recommendations")
     playlist_tracks = playlist.get_tracks_in_playlists(spotify)
-    recommendations = [
-        recommendation
-        for recommendation in recommendations
-        if not any(
-            Track.are_equivalent(recommendation, playlist_track)
-            for playlist_track in playlist_tracks
-        )
-    ]
-    return recommendations
-
-
-# TODO test
-def _filter_out_duplicates(recommendations):
-    logging.info("Filtering out duplicates")
-    logging.debug(str(len(recommendations)) + " tracks before removing duplicates")
-    tracks_without_duplicates = []
-    # We remove duplicates with a list comprehension rather than the traditional hack of using a set, since that
-    # requires the object to be hashable; plus we only want to compare the track name/artist of each track, not
-    # any of the other fields (eg: Spotify ID) which might in fact differ
-    [
-        tracks_without_duplicates.append(track_x)
-        for track_x in recommendations
-        if not any(
-            Track.are_equivalent(track_x, track_y)
-            for track_y in tracks_without_duplicates
-        )
-    ]
-    logging.debug(str(len(recommendations)) + " tracks after removing duplicates")
-    return tracks_without_duplicates
+    return filter_out_tracks_in_second_list(recommendations, playlist_tracks)
