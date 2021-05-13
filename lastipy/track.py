@@ -6,6 +6,7 @@ class Track:
         self.artist = artist
         self.spotify_id = spotify_id
 
+    # TODO test
     @staticmethod
     def are_equivalent(track_1, track_2):
         """Returns true if the given tracks are equivalent (ie: same track name and artist)"""

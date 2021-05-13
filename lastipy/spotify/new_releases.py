@@ -56,8 +56,6 @@ def fetch_new_tracks(
 
 
 # TODO test
-
-
 def fetch_new_albums(
     spotify,
     album_types=[album.SINGLE_ALBUM_TYPE, album.ALBUM_ALBUM_TYPE],

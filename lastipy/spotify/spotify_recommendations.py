@@ -2,6 +2,7 @@ import logging
 from lastipy.spotify.search import search_for_tracks
 from lastipy.recommendations.recommended_track import RecommendedTrack
 
+# TODO test
 def fetch_recommendations(spotify, track, limit):
     logging.info("Fetching up to " + str(limit) + " recommendations based on " + str(track) + " in Spotify")
     track_in_spotify = search_for_tracks(spotify=spotify, query=track.artist + " " + track.track_name)[0]
