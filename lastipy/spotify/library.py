@@ -7,7 +7,7 @@ MAX_ITEMS_PER_REQUEST = 50
 
 
 def get_saved_tracks(spotify):
-    """Returns the currently-logged-in users's saved tracks (aka "Liked Songs")"""
+    """Returns the current logged-in users's saved tracks (Liked Songs)"""
 
     logging.info("Fetching " + spotify.current_user()
                  ['id'] + "'s saved tracks")
@@ -29,6 +29,8 @@ def get_saved_tracks(spotify):
 
 
 def add_tracks_to_library(spotify, tracks):
+    """Adds the given tracks to the current logged-in user's saved tracks (Liked Songs)"""
+
     logging.info("Adding " + str(len(tracks)) + " to " +
                  spotify.current_user()['id'] + "'s library")
     logging.debug("Adding tracks: " + str(tracks))
@@ -40,6 +42,8 @@ def add_tracks_to_library(spotify, tracks):
 
 
 def add_albums_to_library(spotify, albums):
+    """Adds the given albums to the current logged-in user's library"""
+
     logging.info("Adding " + str(len(albums)) + " to " +
                  spotify.current_user()['id'] + "'s library")
     logging.debug("Adding albums: " + str(albums))
@@ -52,6 +56,8 @@ def add_albums_to_library(spotify, albums):
 
 # TODO test
 def remove_tracks_from_library(spotify, tracks):
+    """Removes the given tracks from the current logged-in user's saved tracks (Liked Songs)"""
+
     logging.info("Removing " + str(len(tracks)) + " from " +
                  spotify.current_user()['id'] + "'s library")
     logging.debug("Removing tracks: " + str(tracks))
@@ -63,5 +69,5 @@ def remove_tracks_from_library(spotify, tracks):
 
 
 def _chunk(list_to_be_chunked, chunk_size):
-    '''Splits the given list into evenly-sized "chunks" and returns a list of lists'''
+    '''Splits the given list into evenly-sized "chunks", each of size chunk_size'''
     return [list_to_be_chunked[i:i + chunk_size] for i in range(0, len(list_to_be_chunked), chunk_size)]
