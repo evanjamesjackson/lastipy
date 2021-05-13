@@ -20,11 +20,11 @@ def calculate_ratings(user, api_key, top_tracks_to_recommendations, prefer_unhea
     logging.info("Finished adjusting ratings")
     return _extract_tracks_from_map(top_tracks_to_recommendations_copy)
 
-def _adjust_ratings_based_on_playcounts(top_tracks_to_recommendations_copy):
-    """Adjust rating based on associated top track's playcount; the thought is that more frequently listened-to
-    tracks should get a greater representation"""
-    for top_track in top_tracks_to_recommendations_copy:
-        recommendations = top_tracks_to_recommendations_copy[top_track]
+def _adjust_ratings_based_on_playcounts(top_tracks_to_recommendations):
+    """Adjust rating based on associated top track's playcount; the thought being that recommendations based on more listened-to
+    tracks should have a higher chance of being recommended"""
+    for top_track in top_tracks_to_recommendations:
+        recommendations = top_tracks_to_recommendations[top_track]
         for recommendation in recommendations:
             recommendation.recommendation_rating *= top_track.playcount
 
@@ -36,7 +36,7 @@ def _adjust_ratings_based_on_recent_artists(top_tracks_to_recommendations, user,
         for recommendation in recommendations:
             for artist in recent_artists:
                 if recommendation.artist.lower() == artist.artist_name.lower():
-                    # Reduce the rating by dividing by the artist's playcount; the thought being that the more listened-to an artist is,
+                    # Reduce the rating by dividing it by the artist's playcount; the thought being that the more listened-to an artist is,
                     # the less chance there should be of one of their tracks being recommended
                     recommendation.recommendation_rating /= artist.playcount
                     logging.debug("Calculated rating for " + str(recommendation) + ": " + str(recommendation.recommendation_rating))
