@@ -8,7 +8,7 @@ def parse_tracks(json_tracks):
 
 def _parse_track(json_track):
     if "added_at" in json_track:
-        _parse_playlist_track(json_track)
+        return _parse_playlist_track(json_track)
     else:
         name, artist, track_id = _parse_common_track_properties(json_track)
         return Track(track_name=name, artist=artist, spotify_id=track_id)
