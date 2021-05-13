@@ -132,6 +132,7 @@ def _filter_out_blacklisted_artists(blacklisted_artists, recommendations):
     return recommendations
 
 
+# TODO test
 def _filter_out_saved_tracks(recommendations, spotify):
     logging.info("Filtering out saved tracks from recommendations")
     saved_tracks = library.get_saved_tracks(spotify)
@@ -146,6 +147,7 @@ def _filter_out_saved_tracks(recommendations, spotify):
     return recommendations
 
 
+# TODO test
 def _filter_out_playlist_tracks(recommendations, spotify):
     logging.info("Filtering out tracks in the user's playlists")
     playlist_tracks = playlist.get_tracks_in_playlists(spotify)
@@ -160,6 +162,7 @@ def _filter_out_playlist_tracks(recommendations, spotify):
     return recommendations
 
 
+# TODO test
 def _filter_out_duplicates(recommendations):
     logging.info("Filtering out duplicates")
     logging.debug(str(len(recommendations)) + " tracks before removing duplicates")
