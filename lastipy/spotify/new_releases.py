@@ -124,19 +124,19 @@ def _fetch_artist_albums(spotify, album_types, artist_id):
         curr_response = spotify.artist_albums(
             artist_id, album_type=album_type, limit=50
         )
-        albums = _convert_albums(curr_response, album_type)
+        albums = _convert_albums(curr_response)
         while len(curr_response["items"]) > 0:
             curr_response = spotify.artist_albums(
                 artist_id, album_type=album_type, limit=50, offset=len(albums)
             )
-            albums += _convert_albums(curr_response, album_type)
+            albums += _convert_albums(curr_response)
     return albums
 
 
-def _convert_albums(json_album_response, album_type):
+def _convert_albums(json_album_response):
     return [
         album.SpotifyAlbum(
-            album_type=album_type,
+            album_type=item["album_type"],
             spotify_id=item["id"],
             release_date_precision=item["release_date_precision"],
             release_date=item["release_date"],
