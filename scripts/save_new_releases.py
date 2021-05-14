@@ -19,14 +19,19 @@ from lastipy.spotify import new_releases
 from datetime import datetime
 from lastipy.util.parse_api_keys import ApiKeysParser
 from lastipy.spotify import album
+from datetime import date, timedelta
 
 
 # TODO test
 def save_new_releases():
-    """Saves new releases (as of the current date) from the specified Spotify user's followed artists to their library"""
+    """Saves all new releases released yesterday by the specified Spotify user's followed artists to their library. We check
+    for yesterday so that all releases released throughout that day are picked up (trying to get today's releases has a chance of missing anything
+    released after this script is run)."""
 
     setup_logging("new_releases.log")
+
     args = _extract_args()
+
     spotify = Spotify(
         auth=token.get_token(
             args.spotify_user,
@@ -35,11 +40,14 @@ def save_new_releases():
         )
     )
 
+    yesterday = date.today() - timedelta(days=1)
+
     if args.save_albums_to_liked_songs:
         new_tracks = new_releases.fetch_new_tracks(
             spotify,
             ignore_remixes=args.ignore_remixes,
             album_types=[album.SINGLE_ALBUM_TYPE, album.ALBUM_ALBUM_TYPE],
+            as_of_date=yesterday,
         )
         _save_tracks(new_tracks, spotify)
     else:
@@ -47,11 +55,12 @@ def save_new_releases():
             spotify,
             ignore_remixes=args.ignore_remixes,
             album_types=[album.SINGLE_ALBUM_TYPE],
+            as_of_date=yesterday,
         )
         _save_tracks(new_tracks, spotify)
 
         new_albums = new_releases.fetch_new_albums(
-            spotify, album_types=[album.ALBUM_ALBUM_TYPE]
+            spotify, album_types=[album.ALBUM_ALBUM_TYPE], as_of_date=yesterday
         )
         if len(new_albums) > 0:
             library.add_albums_to_library(spotify, new_albums)
