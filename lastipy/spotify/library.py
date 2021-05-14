@@ -2,6 +2,7 @@ from lastipy.spotify.parse_spotify_tracks import parse_tracks
 from lastipy.spotify.playlist import get_tracks_in_playlist
 import spotipy
 import logging
+from lastipy.util.chunk import chunk_list
 
 MAX_ITEMS_PER_REQUEST = 50
 
@@ -37,7 +38,7 @@ def add_tracks_to_library(spotify, tracks):
         + "'s library"
     )
     logging.debug("Adding tracks: " + str(tracks))
-    track_chunks = _chunk(tracks, MAX_ITEMS_PER_REQUEST)
+    track_chunks = chunk_list(tracks, MAX_ITEMS_PER_REQUEST)
     for chunk in track_chunks:
         spotify.current_user_saved_tracks_add([track.spotify_id for track in chunk])
     logging.info("Finished adding tracks")
@@ -54,7 +55,7 @@ def add_albums_to_library(spotify, albums):
         + "'s library"
     )
     logging.debug("Adding albums: " + str(albums))
-    album_chunks = _chunk(albums, MAX_ITEMS_PER_REQUEST)
+    album_chunks = chunk_list(albums, MAX_ITEMS_PER_REQUEST)
     for chunk in album_chunks:
         spotify.current_user_saved_albums_add([album.spotify_id for album in chunk])
     logging.info("Finished adding albums")
@@ -72,15 +73,7 @@ def remove_tracks_from_library(spotify, tracks):
         + "'s library"
     )
     logging.debug("Removing tracks: " + str(tracks))
-    track_chunks = _chunk(tracks, MAX_ITEMS_PER_REQUEST)
+    track_chunks = chunk_list(tracks, MAX_ITEMS_PER_REQUEST)
     for chunk in track_chunks:
         spotify.current_user_saved_tracks_delete([track.spotify_id for track in chunk])
     logging.info("Finished removing tracks")
-
-
-def _chunk(list_to_be_chunked, chunk_size):
-    """Splits the given list into evenly-sized "chunks", each of size chunk_size"""
-    return [
-        list_to_be_chunked[i : i + chunk_size]
-        for i in range(0, len(list_to_be_chunked), chunk_size)
-    ]

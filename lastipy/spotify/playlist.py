@@ -1,5 +1,6 @@
 import logging
 from lastipy.spotify.parse_spotify_tracks import parse_tracks
+from lastipy.util.chunk import chunk_list
 
 MAX_ITEMS_PER_REQUEST = 100
 
@@ -108,7 +109,7 @@ def add_tracks_to_playlist(spotify, playlist_name, tracks):
     )
     logging.debug("Adding tracks: " + str(tracks))
 
-    tracks_chunked = _chunk(tracks, MAX_ITEMS_PER_REQUEST)
+    tracks_chunked = chunk_list(tracks, MAX_ITEMS_PER_REQUEST)
     for chunk in tracks_chunked:
         # Remove any tracks that don't have a Spotify ID
         chunk = [track for track in chunk if track.spotify_id is not None]
@@ -141,7 +142,7 @@ def remove_tracks_from_playlist(spotify, playlist_name, tracks):
     if playlist_id is None:
         playlist_id = _create_playlist(spotify, playlist_name)
 
-    tracks_chunked = _chunk(tracks, MAX_ITEMS_PER_REQUEST)
+    tracks_chunked = chunk_list(tracks, MAX_ITEMS_PER_REQUEST)
     for chunk in tracks_chunked:
         # Remove any tracks that don't have a Spotify ID
         chunk = [track for track in chunk if track.spotify_id is not None]
@@ -155,10 +156,6 @@ def remove_tracks_from_playlist(spotify, playlist_name, tracks):
             logging.debug("Chunk is empty, not removing any tracks")
 
     logging.debug("Finished removing tracks")
-
-
-def _chunk(lst, chunk_size):
-    return [lst[i : i + chunk_size] for i in range(0, len(lst), chunk_size)]
 
 
 def _create_playlist(spotify, playlist_name):
