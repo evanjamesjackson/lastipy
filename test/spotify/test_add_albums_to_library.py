@@ -40,6 +40,8 @@ class AddAlbumsToLibraryTest(unittest.TestCase):
 
     def _build_dummy_album(self, spotify_id):
         return SpotifyAlbum(
+            name="test_name",
+            artist="test_artist",
             spotify_id=spotify_id,
             album_type="album",
             release_date_precision="day",
