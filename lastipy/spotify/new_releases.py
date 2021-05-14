@@ -77,6 +77,12 @@ def fetch_new_albums(
         artist_albums = _fetch_artist_albums(spotify, album_types, artist_id)
         all_albums += artist_albums
 
+    # TODO remove this once https://github.com/evanjamesjackson/lastipy/issues/22 is fixed...
+    logging.info(
+        "Before filtering by date, fetched " + str(len(all_albums)) + " albums"
+    )
+    logging.info(str(all_albums))
+
     new_albums = _filter_new_albums(all_albums, as_of_date)
 
     logging.info("Fetched " + str(len(new_albums)) + " new albums " + str(new_albums))
