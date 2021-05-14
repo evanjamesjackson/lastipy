@@ -136,6 +136,8 @@ def _fetch_artist_albums(spotify, album_types, artist_id):
 def _convert_albums(json_album_response):
     return [
         album.SpotifyAlbum(
+            name=item["name"],
+            artist=item["artists"][0]["name"],
             album_type=item["album_type"],
             spotify_id=item["id"],
             release_date_precision=item["release_date_precision"],
