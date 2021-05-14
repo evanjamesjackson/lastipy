@@ -7,10 +7,8 @@ class ParseTracksTest(unittest.TestCase):
         track_name = "Stayin' Alive"
         artist = "Bee Gees"
         to_parse = {
-            'name': track_name,
-            'artist': {
-                'name': artist
-            },
+            "name": track_name,
+            "artist": {"name": artist},
         }
 
         parsed_track_name = parse_track_name(to_parse)
@@ -21,11 +19,8 @@ class ParseTracksTest(unittest.TestCase):
         track_name = "Stayin' Alive"
         artist = "Bee Gees"
         to_convert = {
-            'name': track_name,
-            'artist': {
-                'mbid': '45c25199-fa62-4d4c-b0a2-11eeed6923c3',
-                '#text': artist
-            },
+            "name": track_name,
+            "artist": {"mbid": "45c25199-fa62-4d4c-b0a2-11eeed6923c3", "#text": artist},
         }
 
         parsed_artist = parse_artist(to_convert)

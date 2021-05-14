@@ -9,11 +9,13 @@ class RecommendedTrack(Track):
         self.recommendation_rating = recommendation_rating
 
     def __eq__(self, other):
-        return isinstance(other, RecommendedTrack) \
-            and self.track_name == other.track_name \
-            and self.artist == other.artist \
-            and self.spotify_id == other.spotify_id \
+        return (
+            isinstance(other, RecommendedTrack)
+            and self.track_name == other.track_name
+            and self.artist == other.artist
+            and self.spotify_id == other.spotify_id
             and self.recommendation_rating == other.recommendation_rating
+        )
 
     def __hash__(self):
         return hash((self.track_name, self.artist, self.recommendation_rating))

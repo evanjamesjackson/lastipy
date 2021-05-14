@@ -9,10 +9,12 @@ class TopTrack(Track):
         self.playcount = playcount
 
     def __eq__(self, other):
-        return isinstance(other, TopTrack) \
-            and self.track_name == other.track_name \
-            and self.artist == other.artist \
+        return (
+            isinstance(other, TopTrack)
+            and self.track_name == other.track_name
+            and self.artist == other.artist
             and self.playcount == other.playcount
+        )
 
     def __hash__(self):
         return hash((self.track_name, self.artist, self.playcount))

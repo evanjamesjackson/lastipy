@@ -5,7 +5,7 @@ import os
 
 
 def setup_logging(filename):
-    logs_directory = os.path.join(definitions.ROOT_DIR, 'logs')
+    logs_directory = os.path.join(definitions.ROOT_DIR, "logs")
     if not os.path.exists(logs_directory):
         os.makedirs(logs_directory)
 
@@ -21,7 +21,8 @@ def setup_logging(filename):
         filename=os.path.join(logs_directory, filename),
         maxBytes=2 * 1024 * 1024,  # 2MB
         backupCount=25,
-        encoding='utf-8')
+        encoding="utf-8",
+    )
     file_handler.setFormatter(formatter)
     file_handler.setLevel(logging.INFO)
 
