@@ -130,7 +130,7 @@ def _fetch_artist_albums(spotify, album_types, artist_id):
         curr_response = spotify.artist_albums(
             artist_id, album_type=album_type, limit=50
         )
-        albums = _convert_albums(curr_response)
+        albums += _convert_albums(curr_response)
         while len(curr_response["items"]) > 0:
             curr_response = spotify.artist_albums(
                 artist_id, album_type=album_type, limit=50, offset=len(albums)
