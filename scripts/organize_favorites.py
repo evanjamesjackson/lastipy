@@ -23,13 +23,7 @@ from datetime import datetime, timezone
 from dateutil.relativedelta import relativedelta
 import iso8601
 
-# TODO paramterize these?
-NEW_FAVORITES_PLAYLIST = "New Favorites"
-OLD_FAVORITES_PLAYLIST = "Old Favorites"
-NEGLECTED_PLAYLIST = "Neglected"
 
-
-# TODO test
 def organize_favorites():
     """Organizes a user's Spotify library. Saved tracks with more than args.saved_song_playount_limit plays are moved to a "New Favorites" playlist.
     Tracks in the "New Favorites" playlist are moved to an "Old Favorites" playlist after they've been in "New Favorites" for
@@ -54,7 +48,7 @@ def organize_favorites():
 
 def move_new_favorites(spotify, args):
     new_favorites_tracks = playlist.get_tracks_in_playlist(
-        spotify, playlist_name=NEW_FAVORITES_PLAYLIST
+        spotify, playlist_name=args.new_favorites_playlist
     )
     tracks_to_move = []
     neglected_tracks = []
@@ -79,25 +73,27 @@ def move_new_favorites(spotify, args):
         "Moving "
         + str(len(tracks_to_move))
         + " tracks from "
-        + NEW_FAVORITES_PLAYLIST
+        + args.new_favorites_playlist
         + " to "
-        + OLD_FAVORITES_PLAYLIST
+        + args.old_favorites_playlist
     )
     playlist.remove_tracks_from_playlist(
-        spotify, NEW_FAVORITES_PLAYLIST, tracks_to_move
+        spotify, args.new_favorites_playlist, tracks_to_move
     )
-    playlist.add_tracks_to_playlist(spotify, OLD_FAVORITES_PLAYLIST, tracks_to_move)
+    playlist.add_tracks_to_playlist(
+        spotify, args.old_favorites_playlist, tracks_to_move
+    )
 
     logging.info(
         "Moving "
         + str(len(neglected_tracks))
         + " neglected tracks to "
-        + NEGLECTED_PLAYLIST
+        + args.neglected_playlist
     )
     playlist.remove_tracks_from_playlist(
-        spotify, NEW_FAVORITES_PLAYLIST, neglected_tracks
+        spotify, args.new_favorites_playlist, neglected_tracks
     )
-    playlist.add_tracks_to_playlist(spotify, NEGLECTED_PLAYLIST, neglected_tracks)
+    playlist.add_tracks_to_playlist(spotify, args.neglected_playlist, neglected_tracks)
 
 
 def move_saved_tracks(spotify, args):
@@ -117,10 +113,12 @@ def move_saved_tracks(spotify, args):
         "Moving "
         + str(len(tracks_to_move))
         + " tracks from library to "
-        + NEW_FAVORITES_PLAYLIST
+        + args.new_favorites_playlist
     )
     library.remove_tracks_from_library(spotify, tracks_to_move)
-    playlist.add_tracks_to_playlist(spotify, NEW_FAVORITES_PLAYLIST, tracks_to_move)
+    playlist.add_tracks_to_playlist(
+        spotify, args.new_favorites_playlist, tracks_to_move
+    )
 
 
 def _extract_args():
@@ -151,10 +149,13 @@ def _extract_user_configs(args):
     args.saved_songs_playcount_limit = config_parser[section][
         "SavedSongsPlaycountLimit"
     ]
+    args.new_favorites_playlist = config_parser[section]["NewFavoritesPlaylist"]
     args.new_favorites_time_limit = config_parser[section]["NewFavoritesTimeLimit"]
     args.new_favorites_playcount_limit = config_parser[section][
         "NewFavoritesPlaycountLimit"
     ]
+    args.old_favorites_playlist = config_parser[section]["OldFavoritesPlaylist"]
+    args.neglected_playlist = config_parser[section]["NeglectedPlaylist"]
     return args
 
 
