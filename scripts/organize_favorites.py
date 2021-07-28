@@ -156,6 +156,9 @@ def _extract_user_configs(args):
     args.new_favorites_playcount_limit = config_parser[section][
         "NewFavoritesPlaycountLimit"
     ]
+    args.old_favorites_immediate_playcount_limit = config_parser[section][
+        "OldFavoritesImmediatePlaycountLimit"
+    ]
     return args
 
 
