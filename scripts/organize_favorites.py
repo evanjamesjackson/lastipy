@@ -55,10 +55,10 @@ def move_new_favorites(spotify, args):
     for track in new_favorites_tracks:
         playcount = _get_track_playcount(track, args)
 
-        if hasattr(args, "old_favorites_immediate_playcount_limit"):
-            # hasattr is required since this is an optional parameter
-            logging.debug("OldFavoritesImmediatePlaycountLimit defined")
-            if playcount >= int(args.old_favorites_immediate_playcount_limit):
+        if hasattr(args, "new_favorites_immediate_playcount_limit"):
+            # Checking the attribute actually exists is required, since this is an optional parameter
+            logging.debug("NewFavoritesImmediatePlaycountLimit defined")
+            if playcount >= int(args.new_favorites_immediate_playcount_limit):
                 old_favorites_tracks.append(track)
 
         if _has_track_reached_new_favorites_time_limit(track, args):
@@ -171,13 +171,13 @@ def _extract_user_configs(args):
     ]
 
     try:
-        args.old_favorites_immediate_playcount_limit = config_parser[section][
-            "OldFavoritesImmediatePlaycountLimit"
+        args.new_favorites_immediate_playcount_limit = config_parser[section][
+            "NewFavoritesImmediatePlaycountLimit"
         ]
     except KeyError:
         # Since this parameter is optional, we can just ignore KeyErrors thrown when it's not present
         logging.debug(
-            "OldFavoritesImmediatePlaycountLimit not defined, so continuing without it"
+            "NewFavoritesImmediatePlaycountLimit not defined, so continuing without it"
         )
 
     return args
