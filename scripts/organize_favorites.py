@@ -50,38 +50,37 @@ def move_new_favorites(spotify, args):
     new_favorites_tracks = playlist.get_tracks_in_playlist(
         spotify, playlist_name=args.new_favorites_playlist
     )
-    tracks_to_move = []
+    old_favorites_tracks = []
     neglected_tracks = []
     for track in new_favorites_tracks:
-        added_at = iso8601.parse_date(track.added_at)
-        new_favorites_time_limit = added_at + relativedelta(
-            days=int(args.new_favorites_time_limit)
-        )
-        if datetime.now(timezone.utc) >= new_favorites_time_limit:
-            try:
-                playcount = track_info.fetch_playcount(
-                    track, args.lastfm_user, args.lastfm_api_key
-                )
-                if playcount <= int(args.new_favorites_playcount_limit):
-                    neglected_tracks.append(track)
-                else:
-                    tracks_to_move.append(track)
-            except:
-                logging.warn("Couldn't get playcount for track " + str(track))
+        playcount = _get_track_playcount(track, args)
+
+        if hasattr(args, "old_favorites_immediate_playcount_limit"):
+            # hasattr is required since this is an optional parameter
+            logging.debug("OldFavoritesImmediatePlaycountLimit defined")
+            if playcount >= int(args.old_favorites_immediate_playcount_limit):
+                old_favorites_tracks.append(track)
+
+        if _has_track_reached_new_favorites_time_limit(track, args):
+            if playcount <= int(args.new_favorites_playcount_limit):
+                neglected_tracks.append(track)
+            else:
+                if track not in old_favorites_tracks:
+                    old_favorites_tracks.append(track)
 
     logging.info(
         "Moving "
-        + str(len(tracks_to_move))
+        + str(len(old_favorites_tracks))
         + " tracks from "
         + args.new_favorites_playlist
         + " to "
         + args.old_favorites_playlist
     )
     playlist.remove_tracks_from_playlist(
-        spotify, args.new_favorites_playlist, tracks_to_move
+        spotify, args.new_favorites_playlist, old_favorites_tracks
     )
     playlist.add_tracks_to_playlist(
-        spotify, args.old_favorites_playlist, tracks_to_move
+        spotify, args.old_favorites_playlist, old_favorites_tracks
     )
 
     logging.info(
@@ -96,14 +95,28 @@ def move_new_favorites(spotify, args):
     playlist.add_tracks_to_playlist(spotify, args.neglected_playlist, neglected_tracks)
 
 
+def _get_track_playcount(track, args):
+    try:
+        return track_info.fetch_playcount(track, args.lastfm_user, args.lastfm_api_key)
+    except:
+        logging.warn("Couldn't get playcount for track " + str(track))
+        return 0
+
+
+def _has_track_reached_new_favorites_time_limit(track, args):
+    added_at = iso8601.parse_date(track.added_at)
+    track_age_in_playlist = added_at + relativedelta(
+        days=int(args.new_favorites_time_limit)
+    )
+    return datetime.now(timezone.utc) >= track_age_in_playlist
+
+
 def move_saved_tracks(spotify, args):
     saved_tracks = library.get_saved_tracks(spotify)
     tracks_to_move = []
     for track in saved_tracks:
         try:
-            playcount = track_info.fetch_playcount(
-                track, args.lastfm_user, args.lastfm_api_key
-            )
+            playcount = _get_track_playcount(track, args)
             if playcount >= int(args.saved_songs_playcount_limit):
                 tracks_to_move.append(track)
         except:
@@ -146,16 +159,27 @@ def _extract_user_configs(args):
     section = "Config"
     args.lastfm_user = config_parser[section]["LastFMUser"]
     args.spotify_user = config_parser[section]["SpotifyUser"]
+    args.new_favorites_playlist = config_parser[section]["NewFavoritesPlaylist"]
+    args.old_favorites_playlist = config_parser[section]["OldFavoritesPlaylist"]
+    args.neglected_playlist = config_parser[section]["NeglectedPlaylist"]
     args.saved_songs_playcount_limit = config_parser[section][
         "SavedSongsPlaycountLimit"
     ]
-    args.new_favorites_playlist = config_parser[section]["NewFavoritesPlaylist"]
     args.new_favorites_time_limit = config_parser[section]["NewFavoritesTimeLimit"]
     args.new_favorites_playcount_limit = config_parser[section][
         "NewFavoritesPlaycountLimit"
     ]
-    args.old_favorites_playlist = config_parser[section]["OldFavoritesPlaylist"]
-    args.neglected_playlist = config_parser[section]["NeglectedPlaylist"]
+
+    try:
+        args.old_favorites_immediate_playcount_limit = config_parser[section][
+            "OldFavoritesImmediatePlaycountLimit"
+        ]
+    except KeyError:
+        # Since this parameter is optional, we can just ignore KeyErrors thrown when it's not present
+        logging.debug(
+            "OldFavoritesImmediatePlaycountLimit not defined, so continuing without it"
+        )
+
     return args
 
 
