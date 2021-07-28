@@ -50,7 +50,7 @@ def move_new_favorites(spotify, args):
     new_favorites_tracks = playlist.get_tracks_in_playlist(
         spotify, playlist_name=args.new_favorites_playlist
     )
-    tracks_to_move = []
+    old_favorites_tracks = []
     neglected_tracks = []
     for track in new_favorites_tracks:
         added_at = iso8601.parse_date(track.added_at)
@@ -65,23 +65,23 @@ def move_new_favorites(spotify, args):
                 if playcount <= int(args.new_favorites_playcount_limit):
                     neglected_tracks.append(track)
                 else:
-                    tracks_to_move.append(track)
+                    old_favorites_tracks.append(track)
             except:
                 logging.warn("Couldn't get playcount for track " + str(track))
 
     logging.info(
         "Moving "
-        + str(len(tracks_to_move))
+        + str(len(old_favorites_tracks))
         + " tracks from "
         + args.new_favorites_playlist
         + " to "
         + args.old_favorites_playlist
     )
     playlist.remove_tracks_from_playlist(
-        spotify, args.new_favorites_playlist, tracks_to_move
+        spotify, args.new_favorites_playlist, old_favorites_tracks
     )
     playlist.add_tracks_to_playlist(
-        spotify, args.old_favorites_playlist, tracks_to_move
+        spotify, args.old_favorites_playlist, old_favorites_tracks
     )
 
     logging.info(
