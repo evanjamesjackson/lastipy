@@ -146,16 +146,16 @@ def _extract_user_configs(args):
     section = "Config"
     args.lastfm_user = config_parser[section]["LastFMUser"]
     args.spotify_user = config_parser[section]["SpotifyUser"]
+    args.new_favorites_playlist = config_parser[section]["NewFavoritesPlaylist"]
+    args.old_favorites_playlist = config_parser[section]["OldFavoritesPlaylist"]
+    args.neglected_playlist = config_parser[section]["NeglectedPlaylist"]
     args.saved_songs_playcount_limit = config_parser[section][
         "SavedSongsPlaycountLimit"
     ]
-    args.new_favorites_playlist = config_parser[section]["NewFavoritesPlaylist"]
     args.new_favorites_time_limit = config_parser[section]["NewFavoritesTimeLimit"]
     args.new_favorites_playcount_limit = config_parser[section][
         "NewFavoritesPlaycountLimit"
     ]
-    args.old_favorites_playlist = config_parser[section]["OldFavoritesPlaylist"]
-    args.neglected_playlist = config_parser[section]["NeglectedPlaylist"]
     return args
 
 
