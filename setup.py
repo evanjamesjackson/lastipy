@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 setup(
     name="lastipy",
     # fmt: off
-    version='1.1.23',
+    version='1.1.24',
     # fmt: on
     description="Python library that combines Last.fm and Spotify",
     url="http://github.com/evanjamesjackson/lastipy",
