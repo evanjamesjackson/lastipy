@@ -7,6 +7,7 @@ from lastipy import definitions
 from lastipy.lastfm.library.top_tracks import fetch_top_tracks
 from lastipy.lastfm.library.recent_tracks import fetch_recent_tracks
 from lastipy.lastfm.library.recent_artists import fetch_recent_artists
+from lastipy.util.filter import filter_out_tracks_in_second_list
 from lastipy.lastfm.library import period
 from lastipy.spotify import playlist, search, library
 from lastipy.track import Track
@@ -43,21 +44,27 @@ def save_new_releases():
     yesterday = date.today() - timedelta(days=1)
 
     if args.save_albums_to_liked_songs:
-        new_tracks = new_releases.fetch_new_tracks(
+        _save_new_tracks(
             spotify,
-            ignore_remixes=args.ignore_remixes,
-            album_types=[album.SINGLE_ALBUM_TYPE, album.ALBUM_ALBUM_TYPE],
-            as_of_date=yesterday,
+            args.lastfm_user,
+            args.lastfm_api_key,
+            args.ignore_remixes,
+            args.ignore_scrobbled_songs,
+            yesterday,
+            # Save all types of albums straight to Liked Songs
+            [album.SINGLE_ALBUM_TYPE, album.ALBUM_ALBUM_TYPE],
         )
-        _save_tracks(new_tracks, spotify)
     else:
-        new_tracks = new_releases.fetch_new_tracks(
+        _save_new_tracks(
             spotify,
-            ignore_remixes=args.ignore_remixes,
-            album_types=[album.SINGLE_ALBUM_TYPE],
-            as_of_date=yesterday,
+            args.lastfm_user,
+            args.lastfm_api_key,
+            args.ignore_remixes,
+            args.ignore_scrobbled_songs,
+            yesterday,
+            # Save only single-type albums to Liked Songs
+            [album.SINGLE_ALBUM_TYPE],
         )
-        _save_tracks(new_tracks, spotify)
 
         new_albums = new_releases.fetch_new_albums(
             spotify, album_types=[album.ALBUM_ALBUM_TYPE], as_of_date=yesterday
@@ -70,9 +77,30 @@ def save_new_releases():
     logging.info("Done!")
 
 
-def _save_tracks(tracks, spotify):
-    if len(tracks) > 0:
-        library.add_tracks_to_library(spotify, tracks)
+def _save_new_tracks(
+    spotify,
+    lastfm_user,
+    lastfm_api_key,
+    ignore_remixes,
+    ignore_scrobbled_songs,
+    as_of_date,
+    album_types,
+):
+    new_tracks = new_releases.fetch_new_tracks(
+        spotify,
+        ignore_remixes=ignore_remixes,
+        album_types=album_types,
+        as_of_date=as_of_date,
+    )
+
+    if ignore_scrobbled_songs:
+        logging.info("Filtering out scrobbled tracks from new releases")
+        # TODO this is pretty inefficient but it appears to be the only way to tell if a user has scrobbled a track
+        recent_tracks = fetch_recent_tracks(user=lastfm_user, api_key=lastfm_api_key)
+        new_tracks = filter_out_tracks_in_second_list(new_tracks, recent_tracks)
+
+    if len(new_tracks) > 0:
+        library.add_tracks_to_library(spotify, new_tracks)
     else:
         logging.info("No tracks to add!")
 
@@ -88,6 +116,7 @@ def _extract_api_keys(args):
     keys_parser = ApiKeysParser(args.api_keys_file)
     args.spotify_client_id_key = keys_parser.spotify_client_id_key
     args.spotify_client_secret_key = keys_parser.spotify_client_secret_key
+    args.lastfm_api_key = keys_parser.lastfm_api_key
 
 
 def _extract_user_configs(args):
@@ -95,7 +124,11 @@ def _extract_user_configs(args):
     config_parser.read(args.user_configs_file.name)
     section = "Config"
     args.spotify_user = config_parser.get(section, "SpotifyUser")
+    args.lastfm_user = config_parser.get(section, "LastFMUser")
     args.ignore_remixes = config_parser.getboolean(section, "IgnoreRemixes")
+    args.ignore_scrobbled_songs = config_parser.getboolean(
+        section, "IgnoreScrobbledSongs"
+    )
     args.save_albums_to_liked_songs = config_parser.getboolean(
         section, "SaveAlbumsToLikedSongs"
     )
