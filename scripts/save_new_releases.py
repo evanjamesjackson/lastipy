@@ -43,21 +43,16 @@ def save_new_releases():
     yesterday = date.today() - timedelta(days=1)
 
     if args.save_albums_to_liked_songs:
-        new_tracks = new_releases.fetch_new_tracks(
+        _save_new_tracks(
             spotify,
-            ignore_remixes=args.ignore_remixes,
-            album_types=[album.SINGLE_ALBUM_TYPE, album.ALBUM_ALBUM_TYPE],
-            as_of_date=yesterday,
+            args.ignore_remixes,
+            yesterday,
+            [album.SINGLE_ALBUM_TYPE, album.ALBUM_ALBUM_TYPE],
         )
-        _save_tracks(new_tracks, spotify)
     else:
-        new_tracks = new_releases.fetch_new_tracks(
-            spotify,
-            ignore_remixes=args.ignore_remixes,
-            album_types=[album.SINGLE_ALBUM_TYPE],
-            as_of_date=yesterday,
+        _save_new_tracks(
+            spotify, args.ignore_remixes, yesterday, [album.SINGLE_ALBUM_TYPE]
         )
-        _save_tracks(new_tracks, spotify)
 
         new_albums = new_releases.fetch_new_albums(
             spotify, album_types=[album.ALBUM_ALBUM_TYPE], as_of_date=yesterday
@@ -70,9 +65,15 @@ def save_new_releases():
     logging.info("Done!")
 
 
-def _save_tracks(tracks, spotify):
-    if len(tracks) > 0:
-        library.add_tracks_to_library(spotify, tracks)
+def _save_new_tracks(spotify, ignore_remixes, as_of_date, album_types):
+    new_tracks = new_releases.fetch_new_tracks(
+        spotify,
+        ignore_remixes=ignore_remixes,
+        album_types=album_types,
+        as_of_date=as_of_date,
+    )
+    if len(new_tracks) > 0:
+        library.add_tracks_to_library(spotify, new_tracks)
     else:
         logging.info("No tracks to add!")
 
