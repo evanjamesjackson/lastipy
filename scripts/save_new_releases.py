@@ -47,11 +47,16 @@ def save_new_releases():
             spotify,
             args.ignore_remixes,
             yesterday,
+            # Save all types of albums straight to Liked Songs
             [album.SINGLE_ALBUM_TYPE, album.ALBUM_ALBUM_TYPE],
         )
     else:
         _save_new_tracks(
-            spotify, args.ignore_remixes, yesterday, [album.SINGLE_ALBUM_TYPE]
+            spotify,
+            args.ignore_remixes,
+            yesterday,
+            # Save only single-type albums to Liked Songs
+            [album.SINGLE_ALBUM_TYPE],
         )
 
         new_albums = new_releases.fetch_new_albums(
