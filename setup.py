@@ -21,10 +21,9 @@ setup(
         "numpy",
         "requests",
         "spotipy",
-        "pytest",
         "iso8601",
         "python-dateutil",
-        "pylint",
-        "black",
     ],
+    tests_require=["pytest"],
+    setup_requires=["wheel", "black"]
 )
