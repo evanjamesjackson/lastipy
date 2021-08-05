@@ -23,7 +23,8 @@ setup(
         "spotipy",
         "iso8601",
         "python-dateutil",
-    ],
-    tests_require=["pytest"],
-    setup_requires=["wheel", "black"]
+        "pytest",
+        "wheel",
+        "black"
+    ]
 )
