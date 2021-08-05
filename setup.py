@@ -5,10 +5,10 @@ setup(
     # fmt: off
     version='1.1.25',
     # fmt: on
-    description="Python library that combines Last.fm and Spotify",
+    description="Lastipy is a Python library combining the APIs of Spotify and Last.fm, with scripts for creating customized recommendation playlists, automatically saving new releases, etc.",
     url="http://github.com/evanjamesjackson/lastipy",
     author="Evan Jackson",
-    author_email="evanjamesjackson@gmail.com",
+    author_email="evan@jacksonnet.ca",
     packages=find_packages(),
     entry_points={
         "console_scripts": [
