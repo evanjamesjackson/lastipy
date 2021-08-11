@@ -30,7 +30,7 @@ class AddAlbumsToLibraryTest(unittest.TestCase):
         for _ in range(3):
             chunk = []
             for _ in range(50):
-                chunk.append("123")
+                chunk.append("1234")
             expected_chunks.append(chunk)
 
         add_albums_to_library(spotify, dummy_albums)
