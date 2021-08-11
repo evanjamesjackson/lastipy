@@ -24,7 +24,6 @@ setup(
         "iso8601",
         "python-dateutil",
         "pytest",
-        "wheel",
-        "black"
-    ]
+        "black",
+    ],
 )
