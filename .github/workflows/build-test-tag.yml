@@ -16,6 +16,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - uses: fregante/setup-git-user@v1
     - name: Set up Python 3.9
       uses: actions/setup-python@v2
       with:
@@ -31,7 +32,5 @@ jobs:
     - name: Increment version number
       if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
       run: |
-        git config --global user.name 'Evan Jackson'
-        git config --global user.email 'evanjamesjackson@users.noreply.github.com'
         bump2version patch
-        git push --follow-tags --force
+        git push --follow-tags
