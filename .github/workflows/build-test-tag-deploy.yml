@@ -7,7 +7,7 @@ on:
     branches: [all]
 
 jobs:
-  build-and-test:
+  build-test-tag-deploy:
     runs-on: ubuntu-latest
 
     steps:
