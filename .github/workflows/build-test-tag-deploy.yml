@@ -29,6 +29,12 @@ jobs:
         if: always() # Guarantees that this step always runs, even if the preceding test step fails
         with:
           files: test-results.xml
+      - name: Issue Management Action
+        uses: evanjamesjackson/issue-management@v0.0.1-beta
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fromColumnId: 17949893
+          toColumnId: 17949897
       - name: Increment version number and tag
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
         run: |
