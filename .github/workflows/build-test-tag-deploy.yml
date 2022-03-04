@@ -30,7 +30,7 @@ jobs:
         with:
           files: test-results.xml
       - name: Issue Management Action
-        uses: evanjamesjackson/issue-management@v0.0.1-beta
+        uses: evanjamesjackson/issue-management@v0.0.2-beta
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fromColumnId: 17949893
