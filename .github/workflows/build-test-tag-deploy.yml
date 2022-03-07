@@ -33,7 +33,7 @@ jobs:
         uses: evanjamesjackson/issue-management@v0.0.3-beta
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          fromColumnId: 17949893
+          fromColumnId: 17949893,17949897
           toColumnId: 17949897
       - name: Increment version number and tag
         if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
