@@ -11,7 +11,7 @@
             "program": "${workspaceFolder}/scripts/recommendations_playlist.py",
             "args": [
                 "${workspaceFolder}/scripts/example.recommendations.config",
-                "${workspaceFolder}/../lastipy_config/keys.config"
+                "${workspaceFolder}/keys.config"
             ],
             "console": "integratedTerminal"
         },
@@ -22,7 +22,7 @@
             "program": "${workspaceFolder}/scripts/save_new_releases.py",
             "args": [
                 "${workspaceFolder}/scripts/example.new.releases.config",
-                "${workspaceFolder}/../lastipy_config/keys.config"
+                "${workspaceFolder}/keys.config"
             ],
             "console": "integratedTerminal" 
         },
@@ -33,7 +33,7 @@
             "program": "${workspaceFolder}/scripts/organize_favorites.py",
             "args": [
                 "${workspaceFolder}/scripts/example.organize.favorites.config",
-                "${workspaceFolder}/../lastipy_config/keys.config"
+                "${workspaceFolder}/keys.config"
             ],
             "console": "integratedTerminal" 
         }

@@ -1,4 +1,4 @@
-.keys
+keys.config
 venv
 .idea
 *.log*
