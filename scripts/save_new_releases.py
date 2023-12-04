@@ -41,8 +41,6 @@ def save_new_releases():
         )
     )
 
-    yesterday = date.today() - timedelta(days=1)
-
     if args.save_albums_to_liked_songs:
         _save_new_tracks(
             spotify,
@@ -50,7 +48,6 @@ def save_new_releases():
             args.lastfm_api_key,
             args.ignore_remixes,
             args.ignore_scrobbled_songs,
-            yesterday,
             # Save all types of albums straight to Liked Songs
             [album.SINGLE_ALBUM_TYPE, album.ALBUM_ALBUM_TYPE],
         )
@@ -61,7 +58,6 @@ def save_new_releases():
             args.lastfm_api_key,
             args.ignore_remixes,
             args.ignore_scrobbled_songs,
-            yesterday,
             # Save only single-type albums to Liked Songs
             [album.SINGLE_ALBUM_TYPE],
         )
@@ -83,14 +79,15 @@ def _save_new_tracks(
     lastfm_api_key,
     ignore_remixes,
     ignore_scrobbled_songs,
-    as_of_date,
     album_types,
 ):
+    yesterday = date.today() - timedelta(days=1)
+
     new_tracks = new_releases.fetch_new_tracks(
         spotify,
         ignore_remixes=ignore_remixes,
         album_types=album_types,
-        as_of_date=as_of_date,
+        as_of_date=yesterday,
     )
 
     if ignore_scrobbled_songs:
