@@ -2,6 +2,7 @@ import spotipy
 from lastipy.spotify.parse_spotify_tracks import parse_tracks
 from lastipy.spotify.library import get_saved_tracks
 from lastipy.spotify.playlist import get_tracks_in_playlists
+from lastipy.spotify.artist_albums import artist_albums
 from datetime import datetime
 import logging
 from lastipy.track import Track
@@ -106,6 +107,9 @@ def _fetch_followed_artists(spotify):
     # an unhashable error), then converting to a set and back to a list
     followed_artists = [artist["id"] for artist in followed_artists]
     followed_artist_ids = list(set(followed_artists))
+
+    logging.debug("Fetched " + str(len(followed_artist_ids)) + " followed artists " + str(followed_artist_ids))
+
     return followed_artist_ids
 
 
@@ -127,15 +131,16 @@ def _filter_new_albums(all_albums, as_of_date):
 def _fetch_artist_albums(spotify, album_types, artist_id):
     albums = []
     for album_type in album_types:
-        curr_response = spotify.artist_albums(
-            artist_id, album_type=album_type, limit=50
+        curr_response = _artist_albums(
+            artist_id, album_types=album_type, limit=50
         )
         albums += _convert_albums(curr_response)
         while len(curr_response["items"]) > 0:
-            curr_response = spotify.artist_albums(
-                artist_id, album_type=album_type, limit=50, offset=len(albums)
+            curr_response = _artist_albums(
+                artist_id, album_types=album_type, limit=50, offset=len(albums)
             )
             albums += _convert_albums(curr_response)
+    logging.debug("Fetched " + str(len(albums)) + " albums for artist " + str(artist_id) + " " + str(albums))
     return albums
 
 
@@ -162,3 +167,16 @@ def _fetch_album_tracks(spotify, album):
         )
         album_tracks += curr_response["items"]
     return album_tracks
+
+# Modified version of this method from Spotipy until https://github.com/spotipy-dev/spotipy/pull/1108 is included in a release
+def _artist_albums(
+    spotify, artist_id, album_types=None, country=None, limit=20, offset=0
+):
+    trid = spotify._get_id("artist", artist_id)
+    return spotify._get(
+        "artists/" + trid + "/albums",
+        include_groups=album_types,
+        country=country,
+        limit=limit,
+        offset=offset,
+    )
