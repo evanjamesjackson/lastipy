@@ -128,6 +128,7 @@ def _filter_new_albums(all_albums, as_of_date):
 
 
 def _fetch_artist_albums(spotify, album_types, artist_id):
+    logging.debug("Fetching albums with types " + str(album_types) + " for artist ID " + str(artist_id))
     albums = []
     for album_type in album_types:
         curr_response = _artist_albums(
