@@ -132,12 +132,12 @@ def _fetch_artist_albums(spotify, album_types, artist_id):
     albums = []
     for album_type in album_types:
         curr_response = _artist_albums(
-            artist_id, album_types=album_type, limit=50
+            spotify=spotify, artist_id=artist_id, album_types=album_type, limit=50
         )
         albums += _convert_albums(curr_response)
         while len(curr_response["items"]) > 0:
             curr_response = _artist_albums(
-                artist_id, album_types=album_type, limit=50, offset=len(albums)
+                spotify=spotify, artist_id=artist_id, album_types=album_type, limit=50, offset=len(albums)
             )
             albums += _convert_albums(curr_response)
     logging.debug("Fetched " + str(len(albums)) + " albums for artist " + str(artist_id) + " " + str(albums))
