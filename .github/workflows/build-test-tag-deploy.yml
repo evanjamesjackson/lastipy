@@ -26,7 +26,7 @@ jobs:
           pytest --junitxml test-results.xml test/
       - name: Publish test results
         uses: EnricoMi/publish-unit-test-result-action@v1
-        if: always() # Guarantees that this step always runs, even if the preceding test step fails
+        if: ${{ github.event_name }} == "pull_request"
         with:
           files: test-results.xml
       - name: Increment version number and tag
