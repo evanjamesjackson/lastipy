@@ -2,7 +2,6 @@ import spotipy
 from lastipy.spotify.parse_spotify_tracks import parse_tracks
 from lastipy.spotify.library import get_saved_tracks
 from lastipy.spotify.playlist import get_tracks_in_playlists
-from lastipy.spotify.artist_albums import artist_albums
 from datetime import datetime
 import logging
 from lastipy.track import Track
